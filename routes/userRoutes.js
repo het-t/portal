@@ -1,6 +1,8 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import {createUser} from '../db.js'
+import {
+    createUser,
+} from '../db.js'
 
 var router = express.Router()
 

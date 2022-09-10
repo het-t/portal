@@ -1,12 +1,13 @@
 import express from 'express'
 import jwt from 'jsonwebtoken'
+import { userLogin } from '../db.js'
 
 var router = express.Router()
 
 router.post('/login', (req, res) => {
     console.log(req.body)
     let payload = {
-        "un": req.body.username,
+        "email": req.body.email,
         "pwd": req.body.password
     }
     jwt.sign(payload, 'secert', (err, token) => {
@@ -15,13 +16,25 @@ router.post('/login', (req, res) => {
             res.send('fail')
         }
         else {
-            console.log(token)
             res.cookie('_token', token, {
                 signed: true
             })
-            res.send('ok')
+
+            userLogin([payload.email, payload.pwd])
+            .then((user)=>{
+                if (user) {
+                    res.send({
+                        user,
+                    })
+                }
+            })
+            .catch(()=>{
+                console.log("POST '/login' ", err)
+                res.send('fail')
+            })
         }
     })
+
 })
 
 export {

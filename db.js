@@ -7,6 +7,25 @@ const con = mysql.createConnection({
     database: 'portal'
 })
 
+const userLogin = (args) => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL users_login(?, ?)`,
+            args, 
+            (err, results) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                } 
+                else {
+                    console.log(results)
+                    resolve(results?.[0])
+                }
+            }
+        )
+    })
+}
+
 const createUser =  (args) => {
     return new Promise((resolve, reject) => {
         con.query(
@@ -28,4 +47,5 @@ const createUser =  (args) => {
 
 export {
     createUser,
+    userLogin,
 }
