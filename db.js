@@ -45,7 +45,66 @@ const createUser =  (args) => {
     })
 }
 
+const createRole = (roleName, roleRights) => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL roles_create_role(?, ?)`,
+            [roleName, roleRights],
+            (err, results) => {
+                if (err) {
+                    console.log('DB createRole', err)
+                    reject(err)
+                } 
+                else {
+                    console.log("DB createRole ",results)
+                    resolve(results)
+                }
+            }
+        )
+    })
+}
+
+const getRights = (email) => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL rights_master_get_rights(?)`,
+            email,
+            (err, results) => {
+                if (err) {
+                    console.log('DB getRights', err)
+                    reject(err)
+                }
+                else {
+                    console.log('DB getRights ', results)
+                    resolve(results)
+                }
+            }
+        )
+    })
+}
+
+const getRoles = () => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL roles_get_roles()`,
+            (err, results) => {
+                if (err) {
+                    console.log('DB getRoles', err)
+                    reject(err)
+                }
+                else {
+                    console.log('DB getRoles ', results)
+                    resolve(results)
+                }
+            }
+        )
+    })
+}
+
 export {
     createUser,
     userLogin,
+    createRole,
+    getRights,
+    getRoles,
 }
