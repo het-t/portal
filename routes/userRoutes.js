@@ -24,15 +24,7 @@ const auth = (req, res, next) => {
 }
 
 router.post('/logout', auth, (req, res) => {
-    // jwt.verify(req.signedCookies._token, 'secert', (err, decoded) => {
-    //     if (err) {
-    //         console.log("userRoutes POST '/logout/ ",err) 
-    //         res.send('fail')
-    //     } else {
-    //         console.log('Logout username', decoded.un, 'password', decoded.pwd)
-            res.send('ok')
-    //     }
-    // })
+    res.send('ok')
 })
 
 //RoleView.vue 
