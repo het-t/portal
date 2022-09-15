@@ -1,4 +1,4 @@
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import {userLoginDb} from '../db/login.js'
 
 const login = (req, res) => {

@@ -12,7 +12,9 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.json({limit:'5mb'}))
 
 
-app.use(router)
+app.use('/u/api', router)
+app.use('/api', router)
+
 // app.use('/u/api', userRoutes)
 // app.use('/api', indexRoutes)
 
