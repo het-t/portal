@@ -1,10 +1,7 @@
-import express from 'express'
-import jwt from 'jsonwebtoken'
-import { userLogin } from '../db.js'
+import * as jwt from 'jsonwebtoken'
+import {userLoginDb} from '../db/login.js'
 
-var router = express.Router()
-
-router.post('/login', (req, res) => {
+const login = (req, res) => {
     console.log(req.body)
     let payload = {
         "email": req.body.email,
@@ -20,7 +17,7 @@ router.post('/login', (req, res) => {
                 signed: true
             })
 
-            userLogin([payload.email, payload.pwd])
+            userLoginDb([payload.email, payload.pwd])
             .then((user)=>{
                 if (user) {
                     res.send({
@@ -35,8 +32,6 @@ router.post('/login', (req, res) => {
         }
     })
 
-})
-
-export {
-    router as indexRoutes,
 }
+
+export default login
