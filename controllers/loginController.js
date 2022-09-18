@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 import {userLoginDb} from '../db/login.js'
 
 const login = (req, res) => {
@@ -20,9 +21,19 @@ const login = (req, res) => {
                 signed: true
             })
 
-            userLoginDb([payload.email, payload.pwd])
-            .then((loginStatus)=>{
-                res.send(loginStatus)
+            userLoginDb([payload.email])
+            .then((user)=>{
+                if (user.length == 0) {
+                    res.send("user not found")
+                } 
+                else {
+                    const verified = bcrypt.compareSync(payload.pwd, user[0].password)
+                    console.log("verified ", verified)
+                    if (verified) {
+                        res.send('1')
+                    }
+                    else res.send('0')
+                }
             })
             .catch(()=>{
                 console.log("POST '/login' ", err)

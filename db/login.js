@@ -1,10 +1,10 @@
 import con from './conDb.js'
 
-const userLoginDb = (args) => {
+const userLoginDb = (email) => {
     return new Promise((resolve, reject) => {
         con.query(
-            `CALL users_login(?, ?)`,
-            args, 
+            `CALL users_login(?)`,
+            email, 
             (err, results) => {
                 if (err) {
                     console.log(err)
