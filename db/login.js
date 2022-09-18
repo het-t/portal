@@ -11,7 +11,26 @@ const userLoginDb = (args) => {
                     reject(err)
                 } 
                 else {
-                    console.log(results)
+                    console.log("userLoginDb ",results)
+                    resolve(results?.[0])
+                }
+            }
+        )
+    })
+}
+
+const userRightsDb = (args) => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL rights_master_get_user_rights(?)`,
+            args,
+            (err, results) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                else {
+                    console.log("userRightsDb ", results)
                     resolve(results?.[0])
                 }
             }
@@ -20,5 +39,6 @@ const userLoginDb = (args) => {
 }
 
 export {
-    userLoginDb
+    userLoginDb,
+    userRightsDb,
 }

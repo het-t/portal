@@ -3,10 +3,13 @@ import {userLoginDb} from '../db/login.js'
 
 const login = (req, res) => {
     console.log(req.body)
-    let payload = {
+    let payload;
+
+    payload = {
         "email": req.body.email,
         "pwd": req.body.password
     }
+
     jwt.sign(payload, 'secert', (err, token) => {
         if (err) {
             console.log(err)
@@ -18,12 +21,8 @@ const login = (req, res) => {
             })
 
             userLoginDb([payload.email, payload.pwd])
-            .then((user)=>{
-                if (user) {
-                    res.send({
-                        user,
-                    })
-                }
+            .then((loginStatus)=>{
+                res.send(loginStatus)
             })
             .catch(()=>{
                 console.log("POST '/login' ", err)
