@@ -4,9 +4,8 @@ import {userLoginDb} from '../db/login.js'
 
 const login = (req, res) => {
     console.log(req.body)
-    let payload;
 
-    payload = {
+    let payload = {
         "email": req.body.email,
         "pwd": req.body.password
     }
@@ -27,6 +26,7 @@ const login = (req, res) => {
                     res.send("user not found")
                 } 
                 else {
+                    console.log("hashed",user[0].password, "data", payload.pwd)
                     const verified = bcrypt.compareSync(payload.pwd, user[0].password)
                     console.log("verified ", verified)
                     if (verified) {
