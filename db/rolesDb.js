@@ -38,7 +38,28 @@ const createRoleDb = (roleName, roleRights) => {
     })
 }
 
+const deleteRoleDb = (roleId) => {
+    console.log("delete role roleId", roleId)
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL roles_delete_role(?)`,
+            [roleId],
+            (err, results) => {
+                if (err) {
+                    console.log("DB deleteRole", err)
+                    reject(err)
+                }
+                else {
+                    console.log("Db deleteRole", results)
+                    resolve(results)
+                }
+            }
+        )
+    })
+}
+
 export {
     getRolesDb,
     createRoleDb,
+    deleteRoleDb
 }

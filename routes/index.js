@@ -7,6 +7,7 @@ import userRights from '../controllers/userRightsController.js'
 
 import createRole from '../controllers/createRoleController.js'
 import editRole from '../controllers/editRoleController.js'
+import deleteRole from '../controllers/deleteRoleController.js'
 
 import getRoles from '../controllers/getRolesController.js'
 import getRights from '../controllers/getRightsController.js'
@@ -25,6 +26,7 @@ router.get('/users/get-roles', auth, getRoles)
 
 router.get('/roles/create-role', auth, createRole)
 router.get('/roles/get-roles', auth, getRoles)
+router.post('/roles/delete-role', auth, deleteRole)
 router.get('/roles/edit-role', auth, editRole)
 router.get('/roles/get-rights', auth, getRights)
 
