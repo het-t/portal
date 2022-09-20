@@ -24,6 +24,7 @@ router.post('/users/create-user', auth, createUser)
 router.get('/users/get-roles', auth, getRoles)
 
 router.get('/roles/create-role', auth, createRole)
+router.get('/roles/get-roles', auth, getRoles)
 router.get('/roles/edit-role', auth, editRole)
 router.get('/roles/get-rights', auth, getRights)
 

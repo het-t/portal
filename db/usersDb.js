@@ -1,4 +1,3 @@
-import { hashSync } from 'bcrypt'
 import con from './conDb.js'
 
 const createUserDb =  (args) => {
