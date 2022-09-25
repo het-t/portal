@@ -6,7 +6,6 @@ const createUser = (req, res) => {
     const args = Object.values(req.body.params)
     
     args[6] = bcrypt.hashSync(args[6], 3)
-    console.log("args[6]", args[6])
     createUserDb(args)
     .then((results) => {
         console.log(results)

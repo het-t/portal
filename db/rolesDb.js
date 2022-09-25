@@ -58,8 +58,45 @@ const deleteRoleDb = (roleId) => {
     })
 }
 
+const getEditRoleDb = (roleName) => {
+    console.log("edit role name", roleName)
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL roles_role_data(?)`,
+            [roleName],
+            (err, results) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                } 
+                else {
+                    resolve(results)
+                }
+            }
+        )
+    })
+}
+
+const editRoleDb = (args) => {
+    return new Promise((resolve, reject) => {
+        con.query(`CALL roles_edit_role(?, ?, ?, ?, ?, ?)`,
+        [...args],
+        (err, results) => {
+            if (err) {
+                console.log(err)
+                reject(err)
+            }
+            else {
+                resolve(results)
+            }
+        })
+    })
+}
+
 export {
     getRolesDb,
     createRoleDb,
-    deleteRoleDb
+    deleteRoleDb,
+    getEditRoleDb,
+    editRoleDb
 }
