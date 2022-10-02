@@ -20,6 +20,7 @@ import getEditUser from '../controllers/editUserDataController.js'
 
 import addLog from '../controllers/logs.js'
 
+import usersActivities from '../controllers/usersActivities.js'
 
 const router = express.Router()
 
@@ -41,5 +42,8 @@ router.get('/roles/edit', auth, getEditRole)
 
 router.post('/roles/edit-role', auth, editRole, addLog)
 router.get('/roles/get-rights', auth, getRights, addLog)
+
+
+router.get('/activity', auth, usersActivities, addLog)
 
 export default router;
