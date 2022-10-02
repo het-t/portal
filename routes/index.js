@@ -18,25 +18,28 @@ import createUser from '../controllers/createUserController.js'
 import getAllUsers from '../controllers/getAllUsersController.js'
 import getEditUser from '../controllers/editUserDataController.js'
 
+import addLog from '../controllers/logs.js'
+
+
 const router = express.Router()
 
-router.post('/login', login)
-router.get('/rights', auth, userRights)
+router.post('/login', login, addLog)
+router.get('/rights', auth, userRights, addLog)
 router.post('/logout', logout)
 router.post('/auth', login)
 
-router.post('/users/create-user', auth, createUser)
-router.get('/users/', auth, getAllUsers)
-router.get('/users/get-roles', auth, getRoles)
+router.post('/users/create-user', auth, createUser, addLog)
+router.get('/users/', auth, getAllUsers, addLog)
+router.get('/users/get-roles', auth, getRoles, addLog)
 router.get('/users/edit', auth, getEditUser)
-router.post('/users/edit-user', auth, editUser)
+router.post('/users/edit-user', auth, editUser, addLog)
 
-router.get('/roles/create-role', auth, createRole)
-router.get('/roles/get-roles', auth, getRoles)
-router.post('/roles/delete-role', auth, deleteRole)
+router.get('/roles/create-role', auth, createRole, addLog)
+router.get('/roles/get-roles', auth, getRoles, addLog)
+router.post('/roles/delete-role', auth, deleteRole)//
 router.get('/roles/edit', auth, getEditRole)
 
-router.get('/roles/edit-role', auth, editRole)
-router.get('/roles/get-rights', auth, getRights)
+router.post('/roles/edit-role', auth, editRole, addLog)
+router.get('/roles/get-rights', auth, getRights, addLog)
 
 export default router;

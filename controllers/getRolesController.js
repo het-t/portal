@@ -1,15 +1,24 @@
 import {getRolesDb} from '../db/rolesDb.js'
 
-const getRoles = (req, res) => {
+const getRoles = (req, res, next) => {
     console.log("GET '/users/get-roles'")
+    req.log_details = {
+        "activity_id": 10,
+        "user": req.email,
+        "reference_table": "roles",
+        "reference_table_pk_id": null,
+    }
     getRolesDb()
     .then((roles) => {
-        console.log(roles)
-        res.send(roles)
+        req.log_details.detail = 'success'
+        req.res_data = roles
+        next()
     })
     .catch((err) => {
         console.log("/users/get-roles catch ",err)
-        res.send('failed')
+        req.log_details.detail = err
+        req.res_data = err
+        next()
     })
 }
 

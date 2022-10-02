@@ -77,10 +77,10 @@ const getEditRoleDb = (roleName) => {
     })
 }
 
-const editRoleDb = (args) => {
+const editRoleDb = (roleName, roleRights) => {
     return new Promise((resolve, reject) => {
-        con.query(`CALL roles_edit_role(?, ?, ?, ?, ?, ?)`,
-        [...args],
+        con.query(`CALL roles_edit_role(?, ?)`,
+        [roleName, roleRights],
         (err, results) => {
             if (err) {
                 console.log(err)
