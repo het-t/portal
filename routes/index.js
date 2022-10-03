@@ -37,7 +37,7 @@ router.post('/users/edit-user', auth, editUser, addLog)
 
 router.get('/roles/create-role', auth, createRole, addLog)
 router.get('/roles/get-roles', auth, getRoles, addLog)
-router.post('/roles/delete-role', auth, deleteRole)//
+router.post('/roles/delete-role', auth, deleteRole, addLog)
 router.get('/roles/edit', auth, getEditRole)
 
 router.post('/roles/edit-role', auth, editRole, addLog)

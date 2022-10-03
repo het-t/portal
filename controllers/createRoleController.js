@@ -9,19 +9,21 @@ const createRole = (req, res, next) => {
         "activity_id": 3,
         "user": req.email,
         "reference_table": "roles",
-        "reference_table_pk_id": null,
     }
 
     createRoleDb(roleName, roleRights)
     .then((results) => {
-        console.log(results)
+        console.log("creater role", results)
+        req.log_details.reference_table_pk_id = results[0][0].pk_for_logs
         req.log_details.detail = 'success'
         req.res_data = 'success'
         next()
     })
     .catch((err) => {
         console.log("/users/create-role catch ",err)
-        req.log_details.detail = err
+        req.log_details.reference_table_pk_id = null
+        // req.log_details.detail = JSON.stringify(err)
+        req.log_details.detail = [err]
         req.res_data = 'failed'
         next()
     })

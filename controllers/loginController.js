@@ -13,11 +13,11 @@ const login = (req, res, next) => {
         "activity_id": 1,
         "user": payload.email,
         "reference_table": "users",
-        "reference_table_pk_id": null,
     }
     jwt.sign(payload, 'secert', (err, token) => {
         if (err) {
             console.log(err)
+            req.log_details.detail = [err]
             req.res_data = 'fail'
             next()
         }
@@ -29,7 +29,10 @@ const login = (req, res, next) => {
             userLoginDb([payload.email])
             .then((user)=>{
                 if (user.length == 0) {
+                    //add_logs will not work because user_id will not be avilable for this case
+                    console.log("user login", user.length)
                     req.res_data = "user not found"
+                    req.log_details.reference_table_pk_id = null
                     req.log_details.detail = "user not found"
                     next()
                 } 
@@ -38,11 +41,13 @@ const login = (req, res, next) => {
                     const verified = bcrypt.compareSync(payload.pwd, user[0].password)
                     console.log("verified ", verified)
                     if (verified) {
+                        req.log_details.reference_table_pk_id = user[0].pk_for_logs
                         req.log_details.detail = 'success'
                         req.res_data = '1'
                         next()
                     }
                     else {
+                        req.log_details.reference_table_pk_id = user[0].pk_for_logs
                         req.log_details.detail = 'password not matching'
                         req.res_data = '0'
                         next()
@@ -51,7 +56,7 @@ const login = (req, res, next) => {
             })
             .catch(()=>{
                 console.log("POST '/login' ", err)
-                req.log_details.detail = err
+                req.log_details.detail = [err]
                 req.res_data = 'fail'
                 next()
             })

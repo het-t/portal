@@ -3,14 +3,26 @@ import {deleteRoleDb} from '../db/rolesDb.js'
 const deleteRole = (req, res, next) => {
     console.log("deleteRole body ",req.body)
     const roleId = req.body.role_id
+    
+    req.log_details = {
+        "activity_id": 7,
+        "user": req.email,
+        "reference_table": "roles",
+    }
     deleteRoleDb(roleId)
     .then((results) => {
         console.log(results)
-        res.send(results[0])
+        req.log_details.reference_table_pk_id = roleId
+        req.log_details.detail = 'success'
+        req.res_data = results[0]
+        next()
     })
     .catch((err) => {
         console.log(err)
-        res.send('failed to delete role')
+        req.log_details.reference_table_pk_id = null
+        req.log_details.detail = [err]
+        req.res_data = "failed to delete role"
+        next()
     });
 }
 

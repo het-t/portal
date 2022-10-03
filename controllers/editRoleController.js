@@ -7,15 +7,16 @@ const editRole = (req, res, next) => {
         "activity_id": 5,
         "user": req.email,
         "reference_table": "roles",
-        "reference_table_pk_id": null,
     }
     editRoleDb(req.body.params.role_name, JSON.stringify(req.body.params.role_rights))
     .then((results) => {
+        req.log_details.reference_table_pk_id = results[0][0].pk_for_logs
         req.log_details.detail = 'success'
         next()
     })
     .catch((err) => {
-        req.log_details.detail = [(err)]
+        req.log_details.reference_table_pk_id = null
+        req.log_details.detail = [err]
         next()
     })
 }

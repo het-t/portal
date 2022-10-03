@@ -9,18 +9,19 @@ const createUser = (req, res, next) => {
         "activity_id": 4,
         "user": req.email,
         "reference_table": "users",
-        "reference_table_pk_id": null,
     }
     args[6] = bcrypt.hashSync(args[6], 3)
     createUserDb(args)
     .then((results) => {
+        req.log_details.reference_table_pk_id = results[0][0].pk_for_logs
         req.log_details.detail = 'success'
         req.res_data = 'success'
         next()
     })
     .catch((err)=>{
         console.log("/users/create-user catch ",err)
-        req.log_details.detail = err
+        req.log_details.reference_table_pk_id = null
+        req.log_details.detail = [err]
         req.res_data = 'failed'
         next()
     })
