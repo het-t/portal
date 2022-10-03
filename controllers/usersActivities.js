@@ -7,8 +7,9 @@ const usersActivities = (req, res, next) => {
         "reference_table": "user_activities",
         "reference_table_pk_id": null,
     }
-    activityDb()
+    activityDb(req.query.from, req.query.records_per_page)
     .then((activities) => {
+        console.log(activities)
         req.res_data = activities
         req.log_details.detail = 'success'
         next()
