@@ -9,19 +9,22 @@ import createRole from '../controllers/createRoleController.js'
 import editRole from '../controllers/editRoleController.js'
 import deleteRole from '../controllers/deleteRoleController.js'
 import getEditRole from '../controllers/editRoleDataController.js'
-import editUser from '../controllers/editUserController.js'
+import rolesCount from '../controllers/rolesCount.js'
 
 import getRoles from '../controllers/getRolesController.js'
 import getRights from '../controllers/getRightsController.js'
 
 import createUser from '../controllers/createUserController.js'
+import editUser from '../controllers/editUserController.js'
 import getAllUsers from '../controllers/getAllUsersController.js'
 import getEditUser from '../controllers/editUserDataController.js'
 
 import addLog from '../controllers/logs.js'
 
 import usersActivities from '../controllers/usersActivities.js'
+
 import usersActivitiesCount from '../controllers/userActivitiesCount.js'
+import usersCount from '../controllers/usersCount.js'
 
 const router = express.Router()
 
@@ -35,11 +38,13 @@ router.get('/users/', auth, getAllUsers, addLog)
 router.get('/users/get-roles', auth, getRoles, addLog)
 router.get('/users/edit', auth, getEditUser)
 router.post('/users/edit-user', auth, editUser, addLog)
+router.get('/users/count', auth, usersCount)
 
 router.get('/roles/create-role', auth, createRole, addLog)
-router.get('/roles/get-roles', auth, getRoles, addLog)
+router.get('/roles/', auth, getRoles, addLog)
 router.post('/roles/delete-role', auth, deleteRole, addLog)
 router.get('/roles/edit', auth, getEditRole)
+router.get('/roles/count', auth, rolesCount)
 
 router.post('/roles/edit-role', auth, editRole, addLog)
 router.get('/roles/get-rights', auth, getRights, addLog)

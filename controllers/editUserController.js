@@ -18,7 +18,7 @@ const editUser = (req, res, next) => {
     })
     .catch((err) => {
         req.log_details.reference_table_pk_id = null
-        req.log_details.detail = err
+        req.log_details.detail = [err]
         next()
     })
 }

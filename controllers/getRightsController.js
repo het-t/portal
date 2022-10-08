@@ -18,7 +18,7 @@ const getRights = (req, res, next) => {
     })
     .catch((err) => {
         console.log("GET '/u/roles/get-rgihts", err)
-        req.log_details.detail = err
+        req.log_details.detail = [err]
         req.res_data = 'failed'
         // next()
     })

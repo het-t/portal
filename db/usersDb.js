@@ -11,7 +11,6 @@ const createUserDb =  (args) => {
                     reject(err)
                 } 
                 else {
-                    // console.log('DB createUser', results)
                     resolve(results)
                 }
             }
@@ -19,17 +18,16 @@ const createUserDb =  (args) => {
     })
 }
 
-const getAllUsersDb = () => {
+const getAllUsersDb = (offSet, recordsPerPage) => {
     return new Promise((resolve, reject) => {
-        con.query(`CALL users_get_all_users()`,
-        [],
+        con.query(`CALL users_get_all_users(?, ?)`,
+        [offSet, recordsPerPage],
         (err, results) => {
             if (err) {
-                console.log('DB getAllUsers', err)
                 reject(err)
             }
             else {
-                resolve(results)
+                resolve(results[0])
             }
         })
     })
@@ -67,9 +65,23 @@ const editUserDb = (args) => {
         })
     })
 }
+
+const usersCountDb = () => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL users_count()`,
+            (err, results) => {
+                if (err) reject(err)
+                else resolve(results[0])
+            }
+        )
+    })
+}
+
 export {
     createUserDb,
     getAllUsersDb,
     getEditUserDb,
-    editUserDb
+    editUserDb,
+    usersCountDb
 }

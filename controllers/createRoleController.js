@@ -22,7 +22,6 @@ const createRole = (req, res, next) => {
     .catch((err) => {
         console.log("/users/create-role catch ",err)
         req.log_details.reference_table_pk_id = null
-        // req.log_details.detail = JSON.stringify(err)
         req.log_details.detail = [err]
         req.res_data = 'failed'
         next()

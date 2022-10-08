@@ -8,7 +8,7 @@ const getRoles = (req, res, next) => {
         "reference_table": "roles",
         "reference_table_pk_id": null,
     }
-    getRolesDb()
+    getRolesDb(req.query.from, req.query.records_per_page)
     .then((roles) => {
         req.log_details.detail = 'success'
         req.res_data = roles
@@ -16,7 +16,7 @@ const getRoles = (req, res, next) => {
     })
     .catch((err) => {
         console.log("/users/get-roles catch ",err)
-        req.log_details.detail = err
+        req.log_details.detail = [err]
         req.res_data = err
         next()
     })

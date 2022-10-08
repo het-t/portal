@@ -15,7 +15,7 @@ const userRights = (req, res, next) => {
     })
     .catch((err) => {
         console.log(err)
-        req.log_details.detail = 'failed to load rights'
+        req.log_details.detail = [err]
         req.res_data = "failed to load rights"
         next()
     })

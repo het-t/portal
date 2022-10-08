@@ -1,9 +1,10 @@
 import con from './conDb.js'
 
-const getRolesDb = () => {
+const getRolesDb = (offSet, recordsPerPage) => {
     return new Promise((resolve, reject) => {
         con.query(
-            `CALL roles_get_roles()`,
+            `CALL roles_get_roles(?, ?)`,
+            [offSet, recordsPerPage],
             (err, results) => {
                 if (err) {
                     console.log('DB getRoles', err)
@@ -11,7 +12,7 @@ const getRolesDb = () => {
                 }
                 else {
                     console.log('DB getRoles ', results)
-                    resolve(results)
+                    resolve(results[0])
                 }
             }
         )
@@ -93,7 +94,20 @@ const editRoleDb = (roleName, roleRights) => {
     })
 }
 
+const rolesCountDb = () => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL roles_count()`,
+            (err, results) => {
+                if (err) reject(err)
+                else resolve(results[0])
+            }
+        )
+    })
+}
+
 export {
+    rolesCountDb,
     getRolesDb,
     createRoleDb,
     deleteRoleDb,

@@ -1,11 +1,11 @@
 import con from './conDb.js'
 
-const activityDb = (off_set, records_per_page) => {
+const activityDb = (offSet, recordsPerPage) => {
     return new Promise((resolve, reject) => {
-        console.log("pagination ", off_set, records_per_page)
+        console.log("pagination ", offSet, recordsPerPage)
         con.query(
             `CALL user_activities(?, ?)`,
-            [off_set, records_per_page],
+            [offSet, recordsPerPage],
             (err, results) => {
                 if (err) reject(err)
                 else resolve(results[0])
