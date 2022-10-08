@@ -1,4 +1,4 @@
-import {getAllUsersDb} from '../db/usersDb.js'
+import makeDbReq from '../db/index.js'
 
 const getAllUsers = (req, res, next) => {
     req.log_details = {
@@ -7,7 +7,7 @@ const getAllUsers = (req, res, next) => {
         "reference_table": "users",
         "reference_table_pk_id": null,
     }
-    getAllUsersDb(req.query.from, req.query.records_per_page)
+    makeDbReq(`users_get_all_users(?, ?)`, [req.query.from, req.query.records_per_page])
     .then((users) => {
         req.log_details.detail = 'success'
         req.res_data = users

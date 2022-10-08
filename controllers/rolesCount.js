@@ -1,7 +1,7 @@
-import {rolesCountDb} from '../db/rolesDb.js'
+import makeDbReq from '../db/index.js'
 
 const rolesCount = (req, res) => {
-    rolesCountDb()
+    makeDbReq(`roles_count()`, [])
     .then((count) => {
         console.log("roles count ", count)
         res.send(count)

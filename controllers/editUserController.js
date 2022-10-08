@@ -1,4 +1,4 @@
-import {editUserDb} from '../db/usersDb.js'
+import makeDbReq from '../db/index.js'
 
 const editUser = (req, res, next) => {
     console.log("editUser ", req.body.params)
@@ -10,7 +10,7 @@ const editUser = (req, res, next) => {
         "reference_table": "users",
     }
 
-    editUserDb(args)
+    makeDbReq(`users_edit_user(?, ?, ?, ?, ?, ?, ?)`, args)
     .then((results) => {
         req.log_details.reference_table_pk_id = args[0]
         req.log_details.detail = 'success'

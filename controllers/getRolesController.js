@@ -1,4 +1,4 @@
-import {getRolesDb} from '../db/rolesDb.js'
+import makeDbReq from '../db/index.js'
 
 const getRoles = (req, res, next) => {
     console.log("GET '/users/get-roles'")
@@ -8,7 +8,7 @@ const getRoles = (req, res, next) => {
         "reference_table": "roles",
         "reference_table_pk_id": null,
     }
-    getRolesDb(req.query.from, req.query.records_per_page)
+    makeDbReq(`roles_get_roles(?, ?)`, [req.query.from, req.query.records_per_page])
     .then((roles) => {
         req.log_details.detail = 'success'
         req.res_data = roles

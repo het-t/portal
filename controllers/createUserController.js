@@ -1,4 +1,4 @@
-import {createUserDb} from '../db/usersDb.js'
+import makeDbReq from '../db/index.js'
 import bcrypt from 'bcrypt'
 
 const createUser = (req, res, next) => {
@@ -11,9 +11,9 @@ const createUser = (req, res, next) => {
         "reference_table": "users",
     }
     args[6] = bcrypt.hashSync(args[6], 3)
-    createUserDb(args)
+    makeDbReq(`users_create_user(?, ?, ?, ?, ?, ?, ?)`, args)
     .then((results) => {
-        req.log_details.reference_table_pk_id = results[0][0].pk_for_logs
+        req.log_details.reference_table_pk_id = results[0].pk_for_logs
         req.log_details.detail = 'success'
         req.res_data = 'success'
         next()

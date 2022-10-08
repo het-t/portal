@@ -1,4 +1,4 @@
-import {deleteRoleDb} from '../db/rolesDb.js'
+import makeDbReq from '../db/index.js'
 
 const deleteRole = (req, res, next) => {
     console.log("deleteRole body ",req.body)
@@ -9,12 +9,13 @@ const deleteRole = (req, res, next) => {
         "user": req.email,
         "reference_table": "roles",
     }
-    deleteRoleDb(roleId)
+
+    makeDbReq(`roles_delete_role(?)`, [roleId])
     .then((results) => {
         console.log(results)
         req.log_details.reference_table_pk_id = roleId
         req.log_details.detail = 'success'
-        req.res_data = results[0]
+        req.res_data = true
         next()
     })
     .catch((err) => {

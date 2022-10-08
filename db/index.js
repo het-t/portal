@@ -1,11 +1,19 @@
-import userLoginDb from './login.js'
-import * as rightsDb from './rightsDb.js'
-import * as rolesDb from './rolesDb.js'
-import * as usersDb from './usersDb.js'
+import con from './conDb.js'
 
-export default {
-    userLoginDb,
-    rightsDb,
-    rolesDb,
-    usersDb,
+const makeDbReq = (sp, args) => {
+    return new Promise((resolve, reject) => {
+        con.query(
+            `CALL ${sp}`,
+            [...args],
+            (err, results) => {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                } 
+                else resolve(results[0])
+            }
+        )
+    })
 }
+
+export default makeDbReq

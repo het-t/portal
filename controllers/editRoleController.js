@@ -1,4 +1,4 @@
-import { editRoleDb } from "../db/rolesDb.js"
+import makeDbReq from "../db/index.js"
 
 const editRole = (req, res, next) => {
     console.log("edit role ", req.body)
@@ -8,9 +8,9 @@ const editRole = (req, res, next) => {
         "user": req.email,
         "reference_table": "roles",
     }
-    editRoleDb(req.body.params.role_name, JSON.stringify(req.body.params.role_rights))
+    makeDbReq(`roles_edit_role(?, ?)`, [req.body.params.role_name, JSON.stringify(req.body.params.role_rights)])
     .then((results) => {
-        req.log_details.reference_table_pk_id = results[0][0].pk_for_logs
+        req.log_details.reference_table_pk_id = results[0].pk_for_logs
         req.log_details.detail = 'success'
         next()
     })

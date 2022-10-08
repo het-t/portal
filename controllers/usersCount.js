@@ -1,7 +1,7 @@
-import {usersCountDb} from '../db/usersDb.js'
+import makeDbReq from '../db/index.js'
 
 const usersCount = (req, res) => {
-    usersCountDb()
+    makeDbReq(`users_count()`, [])
     .then((count) => {
         res.send(count)
     })
