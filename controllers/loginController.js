@@ -56,7 +56,7 @@ const login = (req, res, next) => {
             })
             .catch(()=>{
                 console.log("POST '/login' ", err)
-                req.log_details.detail = [err]
+                req.log_details.detail = [`Error ${err}`]
                 req.res_data = 'fail'
                 next()
             })

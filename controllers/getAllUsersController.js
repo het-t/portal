@@ -14,7 +14,7 @@ const getAllUsers = (req, res, next) => {
         next()
     })
     .catch((err) => {
-        req.log_details.detail = [err]
+        req.log_details.detail = [`Error ${err}`]
         req.res_data = 'failed in fetching users details'
         next()
     })

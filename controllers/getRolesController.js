@@ -16,7 +16,7 @@ const getRoles = (req, res, next) => {
     })
     .catch((err) => {
         console.log("/users/get-roles catch ",err)
-        req.log_details.detail = [err]
+        req.log_details.detail = [`Error ${err}`]
         req.res_data = err
         next()
     })

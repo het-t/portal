@@ -15,7 +15,7 @@ const usersActivityCount = (req, res, next) => {
     })
     .catch(err => {
         req.res_data = 'failed'
-        req.log_details.detail = [err]
+        req.log_details.detail = [`Error ${err}`]
         next()
     }) 
 }
