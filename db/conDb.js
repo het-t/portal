@@ -1,10 +1,6 @@
 import * as mysql from 'mysql2'
+import dbInfo from './db-info.js'
 
-const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'het161967',
-    database: 'portal'
-})
+const con = mysql.createConnection(dbInfo)
 
 export default con;
