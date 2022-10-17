@@ -1,4 +1,4 @@
-import {activityCountDb} from '../db/activityDb.js'
+import makeDbReq from '../db/index.js'
 
 const usersActivityCount = (req, res, next) => {
     req.log_details = {
@@ -7,7 +7,7 @@ const usersActivityCount = (req, res, next) => {
         "reference_table": "user_activities",
         "reference_table_pk_id": null,
     }
-    activityCountDb()
+    makeDbReq(`user_activities_count()`, [])
     .then((count) => {
         req.res_data = count
         req.log_details.detail = 'success'

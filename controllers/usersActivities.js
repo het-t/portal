@@ -1,7 +1,11 @@
-import {activityDb} from '../db/activityDb.js'
+import makeDbReq from "../db/index.js"
 
 const usersActivities = (req, res, next) => {
-    activityDb(req.query.from, req.query.records_per_page)
+    makeDbReq(
+        `user_activities(?, ?)`,
+        [req.query.from, req.query.records_per_page]
+    )
+    // activityDb(req.query.from, req.query.records_per_page)
     .then((activities) => {
         res.send(activities)
     })

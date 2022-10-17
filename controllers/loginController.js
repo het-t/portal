@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import {userLoginDb} from '../db/login.js'
+import makeDbReq from '../db/index.js'
+// import {userLoginDb} from '../db/login.js'
 
 const login = (req, res, next) => {
     console.log(req.body)
@@ -26,7 +27,11 @@ const login = (req, res, next) => {
                 signed: true
             })
 
-            userLoginDb([payload.email])
+            // userLoginDb([payload.email])
+            makeDbReq(
+                `users_login(?)`,
+                [payload.email]
+            )
             .then((user)=>{
                 if (user.length == 0) {
                     //add_logs will not work because user_id will not be avilable for this case

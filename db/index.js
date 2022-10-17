@@ -10,7 +10,7 @@ const makeDbReq = (sp, args) => {
                     console.log(err)
                     reject(err)
                 } 
-                else resolve(results[0])
+                else resolve(results?.[0])
             }
         )
     })
