@@ -5,7 +5,6 @@ const usersActivities = (req, res, next) => {
         `user_activities(?, ?)`,
         [req.query.from, req.query.records_per_page]
     )
-    // activityDb(req.query.from, req.query.records_per_page)
     .then((activities) => {
         res.send(activities)
     })
