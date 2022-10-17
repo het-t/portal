@@ -1,30 +1,30 @@
 import express from 'express'
 
-import login from '../controllers/loginController.js'
-import logout from '../controllers/logoutController.js'
+import login from '../controllers/login.js'
+import logout from '../controllers/logout.js'
 import auth from '../controllers/auth.js'
-import userRights from '../controllers/userRightsController.js'
+import userRights from '../controllers/rightsData.js'
 
-import createRole from '../controllers/createRoleController.js'
-import editRole from '../controllers/editRoleController.js'
-import deleteRole from '../controllers/deleteRoleController.js'
-import getEditRole from '../controllers/editRoleDataController.js'
-import rolesCount from '../controllers/rolesCount.js'
+import createRole from '../controllers/roleCreate.js'
+import editRole from '../controllers/roleEdit.js'
+import deleteRole from '../controllers/roleDelete.js'
+import getEditRole from '../controllers/roleData.js'
+import rolesCount from '../controllers/roleCount.js'
 
-import getRoles from '../controllers/getRolesController.js'
-import getRights from '../controllers/getRightsController.js'
+import getRoles from '../controllers/roleList.js'
+import getRights from '../controllers/rightsList.js'
 
-import createUser from '../controllers/createUserController.js'
-import editUser from '../controllers/editUserController.js'
-import getAllUsers from '../controllers/getAllUsersController.js'
-import getEditUser from '../controllers/editUserDataController.js'
+import createUser from '../controllers/userCreate.js'
+import editUser from '../controllers/userEdit.js'
+import getAllUsers from '../controllers/userList.js'
+import getEditUser from '../controllers/userData.js'
 
 import addLog from '../controllers/logs.js'
 
-import usersActivities from '../controllers/usersActivities.js'
+import usersActivities from '../controllers/activityData.js'
 
-import usersActivitiesCount from '../controllers/userActivitiesCount.js'
-import usersCount from '../controllers/usersCount.js'
+import usersActivitiesCount from '../controllers/activityCount.js'
+import usersCount from '../controllers/userCount.js'
 
 const router = express.Router()
 
