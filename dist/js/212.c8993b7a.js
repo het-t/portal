@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkportal"]=self["webpackChunkportal"]||[]).push([[212],{8212:function(r,n,e){e.r(n),e.d(n,{default:function(){return i}});var t=e(6252);const s={class:"mr24 ml24"};function u(r,n,e,u,a,c){const o=(0,t.up)("router-view");return(0,t.wg)(),(0,t.iD)("div",s,[(0,t.Wm)(o)])}var a={name:"TasksView"},c=e(3744);const o=(0,c.Z)(a,[["render",u]]);var i=o}}]);
+//# sourceMappingURL=212.c8993b7a.js.map
