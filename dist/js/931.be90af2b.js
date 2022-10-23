@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkportal"]=self["webpackChunkportal"]||[]).push([[931],{3931:function(e,t,r){r.r(t),r.d(t,{default:function(){return l}});var n=r(6252);const u={class:"ml24 mr24"};function c(e,t,r,c,o,s){const a=(0,n.up)("router-view");return(0,n.wg)(),(0,n.iD)("div",u,[(0,n.Wm)(a)])}var o=r(3907),s={name:"RoleView",computed:{...(0,o.Se)(["getRights"])}},a=r(3744);const i=(0,a.Z)(s,[["render",c]]);var l=i}}]);
-//# sourceMappingURL=931.be90af2b.js.map
