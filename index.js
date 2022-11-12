@@ -16,7 +16,7 @@ app.use(express.json({limit:'5mb'}))
 
 
 app.use('/u/api', router)
-app.use('/api', router)
+// app.use('/api', router)
 
 app.listen(8181, ()=>{
     console.log("PORT 8181")
