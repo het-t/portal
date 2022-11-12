@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import makeDbReq from '../db/index.js'
-// import {userLoginDb} from '../db/login.js'
 
 const login = (req, res, next) => {
     console.log(req.body)
