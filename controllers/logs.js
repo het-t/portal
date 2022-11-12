@@ -1,7 +1,7 @@
 import makeDbReq from '../db/index.js'
 
 /**
- * Helps to add new log
+ * add new log
  * @param {Object} req 
  * @param {*} res 
  */
@@ -17,12 +17,3 @@ const addLog = (req, res) => {
 } 
 
 export default addLog
-
-/**
- * returns true if given value is empty
- * @param {Any} value 
- * @returns Boolean
- */
-const isEmpty=(value)=>{
-return !value || typeof value==='object'
-}
