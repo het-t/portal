@@ -1,6 +1,6 @@
 import makeDbReq from '../db/index.js'
 
-const createTask = (req, res, next) => {
+const createSubTask = (req, res, next) => {
 
     req.log_details = {
         "activity_id": 17,
@@ -12,7 +12,7 @@ const createTask = (req, res, next) => {
 
     makeDbReq(`tasks_master_create_task(?, ?, ?)`, [title, cost, saved])
     .then((results) => {
-        req.log_details.reference_table_pk_id = results[0]?.task_id
+        req.log_details.reference_table_pk_id = results[0]?.sub_task_id
         req.log_details.detail = 'success'
         req.res_data = 'success'
         next()
@@ -23,8 +23,6 @@ const createTask = (req, res, next) => {
         req.res_data = 'failed'
         next()
     })
-
-    // if (subTasks?.length > 0) next()
 }
 
-export default createTask
+export default createSubTask
