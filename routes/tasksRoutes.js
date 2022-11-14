@@ -8,10 +8,12 @@ import auth from '../controllers/auth.js'
 import addLog from '../controllers/logs.js'
 import getSubTasks from '../controllers/subTasksList.js'
 import getTasks from '../controllers/tasksList.js'
+import getTaskData from '../controllers/tasksData.js'
 
 const router = express.Router()
 
 router.get('/', auth, getTasks, addLog)
+router.get('/get-task-data', auth, getTaskData, addLog)
 router.get('/create-task', auth, createTask, createSubTasks, addLog)
 router.get('/get-sub-tasks', auth, getSubTasks, addLog)
 
