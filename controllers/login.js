@@ -53,7 +53,7 @@ const login = (req, res, next) => {
                     else {
                         logObj.referenceTablePkId = user[0].pk_for_logs
                         logObj.detail = 'password not matching'
-                        logObj.resData = '0'
+                        logObj.resData = 'password not matching'
                     }
                 }
             })
