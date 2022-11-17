@@ -5,7 +5,7 @@ const usersCount = (req, res) => {
     .then((count) => {
         res.send(count)
     })
-    .catch(err => {
+    .catch(() => {
         res.send(false)
     }) 
 }

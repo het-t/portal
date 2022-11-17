@@ -7,7 +7,7 @@ const getTasks = (req, res, next) => {
         "reference_table": "tasks_master",
         "reference_table_pk_id": null,
     }
-    makeDbReq(`tasks_master_get_tasks()`, [])
+    makeDbReq(`tasks_get_tasks()`, [])
     .then((tasks) => {
         req.log_details.detail = 'success'
         req.res_data = tasks

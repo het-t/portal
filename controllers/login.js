@@ -3,23 +3,26 @@ import bcrypt from 'bcrypt'
 import makeDbReq from '../db/index.js'
 
 const login = (req, res, next) => {
-    console.log(req.body)
 
     let payload = {
         "email": req.body.email,
         "pwd": req.body.password
     }
-    req.log_details = {
-        "activity_id": 1,
+
+    const logObj = {
+        "activityId": 1,
         "user": payload.email,
-        "reference_table": "users",
+        "referenceTable": "users",
+        "referenceTablePkId": '',
+        "detail": '',
+        "resData": {},
+        "resKey": "login"
     }
+
     jwt.sign(payload, 'secert', (err, token) => {
         if (err) {
-            console.log(err)
-            req.log_details.detail = [err]
-            req.res_data = 'fail'
-            next()
+            logObj.detail = [err]
+            logObj.resData = 'fail'
         }
         else {
             res.cookie('_token', token, {
@@ -33,35 +36,39 @@ const login = (req, res, next) => {
             )
             .then((user)=>{
                 if (user.length == 0) {
-                    //add_logs will not work because user_id will not be avilable for this case
                     console.log("user login", user.length)
-                    req.res_data = "user not found"
-                    req.log_details.reference_table_pk_id = null
-                    req.log_details.detail = "user not found"
-                    next()
+                    logObj.resData = "user not found"
+                    logObj.referenceTablePkId = null,
+                    logObj.detail = "use not found"
                 } 
                 else {
                     console.log("hashed",user[0].password, "data", payload.pwd)
                     const verified = bcrypt.compareSync(payload.pwd, user[0].password)
                     console.log("verified ", verified)
                     if (verified) {
-                        req.log_details.reference_table_pk_id = user[0].pk_for_logs
-                        req.log_details.detail = 'success'
-                        req.res_data = '1'
-                        next()
+                        logObj.referenceTablePkId = user[0].pk_for_logs
+                        logObj.detail = 'success'
+                        logObj.resData = '1'
                     }
                     else {
-                        req.log_details.reference_table_pk_id = user[0].pk_for_logs
-                        req.log_details.detail = 'password not matching'
-                        req.res_data = '0'
-                        next()
+                        logObj.referenceTablePkId = user[0].pk_for_logs
+                        logObj.detail = 'password not matching'
+                        logObj.resData = '0'
                     }
                 }
             })
             .catch(()=>{
                 console.log("POST '/login' ", err)
-                req.log_details.detail = [`Error ${err}`]
-                req.res_data = 'fail'
+                logObj.detail = [err]
+                logObj.resData = 'fail'
+            })
+            .finally(() => {
+                if (typeof req?.logs == "Object") {
+                    req.logs.push(logObj)
+                }
+                else {
+                    req.logs = [logObj]
+                }
                 next()
             })
         }

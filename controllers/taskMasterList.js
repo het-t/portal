@@ -1,17 +1,16 @@
 import makeDbReq from '../db/index.js'
 
-const getTaskData = (req, res, next) => {
+const getTasksMaster = (req, res, next) => {
     req.log_details = {
-        "activity_id": 21,
+        "activity_id": 20,
         "user": req.email,
         "reference_table": "tasks_master",
         "reference_table_pk_id": null,
     }
-
-    makeDbReq(`tasks_get_task_data(?)`, [req.query.taskId])
-    .then((taskData) => {
+    makeDbReq(`tasks_master_get_tasks()`, [])
+    .then((tasks) => {
         req.log_details.detail = 'success'
-        req.res_data = taskData
+        req.res_data = tasks
         next()
     })
     .catch((err) => {
@@ -21,4 +20,4 @@ const getTaskData = (req, res, next) => {
     })
 }
 
-export default getTaskData
+export default getTasksMaster

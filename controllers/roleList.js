@@ -1,22 +1,21 @@
 import makeDbReq from '../db/index.js'
 
 const getRoles = (req, res, next) => {
-    console.log("GET '/users/get-roles'")
+
     req.log_details = {
         "activity_id": 10,
         "user": req.email,
         "reference_table": "roles",
         "reference_table_pk_id": null,
     }
-    makeDbReq(`roles_get_roles(?, ?)`, [req.query.from, req.query.records_per_page])
+    makeDbReq(`roles_get_roles(?, ?)`, [req.query.from, req.query.recordsPerPage])
     .then((roles) => {
         req.log_details.detail = 'success'
         req.res_data = roles
         next()
     })
     .catch((err) => {
-        console.log("/users/get-roles catch ",err)
-        req.log_details.detail = [`Error ${err}`]
+        req.log_details.detail = [err]
         req.res_data = err
         next()
     })

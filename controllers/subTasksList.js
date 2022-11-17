@@ -7,9 +7,8 @@ const getSubTasks = (req, res, next) => {
         "reference_table": "sub_tasks_master",
         "reference_table_pk_id": null,
     }
-    makeDbReq(`sub_tasks_master_get_sub_tasks(?)`, [req.query.taskId])
+    makeDbReq(`sub_tasks_get_task_sub_tasks(?)`, [req.query.taskId])
     .then((subTasks) => {
-        console.log("getting sub task of taskId ", req.query.taskId, subTasks)
         req.log_details.detail = 'success'
         req.res_data = subTasks
         next()

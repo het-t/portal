@@ -8,9 +8,9 @@ const createTask = (req, res, next) => {
         "reference_table": "tasks_master",
     }
 
-    const {title, cost, saved, coordinatorId, clientId, subTasks} = req.query
+    const {taskMasterId, title, cost, saved, coordinatorId, clientId, subTasks} = req.query
 
-    makeDbReq(`tasks_master_create_task(?, ?, ?, ?, ?)`, [title, cost, saved, clientId, coordinatorId])
+    makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?)`, [taskMasterId, title, cost, saved, clientId, coordinatorId])
     .then((results) => {
         req.log_details.reference_table_pk_id = results[0]?.task_id
         req.log_details.detail = 'success'
@@ -18,7 +18,7 @@ const createTask = (req, res, next) => {
             saved,
             taskId: results[0].task_id
         }
-        if (subTasks?.length > 0) next()
+        if (JSON.parse(subTasks)?.length > 0) next() 
     })
     .catch((err) => {
         req.log_details.reference_table_pk_id = null
