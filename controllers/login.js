@@ -9,11 +9,11 @@ const login = (req, res, next) => {
         "pwd": req.body.password
     }
 
-    const logObj = {
+    let logObj = {
         "activityId": 1,
         "user": payload.email,
         "referenceTable": "users",
-        "referenceTablePkId": '',
+        "referenceTablePkId": null,
         "detail": '',
         "resData": {},
         "resKey": "login"
@@ -58,7 +58,6 @@ const login = (req, res, next) => {
                 }
             })
             .catch(()=>{
-                console.log("POST '/login' ", err)
                 logObj.detail = [err]
                 logObj.resData = 'fail'
             })

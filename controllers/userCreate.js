@@ -1,29 +1,45 @@
 import makeDbReq from '../db/index.js'
 import bcrypt from 'bcrypt'
 
+/**
+ * create user
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const createUser = (req, res, next) => {
     const {firstName, lastName, gender, bithdate, email, role, password} = req.body.params
     
-    req.log_details = {
-        "activity_id": 4,
+    let logObj = {
+        "activityId": 4,
         "user": req.email,
-        "reference_table": "users",
+        "referenceTable": "users",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "userCreated"
     }
 
     password = bcrypt.hashSync(password, 3)
 
     makeDbReq(`users_create_user(?, ?, ?, ?, ?, ?, ?)`, [firstName, lastName, gender, bithdate, email, role, password])
     .then((results) => {
-        req.log_details.reference_table_pk_id = results[0].pk_for_logs
-        req.log_details.detail = 'success'
+        logObj.referenceTablePkId = results[0].pk_for_logs
+        logObj.detail = 'success'
         req.res_data = 'success'
-        next()
     })
     .catch((err)=>{
-        console.log("/users/create-user catch ",err)
-        req.log_details.reference_table_pk_id = null
-        req.log_details.detail = [err]
-        req.res_data = 'failed'
+        logObj.detail = [err]
+        req.res_data = 'fail'
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

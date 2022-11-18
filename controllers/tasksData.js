@@ -1,22 +1,38 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * get data of task for edit task screen
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const getTaskData = (req, res, next) => {
-    req.log_details = {
-        "activity_id": 21,
+    let logObj = {
+        "activityId": 21,
         "user": req.email,
-        "reference_table": "tasks_master",
-        "reference_table_pk_id": null,
-    }
+        "referenceTable": "tasks_master",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "rightsMasterList",    }
 
     makeDbReq(`tasks_get_task_data(?)`, [req.query.taskId])
     .then((taskData) => {
-        req.log_details.detail = 'success'
-        req.res_data = taskData
-        next()
+        logObj.detail = 'success'
+        logObj.resData = taskData
     })
     .catch((err) => {
-        req.log_details.detail = [err]
-        req.res_data = err
+        logObj.detail = [err]
+        logObj.resData = err
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

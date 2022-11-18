@@ -1,22 +1,39 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * get roles
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const getRoles = (req, res, next) => {
 
-    req.log_details = {
-        "activity_id": 10,
+    let logObj = {
+        "activityId": 10,
         "user": req.email,
-        "reference_table": "roles",
-        "reference_table_pk_id": null,
+        "referenceTable": "roles",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "rolesList",
     }
     makeDbReq(`roles_get_roles(?, ?)`, [req.query.from, req.query.recordsPerPage])
     .then((roles) => {
-        req.log_details.detail = 'success'
-        req.res_data = roles
-        next()
+        logObj.detail = 'success'
+        logObj.resData = roles
     })
     .catch((err) => {
-        req.log_details.detail = [err]
-        req.res_data = err
+        logObj.detail = [err]
+        logObj.resData = err
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

@@ -12,7 +12,7 @@ import getTasksMaster from '../controllers/taskMasterList.js'
 
 const router = express.Router()
 
-router.get('/', auth, getTasks, getTasksMaster, addLog)
+router.get('/', auth, getTasks, addLog)
 router.get('/get-task-data', auth, getTaskData, addLog)
 router.get('/create-task', auth, createTask, createSubTasks, addLog)
 router.get('/get-sub-tasks', auth, getSubTasks, addLog)

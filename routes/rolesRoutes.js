@@ -14,10 +14,10 @@ import auth from '../controllers/auth.js'
 const router = express.Router()
 
 router.get('/create-role', auth, createRole, addLog)
-router.get('/', auth, getRoles, addLog)
+router.get('/', auth,getRoles, addLog)
 router.post('/delete-role', auth, deleteRole, addLog)
 router.get('/edit', auth, getEditRole)
-router.get('/count', auth, rolesCount)
+router.get('/count', auth, rolesCount, addLog)
 router.post('/edit-role', auth, editRole, addLog)
 router.get('/get-rights', auth, getRights, addLog)
 

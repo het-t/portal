@@ -1,21 +1,38 @@
 import makeDbReq from '../db/index.js'
 
+
+/**
+ * get list of tasks for `tasks` screen
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const getTasks = (req, res, next) => {
-    req.log_details = {
-        "activity_id": 20,
+    let logObj = {
+        "activityId": 20,
         "user": req.email,
-        "reference_table": "tasks_master",
-        "reference_table_pk_id": null,
+        "referenceTable": "tasks",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "tasksList"
     }
     makeDbReq(`tasks_get_tasks()`, [])
     .then((tasks) => {
-        req.log_details.detail = 'success'
-        req.res_data = tasks
-        next()
+        logObj.detail = 'success'
+        logObj.resData = tasks
     })
     .catch((err) => {
-        req.log_details.detail = [err]
-        req.res_data = err
+        logObj.detail = [err]
+        logObj.resData = err
+    })
+    .finally(() => {
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

@@ -3,7 +3,7 @@ import express from 'express'
 import login from '../controllers/login.js'
 import logout from '../controllers/logout.js'
 import auth from '../controllers/auth.js'
-import userRights from '../controllers/rightsData.js'
+import userRights from '../controllers/userRightsList.js'
 
 import addLog from '../controllers/logs.js'
 

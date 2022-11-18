@@ -1,24 +1,40 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * create role
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const createRole = (req, res, next) => {
         
-    req.log_details = {
-        "activity_id": 3,
+    let logObj = {
+        "activityId": 3,
         "user": req.email,
-        "reference_table": "roles",
+        "referenceTable": "roles",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "roleCreated"
     }
 
-    makeDbReq(`roles_create_role(?, ?)`, [req.query.roleName, JSON.stringify(req.query.role_rights)])
-    .then((results) => {
-        req.log_details.reference_table_pk_id = results[0].pk_for_logs
-        req.log_details.detail = 'success'
-        req.res_data = 'success'
-        next()
+    makeDbReq('roles_create_role(?, ?)', [req.query.roleName, JSON.stringify(req.query.roleRights)])
+    .then(() => {
+        logObj.detail = 'success'
+        logObj.resData = 'success'
     })
     .catch((err) => {
-        req.log_details.reference_table_pk_id = null
-        req.log_details.detail = [err]
-        req.res_data = 'failed'
+        logObj.detail = [err]
+        logObj.resData = 'failed'
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

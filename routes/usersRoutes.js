@@ -17,8 +17,8 @@ const router = express.Router()
 router.post('/create-user', auth, createUser, addLog)
 router.get('/', auth, getAllUsers, addLog)
 router.get('/get-roles', auth, getRoles, addLog)
-router.get('/edit', auth, getEditUser)
+router.get('/edit', auth, getEditUser,addLog)
 router.post('/edit-user', auth, editUser, addLog)
-router.get('/count', auth, usersCount)
+router.get('/count', auth, usersCount, addLog)
 
 export default router

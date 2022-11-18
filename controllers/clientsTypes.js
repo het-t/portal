@@ -1,21 +1,38 @@
 import makeDbReq from "../db/index.js"
 
+/**
+ * get types of clients
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const clientTypes = (req, res, next) => {
-    req.log_details = {
-        "activity_id": 15,
+    let logObj = {
+        "activityId": 15,
         "user": req.email,
-        "reference_table": "clients_type_master",
-        "reference_table_pk_id": null,
+        "referenceTable": "clients_type_master",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "clientsMasterTypes"
     }
     makeDbReq(`clients_type_master_get_types`, [])
     .then((types) => {
-        req.log_details.detail = 'success'
-        req.res_data = types
-        next()
+        logObj.detail = 'success'
+        logObj.resData = types
     })
     .catch((err) => {
-        req.log_details.detail = [`Error ${err}`]
-        req.res_data = err
+        logObj.detail = [`Error ${err}`]
+        logObj.resData = err
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

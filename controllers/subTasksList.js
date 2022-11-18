@@ -1,21 +1,38 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * get sub tasks of task
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const getSubTasks = (req, res, next) => {
-    req.log_details = {
-        "activity_id": 19,
+    let logObj = {
+        "activityId": 19,
         "user": req.email,
-        "reference_table": "sub_tasks_master",
-        "reference_table_pk_id": null,
+        "referenceTable": "sub_tasks_master",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "subTasksList",
     }
     makeDbReq(`sub_tasks_get_task_sub_tasks(?)`, [req.query.taskId])
     .then((subTasks) => {
-        req.log_details.detail = 'success'
-        req.res_data = subTasks
-        next()
+        logObj.detail = 'success'
+        logObj.resData = subTasks
     })
     .catch((err) => {
-        req.log_details.detail = [err]
-        req.res_data = err
+        logObj.detail = [err]
+        logObj.resData = err
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

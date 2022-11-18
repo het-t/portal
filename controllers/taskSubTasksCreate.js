@@ -1,14 +1,27 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * create sub-task for given task
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const createSubTasks = (req, res, next) => {
 
-    req.res_data.subTasks = []
-    req.log_details.activity_id = 18
-    req.log_details.reference_table = "sub_tasks_master"
+    let logObj = {
+        "activityId": 18,
+        "user": req.email,
+        "referenceTable": "sub_tasks_master",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": [],
+        "resKey": "subTasksCreated"
+    }
 
     const subTasks = JSON.parse(req.query.subTasks)
-    const saved = req.res_data.saved
-    const taskId = req.res_data.taskId
+    const saved = req.resData.saved
+    const taskId = req.resData.taskId
 
     const createSubTasksReqs = []
 
@@ -18,20 +31,21 @@ const createSubTasks = (req, res, next) => {
         createSubTasksReqs.push(
             makeDbReq(`sub_tasks_master_create_sub_task(?, ?, ?, ?, ?, ?, ?)`, [taskId, description, cost, saved, comments, status, assignedTo])
             .then((results) => {
-                req.log_details.reference_table_pk_id = results[0]?.subTaskId
-                req.log_details.detail = 'success'
-                req.res_data.subTasks.push(results[0]?.subTaskId)
+                logObj.referenceTablePkId = results[0]?.subTaskId
+                logObj.detail = 'success'
+                logObj.resData.push(results[0]?.subTaskId)
             })
             .catch((err) => {
-                req.log_details.reference_table_pk_id = null
-                req.log_details.detail = [err]
-                req.res_data = 'failed'
+                logObj.detail = [err]
+                logObj.resData = 'fail'
             })
         )
     }
 
     Promise.all(createSubTasksReqs)
-    .then(() => next())
+    .then(() => {
+        next()
+    })
 }
 
 export default createSubTasks

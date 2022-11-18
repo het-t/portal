@@ -1,21 +1,38 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * get all users
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const getAllUsers = (req, res, next) => {
-    req.log_details = {
-        "activity_id": 11,
+    let logObj = {
+        "activityId": 11,
         "user": req.email,
-        "reference_table": "users",
-        "reference_table_pk_id": null,
+        "referenceTable": "users",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "userList"    
     }
     makeDbReq(`users_get_all_users(?, ?)`, [req.query.from, req.query.records_per_page])
     .then((users) => {
-        req.log_details.detail = 'success'
-        req.res_data = users
-        next()
+        logObj.detail = 'success'
+        logObj.resData = users
     })
     .catch((err) => {
-        req.log_details.detail = [`Error ${err}`]
-        req.res_data = 'failed in fetching users details'
+        logObj.detail = [err]
+        logObj.resData = 'failed in fetching users details'
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 } 

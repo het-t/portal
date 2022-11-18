@@ -1,21 +1,38 @@
 import makeDbReq from "../db/index.js"
 
+/**
+ * edit role
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const editRole = (req, res, next) => {
 
-    req.log_details = {
-        "activity_id": 5,
+    let logObj = {
+        "activityId": 5,
         "user": req.email,
-        "reference_table": "roles",
+        "referenceTable": "roles",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "roleEdited",
     }
     makeDbReq(`roles_edit_role(?, ?)`, [req.body.params.roleName, JSON.stringify(req.body.params.roleRights)])
     .then((results) => {
-        req.log_details.reference_table_pk_id = results[0].pk_for_logs
-        req.log_details.detail = 'success'
-        next()
+        logObj.referenceTablePkId = results[0].pk_for_logs
+        logObj.detail = 'success'
     })
     .catch((err) => {
-        req.log_details.reference_table_pk_id = null
-        req.log_details.detail = [err]
+        logObj.detail = [err]
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

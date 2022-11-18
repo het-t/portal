@@ -1,36 +1,31 @@
-import makeDbReq from '../db/index.js'
+import makeDbReq from "../db/index.js";
 
 /**
- * delete role
+ * get rights of user
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
-
-const deleteRole = (req, res, next) => {
-    const roleId = req.body.roleId
-    
+const userRights = (req, res, next) => {
     let logObj = {
-        "activityId": 7,
+        "activityId": 9,
         "user": req.email,
-        "referenceTable": "roles",
+        "referenceTable": "rights_master",
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
-        "resKey": "roleDeleted",
+        "resKey": "userRights"
     }
-
-    makeDbReq(`roles_delete_role(?)`, [roleId])
-    .then((results) => {
-        logObj.referenceTablePkId = roleId
+    makeDbReq(`rights_master_get_user_rights(?)`, [req.email])
+    .then((rights) => {
         logObj.detail = 'success'
-        logObj.resData = true
+        logObj.resData = rights 
     })
     .catch((err) => {
         logObj.detail = [err]
-        logObj.resData = "fail"
+        logObj.resData = "failed to load rights"
     })
-    .finally(()=>{
+    .finally(() => {
         if (typeof req?.logs == "Object") {
             req.logs.push(logObj)
         }
@@ -41,4 +36,4 @@ const deleteRole = (req, res, next) => {
     })
 }
 
-export default deleteRole
+export default userRights

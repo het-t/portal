@@ -1,23 +1,41 @@
 import makeDbReq from '../db/index.js'
 
+/**
+ * get list of rights
+ * from rights_master
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+
 const getRights = (req, res, next) => {
 
-    req.log_details = {
-        "activity_id": 9,
+    const logObj = {
+        "activityId": 9,
         "user": req.email,
-        "reference_table": "rights_master",
-        "reference_table_pk_id": null
+        "referenceTable": "rights_master",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "rightsMasterList",
     }
 
     makeDbReq(`rights_master_get_all_rights()`, [])
-    .then((results) => {
-        req.log_details.detail = "success"
-        req.res_data = results
-        next()
+    .then((rights) => {
+        logObj.detail = "success"
+        logObj.resData = rights
     })
     .catch((err) => {
-        req.log_details.detail = [err]
-        req.res_data = 'failed'
+        logObj.detail = [err]
+        logObj.resData = 'fail'
+    })
+    .finally(()=>{
+        if (typeof req?.logs == "Object") {
+            req.logs.push(logObj)
+        }
+        else {
+            req.logs = [logObj]
+        }
         next()
     })
 }

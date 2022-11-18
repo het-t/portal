@@ -8,7 +8,7 @@ import addLog from '../controllers/logs.js'
 
 const router = express.Router()
 
-router.get('/', auth, usersActivities)
+router.get('/', auth, usersActivities, addLog)
 router.get('/count', auth, usersActivitiesCount, addLog)
 
 export default router
