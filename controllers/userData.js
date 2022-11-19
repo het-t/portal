@@ -6,10 +6,24 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const getEditUser = (req, res) => {
+const getEditUser = (req, res, next) => {
+    let logObj = {
+        "activityId": 25,
+        "user": req.email,
+        "referenceTable": "users",
+        "referenceTablePkId": null,
+        "detail": "",
+        "resData": {},
+        "resKey": "userData"
+    }
     makeDbReq(`users_user_data(?)`, [req.query.editUserId])
     .then((userData) => {
-        res.send(userData[0])
+        logObj.detail = 'success'
+        logObj.resData = userData[0]
+    })
+    .catch(() => {
+        logObj.detail = [err]
+        logObj.resData = err
     })
     .finally(()=>{
         if (typeof req?.logs == "Object") {
