@@ -19,17 +19,22 @@ const createSubTasks = (req, res, next) => {
         "resKey": "subTasksCreated"
     }
 
+    console.log(req.query.subTasks)
+
     const subTasks = JSON.parse(req.query.subTasks)
-    const saved = req.resData.saved
-    const taskId = req.resData.taskId
+
+    console.log("resData", req.resData)
+    const {taskId, taskMasterId, saved} = req.resData
 
     const createSubTasksReqs = []
 
+    console.log("subTasks", subTasks)
+
     for(let i = 0; i!=subTasks.length; i++) {
-        console.log("subtask", subTasks[i])
+        console.log("subtask", subTasks)
         const {description, cost, comments, status, assignedTo} = subTasks[i]
         createSubTasksReqs.push(
-            makeDbReq(`sub_tasks_master_create_sub_task(?, ?, ?, ?, ?, ?, ?)`, [taskId, description, cost, saved, comments, status, assignedTo])
+            makeDbReq(`sub_tasks_master_create_sub_task(?, ?, ?, ?, ?, ?, ?, ?)`, [taskMasterId, taskId, description, cost, saved, comments, status, assignedTo])
             .then((results) => {
                 logObj.referenceTablePkId = results[0]?.subTaskId
                 logObj.detail = 'success'

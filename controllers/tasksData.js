@@ -15,7 +15,7 @@ const getTaskData = (req, res, next) => {
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
-        "resKey": "rightsMasterList",    }
+        "resKey": "taskData",    }
 
     makeDbReq(`tasks_get_task_data(?)`, [req.query.taskId])
     .then((taskData) => {

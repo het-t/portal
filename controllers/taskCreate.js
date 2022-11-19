@@ -23,24 +23,28 @@ const createTask = (req, res, next) => {
 
     makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?)`, [taskMasterId, title, cost, saved, clientId, coordinatorId])
     .then((results) => {
-        logObj.referenceTablePkId = results[0]?.task_id
+        logObj.referenceTablePkId = results[0]?.taskId
         logObj.detail = 'success'
+
+        // console.log("create task result", results[])
         req.resData = logObj.resData = {
             saved,
-            taskId: results[0].task_id
+            taskId: results[0].taskId,
+            taskMasterId: results[0].taskMasterId
         }
     })
     .catch((err) => {
         logObj.detail = [err]
         logObj.resData = 'fail'
     })
-    .finally(()=>{
+    .then(()=>{
         if (typeof req?.logs == "Object") {
             req.logs.push(logObj)
         }
         else {
             req.logs = [logObj]
         }
+        console.log("subTasks", subTasks)
         if (JSON.parse(subTasks)?.length > 0) next() 
     })
     
