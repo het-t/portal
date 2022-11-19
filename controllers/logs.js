@@ -10,7 +10,6 @@ const addLog = (req, res) => {
     let p = []
 
     for (let logObj of req.logs) {
-        console.log("logObj",logObj)
         let {activityId, user, referenceTable, referenceTablePkId, detail, resData, resKey} = logObj
 
         Object.defineProperty(resDataObj, resKey, {
@@ -25,8 +24,9 @@ const addLog = (req, res) => {
                 `logs_add(?, ?, ?, ?, ?)`,
                 [activityId, user, referenceTable, referenceTablePkId, detail]
             )
-            .catch((e) => {
-                // console.log(e)
+            .catch((err) => {
+                console.log("error in logs.js", err)
+                res.send(resDataObj)
             })
         )
 

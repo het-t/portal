@@ -15,9 +15,9 @@ const getAllUsers = (req, res, next) => {
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
-        "resKey": "userList"    
+        "resKey": "usersList"    
     }
-    makeDbReq(`users_get_all_users(?, ?)`, [req.query.from, req.query.records_per_page])
+    makeDbReq(`users_get_all_users(?, ?)`, [req.query.from, req.query.recordsPerPage])
     .then((users) => {
         logObj.detail = 'success'
         logObj.resData = users

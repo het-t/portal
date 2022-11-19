@@ -6,7 +6,7 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const usersCount = (req, res) => {
+const usersCount = (req, res, next) => {
     let logObj = {
         "activityId": 23,
         "user": req.email,
@@ -14,12 +14,12 @@ const usersCount = (req, res) => {
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
-        "resKey": "taskCreated"
+        "resKey": "count"
     }
     makeDbReq(`users_count()`, [])
     .then((count) => {
         logObj.detail = 'success'
-        logObj.resData = count
+        logObj.resData = count[0].count
     })
     .catch(() => {
         logObj.detail = [err]
