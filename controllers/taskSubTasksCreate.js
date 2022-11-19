@@ -34,7 +34,7 @@ const createSubTasks = (req, res, next) => {
         console.log("subtask", subTasks)
         const {description, cost, comments, status, assignedTo} = subTasks[i]
         createSubTasksReqs.push(
-            makeDbReq(`sub_tasks_master_create_sub_task(?, ?, ?, ?, ?, ?, ?, ?)`, [taskMasterId, taskId, description, cost, saved, comments, status, assignedTo])
+            makeDbReq(`sub_tasks_create_sub_task(?, ?, ?, ?, ?, ?, ?, ?)`, [taskMasterId, taskId, description, cost, saved, comments, status, assignedTo])
             .then((results) => {
                 logObj.referenceTablePkId = results[0]?.subTaskId
                 logObj.detail = 'success'
