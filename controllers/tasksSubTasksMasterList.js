@@ -1,24 +1,23 @@
 import makeDbReq from '../db/index.js'
 
+
 /**
- * get tasks details stored inside task_master
- * to show as template for tasks
+ * get list of tasks for `tasks` screen
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
-const getTasksMaster = (req, res, next) => {
+const getSubTasksMaster = (req, res, next) => {
     let logObj = {
-        "activityId": 20,
+        "activityId": 27,
         "user": req.email,
-        "referenceTable": "tasks_master",
+        "referenceTable": "tasks",
         "referenceTablePkId": null,
-        "detail": '',
+        "detail": "",
         "resData": {},
-        "resKey": "task_master_list",
+        "resKey": "subTasksMasterList"
     }
-
-    makeDbReq(`tasks_master_get_tasks()`, [])
+    makeDbReq(`sub_tasks_master_get_sub_tasks(?)`, [req.query.taskMasterId])
     .then((tasks) => {
         logObj.detail = 'success'
         logObj.resData = tasks
@@ -27,7 +26,7 @@ const getTasksMaster = (req, res, next) => {
         logObj.detail = [err]
         logObj.resData = err
     })
-    .finally(()=>{
+    .finally(() => {
         if (typeof req?.logs == "Object") {
             req.logs.push(logObj)
         }
@@ -38,4 +37,4 @@ const getTasksMaster = (req, res, next) => {
     })
 }
 
-export default getTasksMaster
+export default getSubTasksMaster
