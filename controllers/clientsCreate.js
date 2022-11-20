@@ -8,7 +8,7 @@ import makeDbReq from "../db/index.js"
  */
 
 const createClient = (req, res, next) => {
-    const {clientName, clientType, cin, firmName, firmAddress, caEmail, caPanDetails, conName, conEmail, conPhone} = req.query
+    const {clientName, clientTypeId, cin, firmName, firmAddress, caEmail, caPan, conName, conEmail, conPhone} = req.query
 
     let logObj = {
         "activityId": 13,
@@ -16,18 +16,32 @@ const createClient = (req, res, next) => {
         "referenceTable": "clients_master",
         "referenceTablePkId": null,
         "resData": "",
-        "resKey": "clientCreate"
+        "resKey": "clientCreated"
     }
-    makeDbReq(`clients_master_create_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [clientName, clientType, cin, firmName, firmAddress, caEmail, caPanDetails, conName, conEmail, conPhone])
+    makeDbReq(
+        `clients_master_create_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+        [
+            clientName, 
+            cin,
+            clientTypeId, 
+            firmName, 
+            firmAddress, 
+            caPan, 
+            caEmail, 
+            conName, 
+            conEmail, 
+            conPhone
+        ]
+    )
     .then(() => {
         logObj.detail = 'success'
         logObj.resData = 'success'
     })
     .catch((err) => {
         logObj.detail = [err]
-        logObj.resData = err
+        logObj.resData = 'fail'
     })
-    .finally(() => {
+    .then(() => {
         if (typeof req?.logs == "Object") {
             req.logs.push(logObj)
         }
