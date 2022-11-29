@@ -16,7 +16,7 @@ const userRights = (req, res, next) => {
         "resData": {},
         "resKey": "userRights"
     }
-    makeDbReq(`rights_master_get_user_rights(?)`, [req.email])
+    makeDbReq(`rights_master_get_user_rights(?)`, [req.userId])
     .then((rights) => {
         logObj.detail = 'success'
         logObj.resData = rights 
