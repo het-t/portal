@@ -11,7 +11,7 @@ const createRole = (req, res, next) => {
         
     let logObj = {
         "activityId": 3,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "roles",
         "referenceTablePkId": null,
         "detail": "",

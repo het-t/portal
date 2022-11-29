@@ -12,7 +12,7 @@ const editUser = (req, res, next) => {
     
     let logObj = {
         "activityId": 6,
-        "user": req.email,
+        "user": req.userId,
         "reference_table": "users",
         "referenceTablePkId": null,
         "detail": "",

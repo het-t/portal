@@ -12,7 +12,7 @@ const createClient = (req, res, next) => {
 
     let logObj = {
         "activityId": 13,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "clients_master",
         "referenceTablePkId": null,
         "resData": "",

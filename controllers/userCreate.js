@@ -13,7 +13,7 @@ const createUser = (req, res, next) => {
     
     let logObj = {
         "activityId": 4,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "users",
         "referenceTablePkId": null,
         "detail": "",

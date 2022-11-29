@@ -12,7 +12,7 @@ const getRights = (req, res, next) => {
 
     const logObj = {
         "activityId": 9,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "rights_master",
         "referenceTablePkId": null,
         "detail": "",

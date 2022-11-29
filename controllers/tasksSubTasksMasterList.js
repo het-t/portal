@@ -10,7 +10,7 @@ import makeDbReq from '../db/index.js'
 const getSubTasksMaster = (req, res, next) => {
     let logObj = {
         "activityId": 27,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "tasks",
         "referenceTablePkId": null,
         "detail": "",

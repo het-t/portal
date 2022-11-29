@@ -10,7 +10,7 @@ import makeDbReq from "../db/index.js"
 const clientTypes = (req, res, next) => {
     let logObj = {
         "activityId": 15,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "clients_type_master",
         "referenceTablePkId": null,
         "detail": "",

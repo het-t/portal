@@ -12,7 +12,7 @@ const deleteRole = (req, res, next) => {
     
     let logObj = {
         "activityId": 7,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "roles",
         "referenceTablePkId": null,
         "detail": "",

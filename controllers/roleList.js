@@ -11,7 +11,7 @@ const getRoles = (req, res, next) => {
 
     let logObj = {
         "activityId": 10,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "roles",
         "referenceTablePkId": null,
         "detail": "",

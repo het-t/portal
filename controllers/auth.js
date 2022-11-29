@@ -11,8 +11,7 @@ const auth = (req, res, next) => {
         if (err) {
             res.send("invalid login attempt")
         } else {
-            req.email = decoded.email
-            req.pwd = decoded.pwd
+            req.userId = decoded.userId
             next()
         }
     })

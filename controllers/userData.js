@@ -9,7 +9,7 @@ import makeDbReq from '../db/index.js'
 const getEditUser = (req, res, next) => {
     let logObj = {
         "activityId": 25,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "users",
         "referenceTablePkId": null,
         "detail": "",

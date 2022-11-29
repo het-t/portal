@@ -11,7 +11,7 @@ const createTask = (req, res, next) => {
 
     let logObj = {
         "activityId": 17,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "tasks_master",
         "referenceTablePkId": null,
         "detail": "",

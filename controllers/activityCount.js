@@ -10,7 +10,7 @@ import makeDbReq from '../db/index.js'
 const usersActivityCount = (req, res, next) => {
     let logObj = {
         "activityId": 23,
-        "user": req.email,
+        "user": req.userId,
         "referenceTable": "user_activities",
         "referencetablePkId": null,
         "resData": {},
