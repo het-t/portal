@@ -19,7 +19,7 @@ const getRoleData = (req, res, next) => {
     makeDbReq(`roles_role_data(?)`, [req.query.editRoleName])
     .then((roleData) => {
         logObj.detail = "success"
-        logObj.resData = roleData[0]
+        logObj.resData = roleData
     })
     .finally(()=>{
         if (typeof req?.logs == "Object") {

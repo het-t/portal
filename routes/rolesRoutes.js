@@ -14,7 +14,7 @@ import auth from '../controllers/auth.js'
 const router = express.Router()
 
 router.get('/create-role', auth, createRole, addLog)
-router.get('/', auth,getRoles, addLog)
+router.get('/', auth, getRoles, addLog)
 router.post('/delete-role', auth, deleteRole, addLog)
 router.get('/edit-role', auth, getEditRole, addLog)
 router.get('/count', auth, rolesCount, addLog)
