@@ -6,7 +6,7 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const getRoleData = (req, res) => {
+const getRoleData = (req, res, next) => {
     let logObj = {
         "activityId": 22,
         "user": req.userId,
