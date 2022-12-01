@@ -6,6 +6,7 @@ import rolesRoutes from './rolesRoutes.js'
 import activityRoutes from './activityRoutes.js'
 import clientRoutes from './clientsRoutes.js'
 import tasksRoutes from './tasksRoutes.js'
+import myTasksRoutes from './myTasksRoutes.js'
 
 const app = express()
 
@@ -15,5 +16,6 @@ app.use('/roles', rolesRoutes)
 app.use('/activity', activityRoutes)
 app.use('/clients', clientRoutes)
 app.use('/tasks', tasksRoutes)
+app.use('/myTasks', myTasksRoutes)
 
 export default app;
