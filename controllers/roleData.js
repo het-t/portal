@@ -16,7 +16,7 @@ const getRoleData = (req, res, next) => {
         "resData": {},
         "resKey": "roleData",
     }
-    makeDbReq(`roles_role_data(?)`, [req.query.editRoleName])
+    makeDbReq(`roles_role_data(?)`, [req.query.editRoleId])
     .then((roleData) => {
         logObj.detail = "success"
         logObj.resData = roleData
