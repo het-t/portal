@@ -20,35 +20,41 @@ const login = (req, res, next) => {
         "resKey": "login"
     }
 
+    //find users     
+    //get hash from database
     makeDbReq(
         `users_login(?)`,
         [email]
     )
+    //if no user exist throw err
     .then((user)=>{
         if (user.length == 0) {
-            console.log("user login", user)
             logObj.resData = "user not found"
             logObj.referenceTablePkId = null,
             logObj.detail = "use not found"
-        } 
+            throw "user not found"
+        }
         else {
-            console.log("hashed",user[0].password, "data", password)
-            const verified = bcrypt.compareSync(password, user[0].password)
-            console.log("verified ", verified)
-            if (verified) {
-                payload.userId = user[0].userId
-                logObj.referenceTablePkId = user[0].userId
-                logObj.detail = 'success'
-                logObj.resData = '1'
-            }
-            else {
-                logObj.referenceTablePkId = user[0].userId
-                logObj.detail = 'password not matching'
-                logObj.resData = 'password not matching'
-            }
+            payload.userId = user[0].userId
+            logObj.referenceTablePkId = user[0].userId
+            return user
         }
     })
-    .then(()=>{
+    //compare it with input password
+    .then((user) => bcrypt.compare(password, user[0].password))
+    //jwt
+    .then((verified)=>{
+        if (verified == true) {
+            logObj.detail = 'success'
+            logObj.resData = '1'
+        }
+        else {
+            logObj.detail = 'password not matching'
+            logObj.resData = 'password not matching'
+            throw "password not matching"
+        }
+    })
+    .then(() =>{
         jwt.sign(payload, 'secert', (err, token) => {
             if (err) {
                 logObj.detail = [err]
@@ -58,41 +64,12 @@ const login = (req, res, next) => {
                 res.cookie('_token', token, {
                     signed: true
                 })
-    
-                // userLoginDb([payload.email])
-                makeDbReq(
-                    `users_login(?)`,
-                    [email]
-                )
-                .then((user)=>{
-                    if (user.length == 0) {
-                        console.log("user login", user.length)
-                        logObj.resData = "user not found"
-                        logObj.referenceTablePkId = null,
-                        logObj.detail = "use not found"
-                    } 
-                    else {
-                        console.log("hashed",user[0].password, "data", password)
-                        const verified = bcrypt.compareSync(password, user[0].password)
-                        console.log("verified ", verified)
-                        if (verified) {
-                            logObj.referenceTablePkId = user[0].userId
-                            logObj.detail = 'success'
-                            logObj.resData = '1'
-                        }
-                        else {
-                            logObj.referenceTablePkId = user[0].userId
-                            logObj.detail = 'password not matching'
-                            logObj.resData = 'password not matching'
-                        }
-                    }
-                })
             }
         })
     })
-    .catch(()=>{
+    .catch((err)=>{
         logObj.detail = [err]
-        logObj.resData = 'fail'
+        logObj.resData = err
     })
     .finally(() => {
         if (typeof req?.logs == "Object") {
