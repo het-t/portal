@@ -20,7 +20,7 @@ const createUser = (req, res, next) => {
         "resData": {},
         "resKey": "userCreated"
     }
-    
+
     bcrypt.hash(password, 3)
     .then((passwordHash) => {
         makeDbReq(`users_create_user(?, ?, ?, ?, ?, ?, ?)`, [firstName, lastName, gender, bithdate, email, role, passwordHash])
@@ -28,11 +28,11 @@ const createUser = (req, res, next) => {
     .then((results) => {
         logObj.referenceTablePkId = results[0].pk_for_logs
         logObj.detail = 'success'
-        req.res_data = 'success'
+        logObj.resData = 'success'
     })
     .catch((err)=>{
         logObj.detail = [err]
-        req.res_data = 'fail'
+        logObj.resData = 'fail'
     })
     .finally(()=>{
         if (typeof req?.logs == "Object") {

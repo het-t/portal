@@ -8,25 +8,43 @@ import makeDbReq from '../db/index.js'
  */
 
 const editUser = (req, res, next) => {
-    const args = Object.values(req.body.params)
-    
+    const {
+        userId,
+        firstName,
+        lastName,
+        gender,
+        birthdate,
+        email,
+        role
+    } = req.body.params
+
     let logObj = {
         "activityId": 6,
         "user": req.userId,
-        "reference_table": "users",
+        "referenceTable": "users",
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
         "resKey": "userEdited"
     }
 
-    makeDbReq(`users_edit_user(?, ?, ?, ?, ?, ?, ?)`, args)
+    makeDbReq(`users_edit_user(?, ?, ?, ?, ?, ?, ?)`, [
+        userId,
+        firstName,
+        lastName,
+        gender,
+        birthdate,
+        email,
+        role
+    ])
     .then((results) => {
-        logObj.referenceTablePkId = args[0]
+        logObj.referenceTablePkId = userId
         logObj.detail = 'success'
+        logObj.resData = 'success'
     })
     .catch((err) => {
         logObj.detail = [err]
+        logObj.resData = err
     })
     .finally(()=>{
         if (typeof req?.logs == "Object") {
