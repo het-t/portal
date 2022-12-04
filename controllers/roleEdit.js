@@ -18,7 +18,8 @@ const editRole = (req, res, next) => {
         "resData": {},
         "resKey": "roleEdited",
     }
-    makeDbReq(`roles_edit_role(?, ?)`, [req.body.params.roleName, JSON.stringify(req.body.params.roleRights)])
+    
+    makeDbReq(`roles_edit_role(?, ?, ?)`, [req.body.params.roleId, req.body.params.roleName, JSON.stringify(req.body.params.roleRights)])
     .then((results) => {
         logObj.referenceTablePkId = results[0].pk_for_logs
         logObj.detail = 'success'

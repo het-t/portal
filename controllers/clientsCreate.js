@@ -8,7 +8,18 @@ import makeDbReq from "../db/index.js"
  */
 
 const createClient = (req, res, next) => {
-    const {clientName, clientTypeId, cin, firmName, firmAddress, caEmail, caPan, conName, conEmail, conPhone} = req.query
+    const {
+        clientName, 
+        clientTypeId, 
+        cin, 
+        firmName, 
+        firmAddress, 
+        caEmail, 
+        caPan, 
+        conName,
+        conEmail, 
+        conPhone
+    } = req.query
 
     let logObj = {
         "activityId": 13,
