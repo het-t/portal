@@ -18,7 +18,7 @@ const getClients = (req, res, next) => {
         "resKey": "clientsList"
     }
 
-    makeDbReq(`clients_master_get_clients()`, [])
+    makeDbReq(`clients_master_get_clients(?, ?)`, [req.query.from, req.query.recordsPerPage])
     .then((results) => {
         logObj.detail = "success"
         logObj.resData = results

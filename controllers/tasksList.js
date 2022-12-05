@@ -17,7 +17,7 @@ const getTasks = (req, res, next) => {
         "resData": {},
         "resKey": "tasksList"
     }
-    makeDbReq(`tasks_get_tasks()`, [])
+    makeDbReq(`tasks_get_tasks(?, ?)`, [req.query.from, req.query.recordsPerPage])
     .then((tasks) => {
         logObj.detail = 'success'
         logObj.resData = tasks

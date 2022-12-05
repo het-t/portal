@@ -17,7 +17,7 @@ const tasksGetMyTasks = (req, res, next) => {
         "resData": {},
         "resKey": "myTasksList"
     }
-    makeDbReq(`tasks_get_my_tasks(?)`, [req.userId])
+    makeDbReq(`tasks_get_my_tasks(?, ?, ?)`, [req.userId, req.query.from, req.query.recordsPerPage])
     .then((myTasks) => {
         logObj.detail = 'success'
         logObj.resData = myTasks
@@ -27,7 +27,7 @@ const tasksGetMyTasks = (req, res, next) => {
         logObj.resData = err
     })
     .finally(() => {
-        if (typeof req?.logs == 'Object') {
+        if (typeof req?.logs == 'object') {
             req.logs.push(logObj)
         }
         else {
