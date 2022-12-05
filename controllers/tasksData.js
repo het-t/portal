@@ -15,11 +15,15 @@ const getTaskData = (req, res, next) => {
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
-        "resKey": "taskData",    }
+        "resKey": "taskData",    
+    }
 
-    makeDbReq(`tasks_get_task_data(?)`, [req.query.taskId])
+    const {taskId} = req.query
+
+    makeDbReq(`tasks_get_task_data(?)`, [taskId])
     .then((taskData) => {
         logObj.detail = 'success'
+        req.resData = taskId
         logObj.resData = taskData
     })
     .catch((err) => {

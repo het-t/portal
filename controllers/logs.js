@@ -29,15 +29,15 @@ const addLog = (req, res) => {
                 res.send(resDataObj)
             })
         )
+    }
 
-        Promise.all(p)
-        .then(() => {
-            res.send(resDataObj)
-        })
-        .catch(() => {
-            res.send('fail')
-        })
-    };
+    Promise.all(p)
+    .then(() => {
+        res.send(resDataObj)
+    })
+    .catch(() => {
+        res.send('fail')
+    })
 } 
 
 export default addLog

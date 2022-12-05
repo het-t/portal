@@ -19,7 +19,16 @@ const createTask = (req, res, next) => {
         "resKey": "taskCreated"
     }
 
-    const {taskMasterId, title, taskDescription, cost, saved, coordinatorId, clientId, subTasks} = req.query
+    const {
+        taskMasterId, 
+        title, 
+        taskDescription,
+        cost, 
+        saved, 
+        coordinatorId, 
+        clientId, 
+        subTasks
+    } = req.query
 
     makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?, ?, ?)`, [req.userId, taskMasterId, title, taskDescription, cost, saved, clientId, coordinatorId])
     .then((results) => {
