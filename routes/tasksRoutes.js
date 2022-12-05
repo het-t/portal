@@ -11,15 +11,20 @@ import getTaskData from '../controllers/tasksData.js'
 import getTasksMaster from '../controllers/tasksMasterList.js'
 import getSubTasksMaster from '../controllers/tasksSubTasksMasterList.js'
 import tasksCount from '../controllers/tasksCount.js'
+import editTask from '../controllers/taskEdit.js'
+import editTaskMaster from '../controllers/taskMasterEdit.js'
+import getTaskLogs from '../controllers/tasksLogs.js'
 
 const router = express.Router()
 
 router.get('/', auth, getTasks, addLog)
-router.get('/get-task-data', auth, getTaskData, addLog)
+router.get('/get-task-data', auth, getTaskData, getTaskLogs, addLog)
 router.get('/create-task', auth, createTask, createSubTasks, addLog)
 router.get('/get-sub-tasks', auth, getSubTasks, addLog)
 router.get('/get-tasks-master', auth, getTasksMaster, addLog)
 router.get('/get-sub-tasks-master', auth, getSubTasksMaster, addLog)
 router.get('/count', auth, tasksCount, addLog)
+router.get('/edit-task', auth, editTask, addLog)
+router.get('/edit-task-master', auth, editTaskMaster, addLog)
 
 export default router
