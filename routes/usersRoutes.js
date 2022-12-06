@@ -5,7 +5,7 @@ import createUser from '../controllers/userCreate.js'
 import editUser from '../controllers/userEdit.js'
 import getAllUsers from '../controllers/userList.js'
 import getEditUser from '../controllers/userData.js'
-
+import deleteUser from '../controllers/userDelete.js'
 
 import getRoles from '../controllers/roleList.js'
 
@@ -20,5 +20,6 @@ router.get('/get-roles', auth, getRoles, addLog)
 router.get('/edit', auth, getEditUser,addLog)
 router.post('/edit-user', auth, editUser, addLog)
 router.get('/count', auth, usersCount, addLog)
+router.post('/delete-user', auth, deleteUser, addLog)
 
 export default router
