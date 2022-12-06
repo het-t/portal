@@ -23,7 +23,7 @@ const editClient = (req, res, next) => {
     } = req.query
 
     let logObj = {
-        "activityId": 13,
+        "activityId": 14,
         "user": req.userId,
         "referenceTable": "clients_master",
         "referenceTablePkId": null,

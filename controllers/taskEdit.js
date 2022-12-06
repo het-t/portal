@@ -10,7 +10,7 @@ import makeDbReq from "../db/index.js"
 const editTask = (req, res, next) => {
 
     let logObj = {
-        "activityId": 5,
+        "activityId": 30,
         "user": req.userId,
         "referenceTable": "tasks",
         "referenceTablePkId": null,
