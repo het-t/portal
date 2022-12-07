@@ -1,32 +1,35 @@
 import makeDbReq from '../db/index.js'
 
-
 /**
- * get list of tasks for `tasks` screen
+ * delete task
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
-const getTasksMaster = (req, res, next) => {
+
+const deleteTask = (req, res, next) => {
+    const taskId = req.body.params.taskId
+    
     let logObj = {
-        "activityId": 26,
+        "activityId": 32,
         "user": req.userId,
         "referenceTable": "tasks",
-        "referenceTablePkId": null,
+        "referenceTablePkId": taskId,
         "detail": "",
         "resData": {},
-        "resKey": "tasksMasterList"
+        "resKey": "taskDeleted",
     }
-    makeDbReq(`tasks_master_get_tasks()`, [])
-    .then((tasks) => {
+
+    makeDbReq(`tasks_delete(?)`, [taskId])
+    .then(() => {
         logObj.detail = 'success'
-        logObj.resData = tasks
+        logObj.resData = true
     })
     .catch((err) => {
         logObj.detail = [err]
-        logObj.resData = err
+        logObj.resData = "fail"
     })
-    .finally(() => {
+    .finally(()=>{
         if (typeof req?.logs == "object") {
             req.logs.push(logObj)
         }
@@ -37,4 +40,4 @@ const getTasksMaster = (req, res, next) => {
     })
 }
 
-export default getTasksMaster
+export default deleteTask

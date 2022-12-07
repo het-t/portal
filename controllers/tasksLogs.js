@@ -28,14 +28,12 @@ const getTaskLogs = (req, res, next) => {
         logObj.resData = err
     })
     .finally(()=>{
-        console.log(req.logs, "\n\n")
         if (typeof req?.logs == "object") {
             req.logs.push(logObj)
         }
         else {
             req.logs = [logObj]
         }
-        console.log(req.logs)
         next()
     })
 }

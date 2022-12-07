@@ -8,8 +8,10 @@ import makeDbReq from '../db/index.js'
  */
 
 const deleteRole = (req, res, next) => {
-    const roleId = req.body.roleId
+    const roleId = req.body.params.roleId
     
+    console.log("deleting role", roleId)
+
     let logObj = {
         "activityId": 7,
         "user": req.userId,
@@ -22,7 +24,6 @@ const deleteRole = (req, res, next) => {
 
     makeDbReq(`roles_delete_role(?)`, [roleId])
     .then((results) => {
-        logObj.referenceTablePkId = roleId
         logObj.detail = 'success'
         logObj.resData = true
     })

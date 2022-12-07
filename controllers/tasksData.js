@@ -31,7 +31,7 @@ const getTaskData = (req, res, next) => {
         logObj.resData = err
     })
     .finally(()=>{
-        if (typeof req?.logs == "Object") {
+        if (typeof req?.logs == "object") {
             req.logs.push(logObj)
         }
         else {

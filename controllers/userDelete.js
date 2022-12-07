@@ -8,7 +8,7 @@ import makeDbReq from '../db/index.js'
  */
 
 const deleteUser = (req, res, next) => {
-    const userId = req.body.userId
+    const userId = req.body.params.userId
     
     let logObj = {
         "activityId": 8,

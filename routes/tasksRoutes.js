@@ -14,6 +14,8 @@ import tasksCount from '../controllers/tasksCount.js'
 import editTask from '../controllers/taskEdit.js'
 import editTaskMaster from '../controllers/taskMasterEdit.js'
 import getTaskLogs from '../controllers/tasksLogs.js'
+import editSubTasks from '../controllers/tasksSubTaskEdit.js'
+import deleteTask from '../controllers/taskDelete.js'
 
 const router = express.Router()
 
@@ -24,7 +26,8 @@ router.get('/get-sub-tasks', auth, getSubTasks, addLog)
 router.get('/get-tasks-master', auth, getTasksMaster, addLog)
 router.get('/get-sub-tasks-master', auth, getSubTasksMaster, addLog)
 router.get('/count', auth, tasksCount, addLog)
-router.get('/edit-task', auth, editTask, addLog)
+router.get('/edit-task', auth, editTask, editSubTasks, addLog)
 router.get('/edit-task-master', auth, editTaskMaster, addLog)
+router.post('/delete-task', auth, deleteTask, addLog)
 
 export default router
