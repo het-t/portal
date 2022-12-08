@@ -12,24 +12,38 @@ const createTask = (req, res, next) => {
     let logObj = {
         "activityId": 17,
         "user": req.userId,
-        "referenceTable": "tasks_master",
+        "referenceTable": "tasks",
         "referenceTablePkId": null,
         "detail": "",
         "resData": {},
         "resKey": "taskCreated"
     }
 
-    const {
+    let {
         taskMasterId, 
         title, 
         description,
         cost, 
-        saved, 
+        saved,
         coordinatorId, 
         clientId
     } = req.query
 
-    makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?, ?, ?)`, [req.userId, taskMasterId, title, description, cost, saved, clientId, coordinatorId])
+    const reqTaskMasterId = req?.resData?.taskMasterId
+
+    if (reqTaskMasterId != undefined && reqTaskMasterId != null) {
+        taskMasterId = reqTaskMasterId
+    } 
+    
+    makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?, ?)`, [
+        req.userId, 
+        taskMasterId ? taskMasterId : null, 
+        title, 
+        description, 
+        cost ? cost : null,  
+        clientId ? clientId : null, 
+        coordinatorId ? coordinatorId : null
+    ])
     .then((results) => {
         logObj.referenceTablePkId = results[0]?.taskId
         logObj.detail = 'success'
@@ -37,12 +51,8 @@ const createTask = (req, res, next) => {
         req.resData = logObj.resData = {
             saved,
             taskId: results[0].taskId,
-            taskMasterId: results[0].taskMasterId 
+            taskMasterId 
         }
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = 'fail'
     })
     .then(()=>{
         if (typeof req?.logs == "object") {
@@ -52,6 +62,12 @@ const createTask = (req, res, next) => {
             req.logs = [logObj]
         }
         next() 
+    })
+    .catch((err) => {
+        logObj.detail = [err]
+        logObj.resData = 'fail'
+        ///////// set response status ////////////////////
+        res.end();
     })
     
 }
