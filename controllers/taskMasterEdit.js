@@ -32,7 +32,6 @@ const editTaskMaster = (req, res, next) => {
         title, 
         description,
         cost, 
-        // saved, 
     ])
     .then((results) => {
         logObj.referenceTablePkId = results[0].pk_for_logs

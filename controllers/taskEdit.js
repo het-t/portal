@@ -18,17 +18,21 @@ const editTask = (req, res, next) => {
         "resData": {},
         "resKey": "taskEdited",
     }
-    const {
+    let {
         taskId, 
         taskMasterId,
         title, 
         description,
         cost, 
-        saved, 
         coordinatorId, 
         clientId, 
-        subTasks
     } = req.query
+
+    const reqTaskMasterId = req?.resData?.taskMasterId
+
+    if (reqTaskMasterId != undefined && reqTaskMasterId != null) {
+        taskMasterId = reqTaskMasterId
+    }
 
     makeDbReq(`tasks_edit_task(?, ?, ?, ?, ?, ?, ?)`, [
         taskId, 
@@ -36,19 +40,14 @@ const editTask = (req, res, next) => {
         title, 
         description,
         cost, 
-        // saved, 
         clientId, 
         coordinatorId, 
-        // subTasks
     ])
-    .then((results) => {
-        logObj.referenceTablePkId = results[0].pk_for_logs
+    .then(() => {
+        logObj.referenceTablePkId = taskId
         logObj.detail = 'success'
     })
-    .catch((err) => {
-        logObj.detail = [err]
-    })
-    .finally(()=>{
+    .then(()=>{
         if (typeof req?.logs == "object") {
             req.logs.push(logObj)
         }
@@ -56,6 +55,11 @@ const editTask = (req, res, next) => {
             req.logs = [logObj]
         }
         next()
+    })
+    .catch((err) => {
+        logObj.detail = [err]
+        console.log(err)
+        res.end()
     })
 }
 
