@@ -24,19 +24,20 @@ const addLog = (req, res) => {
                 `logs_add(?, ?, ?, ?, ?)`,
                 [activityId, user, referenceTable, referenceTablePkId, detail]
             )
-            .catch((err) => {
-                console.log("error in logs.js", err)
-                res.send(resDataObj)
-            })
+            // .catch((err) => {
+            //     console.log("error in logs.js", err)
+            //     res.send(resDataObj)
+            // })
         )
     }
 
-    Promise.all(p)
+    Promise.all(p) 
     .then(() => {
         res.send(resDataObj)
     })
-    .catch(() => {
-        res.send('fail')
+    .catch(err => {
+        console.log("error in logs.js catch ", err)
+        res.send(resDataObj)
     })
 } 
 
