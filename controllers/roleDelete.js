@@ -9,25 +9,11 @@ import makeDbReq from '../db/index.js'
 
 const deleteRole = (req, res, next) => {
     const roleId = req.body.params.roleId
-    
-    // let logObj = {
-    //     "activityId": 7,
-    //     "user": req.userId,
-    //     "referenceTable": "roles",
-    //     "referenceTablePkId": roleId,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "roleDeleted",
-    // }
 
     makeDbReq(`roles_delete(?, ?)`, [
         req.userId,    
         roleId
     ])
-    // .then((results) => {
-    //     logObj.detail = 'success'
-    //     logObj.resData = true
-    // })
     .then(() => {
         next()
     })
@@ -42,15 +28,6 @@ const deleteRole = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     }) 
-    // .finally(()=>{
-    //     if (typeof req?.logs == "Object") {
-    //         req.logs.push(logObj)
-    //     }
-    //     else {
-    //         req.logs = [logObj]
-    //     }
-    //     next()
-    // })
 }
 
 export default deleteRole

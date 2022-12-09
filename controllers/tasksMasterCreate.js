@@ -30,16 +30,6 @@ const createTaskMaster = (req, res, next) => {
 
     else {
 
-        // let logObj = {
-        //     "activityId": 33,
-        //     "user": req.userId,
-        //     "referenceTable": "tasks_master",
-        //     "referenceTablePkId": null,
-        //     "detail": "",
-        //     "resData": {},
-        //     "resKey": 
-        // }
-
         makeDbReq(`tasks_master_create(?, ?, ?, ?)`, [
             req.userId,
             title, 

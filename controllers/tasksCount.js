@@ -7,15 +7,7 @@ import makeDbReq from '../db/index.js'
  */
 
 const tasksCount = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 23,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "count"
-    // }
+    
     makeDbReq(`tasks_count(?)`, [req.userId])
     .then((results) => {
         const resKey = 'count'

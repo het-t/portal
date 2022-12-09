@@ -8,15 +8,7 @@ import makeDbReq from '../db/index.js'
  */
 
 const getAllUsers = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 11,
-    //     "user": req.userId,
-    //     "referenceTable": "users",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "usersList"    
-    // }
+
     makeDbReq(`users_get(?, ?, ?)`, [
         req.userId,
         req.query.from, 
@@ -45,9 +37,6 @@ const getAllUsers = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     })
-    // .finally(()=>{
-
-    // })
 } 
 
 export default getAllUsers

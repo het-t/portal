@@ -9,15 +9,6 @@ import makeDbReq from "../db/index.js"
 
 const editTask = (req, res, next) => {
 
-    // let logObj = {
-    //     "activityId": 30,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "taskEdited",
-    // }
     let {
         taskId, 
         taskMasterId,
@@ -45,12 +36,6 @@ const editTask = (req, res, next) => {
         coordinatorId, 
     ])
     .then(() => {
-        // if (typeof req?.logs == "object") {
-        //     req.logs.push(logObj)
-        // }
-        // else {
-        //     req.logs = [logObj]
-        // }
         next()
     })
     .catch(err => {

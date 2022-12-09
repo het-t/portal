@@ -22,14 +22,6 @@ const editClient = (req, res, next) => {
         conPhone
     } = req.query
 
-    // let logObj = {
-    //     "activityId": 14,
-    //     "user": req.userId,
-    //     "referenceTable": "clients_master",
-    //     "referenceTablePkId": null,
-    //     "resData": "",
-    //     "resKey": "clientEdited"
-    // }
     makeDbReq(
         `clients_master_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
         [
@@ -48,12 +40,6 @@ const editClient = (req, res, next) => {
         ]
     )
     .then(() => {
-        // if (typeof req?.logs == "object") {
-        //     req.logs.push(logObj)
-        // }
-        // else {
-        //     req.logs = [logObj]
-        // }
         next()
     })
     .catch(err => {

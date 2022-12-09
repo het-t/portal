@@ -10,16 +10,6 @@ import bcrypt from 'bcrypt'
 
 const createUser = (req, res, next) => {
     const {firstName, lastName, gender, bithdate, email, role, password} = req.body.params
-    
-    // let logObj = {
-    //     "activityId": 4,
-    //     "user": req.userId,
-    //     "referenceTable": "users",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": ""
-    // }
 
     bcrypt.hash(password, 3)
     .then((passwordHash) => {

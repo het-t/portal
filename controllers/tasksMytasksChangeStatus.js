@@ -16,27 +16,12 @@ const myTasksChangeStatus = (req, res, next) => {
     taskId = parseInt(taskId, 10)
     subTaskId = parseInt(subTaskId, 10)
 
-    // let userId = req.userId
-
-    // let logObj = {
-    //     "activityId": 34,
-    //     "user": req.userId,
-    //     "referenceTable": "sub_tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "count"
-    // }
     makeDbReq(`sub_tasks_change_status(?, ?, ?, ?)`, [
         req.userId,
         taskId,
         subTaskId,
         statusId
     ])
-    // .then(() => {
-    //     logObj.detail = 'success'
-    //     logObj.resData = subTaskId
-    // })
     .then(() => next())
     .catch(err => {
         res.send(500)
@@ -49,15 +34,6 @@ const myTasksChangeStatus = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     })
-    // .finally(()=>{
-    //     if (typeof req?.logs == "object") {
-    //         req.logs.push(logObj)
-    //     }
-    //     else {
-    //         req.logs = [logObj]
-    //     }
-    //     next()
-    // })
 }
 
 export default myTasksChangeStatus

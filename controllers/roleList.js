@@ -9,15 +9,6 @@ import makeDbReq from '../db/index.js'
 
 const getRoles = (req, res, next) => {
 
-    // let logObj = {
-    //     "activityId": 10,
-    //     "user": req.userId,
-    //     "referenceTable": "roles",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "rolesList",
-    // }
     makeDbReq(`roles_get(?, ?, ?)`, [
         req.userId,
         req.query.from, 

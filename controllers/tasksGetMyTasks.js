@@ -8,15 +8,7 @@ import makeDbReq from "../db/index.js";
  * @param {*} next 
  */
 const tasksGetMyTasks = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 28,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": 
-    // }
+
     makeDbReq(`tasks_get_my_tasks(?, ?, ?)`, [
         req.userId, 
         req.query.from, 

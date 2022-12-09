@@ -9,16 +9,6 @@ import makeDbReq from '../db/index.js'
 
 const createTask = (req, res, next) => {
 
-    // let logObj = {
-    //     "activityId": 17,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": ""
-    // }
-
     let {
         taskMasterId, 
         title, 

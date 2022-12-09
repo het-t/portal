@@ -35,16 +35,6 @@ const editSubTasks = (req, res, next) => {
         subTasks = JSON.stringify(subTasks)
 
 
-        // let logObj = {
-        //     "activityId": 31,
-        //     "user": req.userId,
-        //     "referenceTable": "sub_tasks",
-        //     "referenceTablePkId": null,
-        //     "detail": "",
-        //     "resData": {},
-        //     "resKey": "subTasksEdited"
-        // }
-
         makeDbReq(`sub_tasks_edit(?, ?, ?, ?, ?)`, [
             req.userId,
             taskId, 
@@ -53,15 +43,6 @@ const editSubTasks = (req, res, next) => {
             saved
         ])
         .then(() => {
-            // const resKey = "subTasksEdited"
-            // const resData = results[0].count
-    
-            // if (typeof req?.logs == "object") {
-            //     req.logs.push({resKey, resData})
-            // }
-            // else {
-            //     req.logs = [{resKey, resData}]
-            // }
             next()
         })
         .catch(err => {
@@ -75,15 +56,6 @@ const editSubTasks = (req, res, next) => {
             ])
             .catch((err) => console.log(err))
         })
-        // .finally(() => {
-        //     if (typeof req?.logs == "object") {
-        //         req.logs.push(logObj)
-        //     }
-        //     else {
-        //         req.logs = [logObj]
-        //     }
-        //     next()
-        // })
     }
 }
 

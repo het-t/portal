@@ -9,28 +9,12 @@ import makeDbReq from '../db/index.js'
 
 const deleteTask = (req, res, next) => {
     const taskId = req.body.params.taskId
-    
-    // let logObj = {
-    //     "activityId": 32,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": taskId,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "taskDeleted",
-    // }
 
     makeDbReq(`tasks_delete(?, ?)`, [
         req.userId,
         taskId
     ])
     .then(() => {
-        // if (typeof req?.logs == "object") {
-        //     req.logs.push(logObj)
-        // }
-        // else {
-        //     req.logs = [logObj]
-        // }
         next()
     })
     .catch(err => {

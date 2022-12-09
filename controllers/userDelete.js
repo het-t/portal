@@ -10,16 +10,6 @@ import makeDbReq from '../db/index.js'
 const deleteUser = (req, res, next) => {
     const userIdToDel = req.body.params.userId
     
-    // let logObj = {
-    //     "activityId": 8,
-    //     "user": req.userId,
-    //     "referenceTable": "users",
-    //     "referenceTablePkId": userId,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "userDeleted",
-    // }
-
     makeDbReq(`users_delete(?)`, [
         req.userId,
         userIdToDel
@@ -38,15 +28,6 @@ const deleteUser = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     })
-    // .finally(()=>{
-    //     if (typeof req?.logs == "object") {
-    //         req.logs.push(logObj)
-    //     }
-    //     else {
-    //         req.logs = [logObj]
-    //     }
-    //     next()
-    // })
 }
 
 export default deleteUser

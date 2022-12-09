@@ -7,15 +7,7 @@ import makeDbReq from "../db/index.js";
  * @param {*} next 
  */
 const userRights = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 9,
-    //     "user": req.userId,
-    //     "referenceTable": "rights_master",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "userRights"
-    // }
+
     makeDbReq(`rights_master_get_user_rights(?)`, [req.userId])
     .then((rights) => {
         const resKey = "userRights"
@@ -40,9 +32,6 @@ const userRights = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     })
-    // .finally(() => {
-
-    // })
 }
 
 export default userRights

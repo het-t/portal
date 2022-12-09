@@ -9,17 +9,6 @@ import makeDbReq from '../db/index.js'
  */
 
 const getRights = (req, res, next) => {
-
-    // const logObj = {
-    //     "activityId": 9,
-    //     "user": req.userId,
-    //     "referenceTable": "rights_master",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "rightsMasterList",
-    // }
-
     makeDbReq(`rights_master_get_all(?)`, [req.userId])
     .then((rights) => {
         const resData = rights

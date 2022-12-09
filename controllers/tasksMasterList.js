@@ -8,15 +8,7 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 const getTasksMaster = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 26,
-    //     "user": req.userId,
-    //     "referenceTable": "tasks",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": 
-    // }
+
     makeDbReq(`tasks_master_get(?)`, [req.userId])
     .then((tasks) => {
         const resKey = "tasksMasterList"

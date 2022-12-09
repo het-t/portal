@@ -8,16 +8,6 @@ import makeDbReq from '../db/index.js'
  */
 
 const createRole = (req, res, next) => {
-        
-    // let logObj = {
-    //     "activityId": 3,
-    //     "user": req.userId,
-    //     "referenceTable": "roles",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "roleCreated"
-    // }
 
     makeDbReq('roles_create(?, ?, ?)', [
         res.userId,

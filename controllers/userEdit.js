@@ -18,16 +18,6 @@ const editUser = (req, res, next) => {
         role
     } = req.body.params
 
-    // let logObj = {
-    //     "activityId": 6,
-    //     "user": req.userId,
-    //     "referenceTable": "users",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "userEdited"
-    // }
-
     makeDbReq(`users_edit(?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
         userIdToEdit,
@@ -40,9 +30,6 @@ const editUser = (req, res, next) => {
     ])
     .then(() => {
         next()
-        // logObj.referenceTablePkId = userId
-        // logObj.detail = 'success'
-        // logObj.resData = 'success'
     })
     .catch((err) => {
         res.send(500)
@@ -55,15 +42,6 @@ const editUser = (req, res, next) => {
         ])
         .catch((err) => console.log(err))
     })
-    // .finally(()=>{
-    //     if (typeof req?.logs == "Object") {
-    //         req.logs.push(logObj)
-    //     }
-    //     else {
-    //         req.logs = [logObj]
-    //     }
-    //     next()
-    // })
 }
 
 export default editUser

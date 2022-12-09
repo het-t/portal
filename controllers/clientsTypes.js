@@ -8,15 +8,6 @@ import makeDbReq from "../db/index.js"
  */
 
 const clientTypes = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 15,
-    //     "user": req.userId,
-    //     "referenceTable": "clients_type_master",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "clientsMasterTypes"
-    // }
     makeDbReq(`clients_type_master_get(?)`, [req.userId])
     .then((types) => {
         const resKey = 'clientsMasterTypes'

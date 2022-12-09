@@ -7,15 +7,7 @@ import makeDbReq from '../db/index.js'
  */
 
 const getEditUser = (req, res, next) => {
-    // let logObj = {
-    //     "activityId": 25,
-    //     "user": req.userId,
-    //     "referenceTable": "users",
-    //     "referenceTablePkId": null,
-    //     "detail": "",
-    //     "resData": {},
-    //     "resKey": "userData"
-    // }
+
     makeDbReq(`users_user_data(?, ?)`, [
         req.userId,
         req.query.editUserId

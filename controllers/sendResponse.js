@@ -16,28 +16,10 @@ const sendResponse = (req, res) => {
             writable: true,
         })
 
-        // p.push(
-        //     makeDbReq(
-        //         `logs_add(?, ?, ?, ?, ?)`,
-        //         [activityId, user, referenceTable, referenceTablePkId, detail]
-        //     )
-        //     // .catch((err) => {
-        //     //     console.log("error in logs.js", err)
-        //     //     res.send(resDataObj)
-        //     // })
-        // )
     }
 
     res.send(resDataObj)
 
-    // Promise.all(p) 
-    // .then(() => {
-    //     res.send(resDataObj)
-    // })
-    // .catch(err => {
-    //     console.log("error in logs.js catch ", err)
-    //     res.send(resDataObj)
-    // })
 } 
 
 export default sendResponse

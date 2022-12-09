@@ -24,17 +24,6 @@ const createSubTasks = (req, res, next) => {
         if (subTasks?.length == 0) next()
         else {
 
-            // let logObj = {
-            //     "activityId": 18,
-            //     "user": req.userId,
-            //     "referenceTable": "sub_tasks_master",
-            //     "referenceTablePkId": null,
-            //     "detail": "",
-            //     "resData": [],
-            //     "resKey": "subTasksCreated"
-            // }
-
-
             for(let st in subTasks) {
                 let stObj = subTasks[st]
                 for(let key in stObj) {
@@ -58,7 +47,6 @@ const createSubTasks = (req, res, next) => {
             .then((results) => {
                 const resKey = "subTasksCreated"
                 const resData = results[0]?.subTaskId
-                // logObj.resData.push(results[0]?.subTaskId)
 
                 if (typeof req?.logs == "object") {
                     req.logs.push({resKey, resData})
