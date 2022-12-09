@@ -11,37 +11,51 @@ import bcrypt from 'bcrypt'
 const createUser = (req, res, next) => {
     const {firstName, lastName, gender, bithdate, email, role, password} = req.body.params
     
-    let logObj = {
-        "activityId": 4,
-        "user": req.userId,
-        "referenceTable": "users",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "userCreated"
-    }
+    // let logObj = {
+    //     "activityId": 4,
+    //     "user": req.userId,
+    //     "referenceTable": "users",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": ""
+    // }
 
     bcrypt.hash(password, 3)
     .then((passwordHash) => {
-        makeDbReq(`users_create_user(?, ?, ?, ?, ?, ?, ?)`, [firstName, lastName, gender, bithdate, email, role, passwordHash])
+        makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?)`, [
+            req.userId,
+            firstName, 
+            lastName, 
+            gender, 
+            bithdate, 
+            email, 
+            role, 
+            passwordHash
+        ])
     })
     .then((results) => {
-        logObj.referenceTablePkId = results[0].pk_for_logs
-        logObj.detail = 'success'
-        logObj.resData = 'success'
-    })
-    .catch((err)=>{
-        logObj.detail = [err]
-        logObj.resData = 'fail'
-    })
-    .finally(()=>{
+        const resKey = "userCreated"
+        const resData = results[0].createdUserId
+
         if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
+    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            4,     //activityId
+            15,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
 }
 

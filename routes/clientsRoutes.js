@@ -6,16 +6,16 @@ import editClient from '../controllers/clientsEdit.js'
 import clientsList from '../controllers/clientsList.js'
 import clientsCount from '../controllers/clientsCount.js'
 import auth from '../controllers/auth.js'
-import addLog from '../controllers/logs.js'
+import sendResponse from '../controllers/sendResponse.js'
 import deleteClient from '../controllers/clientsDelete.js'
 
 const router = express.Router()
 
-router.get('/types', auth, getClientTypes, addLog)
-router.get('/create-client', auth, createClient, addLog)
-router.get('/', auth, clientsList, addLog)
-router.get('/count', auth, clientsCount, addLog)
-router.get('/edit-client', auth, editClient, addLog)
-router.post('/delete-client', auth, deleteClient, addLog)
+router.get('/types', auth, getClientTypes, sendResponse)
+router.get('/create-client', auth, createClient, sendResponse)
+router.get('/', auth, clientsList, sendResponse)
+router.get('/count', auth, clientsCount, sendResponse)
+router.get('/edit-client', auth, editClient, sendResponse)
+router.post('/delete-client', auth, deleteClient, sendResponse)
 
 export default router

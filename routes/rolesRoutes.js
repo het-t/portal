@@ -8,17 +8,17 @@ import rolesCount from '../controllers/roleCount.js'
 import getRoles from '../controllers/roleList.js'
 import getRights from '../controllers/rightsList.js'
 
-import addLog from '../controllers/logs.js'
+import sendResponse from '../controllers/sendResponse.js'
 import auth from '../controllers/auth.js'
 
 const router = express.Router()
 
-router.get('/create-role', auth, createRole, addLog)
-router.get('/', auth, getRoles, addLog)
-router.post('/delete-role', auth, deleteRole, addLog)
-router.get('/edit-role', auth, getEditRole, addLog)
-router.get('/count', auth, rolesCount, addLog)
-router.post('/edit-role', auth, editRole, addLog)
-router.get('/get-rights', auth, getRights, addLog)
+router.get('/create-role', auth, createRole, sendResponse)
+router.get('/', auth, getRoles, sendResponse)
+router.post('/delete-role', auth, deleteRole, sendResponse)
+router.get('/edit-role', auth, getEditRole, sendResponse)
+router.get('/count', auth, rolesCount, sendResponse)
+router.post('/edit-role', auth, editRole, sendResponse)
+router.get('/get-rights', auth, getRights, sendResponse)
 
 export default router

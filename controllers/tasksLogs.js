@@ -8,33 +8,33 @@ import makeDbReq from '../db/index.js'
  */
 
 const getTaskLogs = (req, res, next) => {
-    let logObj = {
-        "activityId": 21,
-        "user": req.userId,
-        "referenceTable": "tasks_logs",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "taskLogs",    
-    }
-
-    makeDbReq(`tasks_get_logs(?)`, [req.resData])
+    
+    makeDbReq(`tasks_get_logs(?, ?)`, [
+        req.userId,
+        req.resData
+    ])
     .then((taskLogs) => {
-        logObj.detail = 'success'
-        logObj.resData = taskLogs
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(()=>{
+        const resKey = "tasksLogs"
+        const resData = taskLogs
+
         if (typeof req?.logs == "object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
+    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            37,     //activityId
+            21,     //tableid
+            req.resData,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
 }
 

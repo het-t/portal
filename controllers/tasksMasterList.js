@@ -8,32 +8,38 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 const getTasksMaster = (req, res, next) => {
-    let logObj = {
-        "activityId": 26,
-        "user": req.userId,
-        "referenceTable": "tasks",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "tasksMasterList"
-    }
-    makeDbReq(`tasks_master_get_tasks()`, [])
+    // let logObj = {
+    //     "activityId": 26,
+    //     "user": req.userId,
+    //     "referenceTable": "tasks",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": 
+    // }
+    makeDbReq(`tasks_master_get(?)`, [req.userId])
     .then((tasks) => {
-        logObj.detail = 'success'
-        logObj.resData = tasks
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(() => {
+        const resKey = "tasksMasterList"
+        const resData = tasks
+
         if (typeof req?.logs == "object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
+    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            33,     //activityId
+            12,     //tableid
+            req.resData,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
 }
 

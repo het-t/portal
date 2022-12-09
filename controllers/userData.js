@@ -7,32 +7,41 @@ import makeDbReq from '../db/index.js'
  */
 
 const getEditUser = (req, res, next) => {
-    let logObj = {
-        "activityId": 25,
-        "user": req.userId,
-        "referenceTable": "users",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "userData"
-    }
-    makeDbReq(`users_user_data(?)`, [req.query.editUserId])
+    // let logObj = {
+    //     "activityId": 25,
+    //     "user": req.userId,
+    //     "referenceTable": "users",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "userData"
+    // }
+    makeDbReq(`users_user_data(?, ?)`, [
+        req.userId,
+        req.query.editUserId
+    ])
     .then((userData) => {
-        logObj.detail = 'success'
-        logObj.resData = userData[0]
-    })
-    .catch(() => {
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(()=>{
+        const resKey = "userData"
+        const resData = userData[0]
+
         if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
+    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            25,     //activityId
+            15,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
 }
 

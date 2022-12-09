@@ -6,20 +6,9 @@ const login = (req, res, next) => {
 
     const {password, email} = req.body
 
-    let payload = {
-        "userId": ""
-    }
-
-    let logObj = {
-        "activityId": 1,
-        "user": email,
-        "referenceTable": "users",
-        "referenceTablePkId": null,
-        "detail": '',
-        "resData": {},
-        "resKey": "login"
-    }
-
+    var resKey = 'login'
+    var resData = ''
+    var userId = null
     //find users     
     //get hash from database
     makeDbReq(
@@ -29,14 +18,11 @@ const login = (req, res, next) => {
     //if no user exist throw err
     .then((user)=>{
         if (user.length == 0) {
-            logObj.resData = "user not found"
-            logObj.referenceTablePkId = null,
-            logObj.detail = "use not found"
+            resData = "user not found"
             throw "user not found"
         }
         else {
-            payload.userId = user[0].userId
-            logObj.referenceTablePkId = user[0].userId
+            userId = user[0].userId
             return user
         }
     })
@@ -45,41 +31,43 @@ const login = (req, res, next) => {
     //jwt
     .then((verified)=>{
         if (verified == true) {
-            logObj.detail = 'success'
-            logObj.resData = '1'
+            resData = 1
         }
         else {
-            logObj.detail = 'password not matching'
-            logObj.resData = 'password not matching'
             throw "password not matching"
         }
     })
     .then(() =>{
-        jwt.sign(payload, 'secert', (err, token) => {
+        jwt.sign({userId}, 'secert', (err, token) => {
             if (err) {
-                logObj.detail = [err]
-                logObj.resData = 'fail'
+                throw err
             }
-            else {
+            else {                             
                 res.cookie('_token', token, {
                     signed: true
                 })
+
+                if (typeof req?.logs == "object") {
+                    req.logs.push({resKey, resData})
+                }
+                else {
+                    req.logs = [{resKey, resData}]
+                }
+                next()
             }
         })
     })
-    .catch((err)=>{
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(() => {
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
-        }
-        else {
-            req.logs = [logObj]
-        }
-        next()
-    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            null,
+            1,                  //activityId
+            15,                 //tableid
+            null,                  //tablePkId
+            email + ' ' + err     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default login

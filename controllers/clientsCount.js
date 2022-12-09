@@ -7,33 +7,31 @@ import makeDbReq from '../db/index.js'
  */
 
 const clientsCount = (req, res, next) => {
-    let logObj = {
-        "activityId": 23,
-        "user": req.userId,
-        "referenceTable": "clients_master",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "count"
-    }
-    makeDbReq(`clients_count()`, [])
-    .then((count) => {
-        logObj.detail = 'success'
-        logObj.resData = count[0].count
-    })
-    .catch(err => {
-        logObj.detail = [err]
-        logObj.resData = err
-    }) 
-    .finally(()=>{
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+
+    makeDbReq(`clients_count(?)`, [req.userId])
+    .then((results) => {
+        const resKey = 'count'
+        const resData = results[0].count
+
+        if (typeof req?.logs == "object") {
+            req.logs.push({resData, resKey})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resData, resKey}]
         }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            23,     //activityId
+            3,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default clientsCount

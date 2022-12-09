@@ -9,15 +9,15 @@ import makeDbReq from '../db/index.js'
 
 const createTask = (req, res, next) => {
 
-    let logObj = {
-        "activityId": 17,
-        "user": req.userId,
-        "referenceTable": "tasks",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "taskCreated"
-    }
+    // let logObj = {
+    //     "activityId": 17,
+    //     "user": req.userId,
+    //     "referenceTable": "tasks",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": ""
+    // }
 
     let {
         taskMasterId, 
@@ -35,7 +35,7 @@ const createTask = (req, res, next) => {
         taskMasterId = reqTaskMasterId
     } 
     
-    makeDbReq(`tasks_create_task(?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_create(?, ?, ?, ?, ?, ?, ?)`, [
         req.userId, 
         taskMasterId ? taskMasterId : null, 
         title, 
@@ -44,31 +44,34 @@ const createTask = (req, res, next) => {
         clientId ? clientId : null, 
         coordinatorId ? coordinatorId : null
     ])
-    .then((results) => {
-        logObj.referenceTablePkId = results[0]?.taskId
-        logObj.detail = 'success'
+    .then((results) => { 
+        const resKey = "taskCreated"
+        const resData = results[0].taskId
 
-        req.resData = logObj.resData = {
-            saved,
-            taskId: results[0].taskId,
+        req.resData = {
+            taskId: resData.taskId,
             taskMasterId 
         }
-    })
-    .then(()=>{
+
         if (typeof req?.logs == "object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next() 
     })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = 'fail'
-        ///////// set response status ////////////////////
-        res.end();
-    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            17,     //activityId
+            19,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
     
 }
 

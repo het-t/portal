@@ -26,7 +26,6 @@ const editSubTasks = (req, res, next) => {
             let stObj = subTasks[st]
             for(let key in stObj) {
                 if ((stObj[key] == null || stObj[key] == 'null' || stObj[key] == '') && key != 'id') {
-                    console.log(key, "is null")
                     delete subTasks[st][key]
                 }  
                 else continue
@@ -36,39 +35,55 @@ const editSubTasks = (req, res, next) => {
         subTasks = JSON.stringify(subTasks)
 
 
-        let logObj = {
-            "activityId": 31,
-            "user": req.userId,
-            "referenceTable": "sub_tasks",
-            "referenceTablePkId": null,
-            "detail": "",
-            "resData": {},
-            "resKey": "subTasksEdited"
-        }
+        // let logObj = {
+        //     "activityId": 31,
+        //     "user": req.userId,
+        //     "referenceTable": "sub_tasks",
+        //     "referenceTablePkId": null,
+        //     "detail": "",
+        //     "resData": {},
+        //     "resKey": "subTasksEdited"
+        // }
 
-        makeDbReq(`sub_tasks_edit(?, ?, ?, ?)`, [
+        makeDbReq(`sub_tasks_edit(?, ?, ?, ?, ?)`, [
+            req.userId,
             taskId, 
             taskMasterId,
             subTasks,
             saved
         ])
         .then(() => {
-            logObj.detail = 'success'
-            logObj.resData = 'success'
-        })
-        .catch((err) => {
-            logObj.detail = [err]
-            logObj.resData = err
-        })
-        .finally(() => {
-            if (typeof req?.logs == "object") {
-                req.logs.push(logObj)
-            }
-            else {
-                req.logs = [logObj]
-            }
+            // const resKey = "subTasksEdited"
+            // const resData = results[0].count
+    
+            // if (typeof req?.logs == "object") {
+            //     req.logs.push({resKey, resData})
+            // }
+            // else {
+            //     req.logs = [{resKey, resData}]
+            // }
             next()
         })
+        .catch(err => {
+            res.send(500)
+            makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+                req.userId,
+                31,     //activityId
+                20,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ])
+            .catch((err) => console.log(err))
+        })
+        // .finally(() => {
+        //     if (typeof req?.logs == "object") {
+        //         req.logs.push(logObj)
+        //     }
+        //     else {
+        //         req.logs = [logObj]
+        //     }
+        //     next()
+        // })
     }
 }
 

@@ -10,16 +10,16 @@ import deleteUser from '../controllers/userDelete.js'
 import getRoles from '../controllers/roleList.js'
 
 import auth from '../controllers/auth.js'
-import addLog from '../controllers/logs.js'
+import sendResponse from '../controllers/sendResponse.js'
 
 const router = express.Router()
 
-router.post('/create-user', auth, createUser, addLog)
-router.get('/', auth, getAllUsers, addLog)
-router.get('/get-roles', auth, getRoles, addLog)
-router.get('/edit', auth, getEditUser,addLog)
-router.post('/edit-user', auth, editUser, addLog)
-router.get('/count', auth, usersCount, addLog)
-router.post('/delete-user', auth, deleteUser, addLog)
+router.post('/create-user', auth, createUser, sendResponse)
+router.get('/', auth, getAllUsers, sendResponse)
+router.get('/get-roles', auth, getRoles, sendResponse)
+router.get('/edit', auth, getEditUser,sendResponse)
+router.post('/edit-user', auth, editUser, sendResponse)
+router.get('/count', auth, usersCount, sendResponse)
+router.post('/delete-user', auth, deleteUser, sendResponse)
 
 export default router

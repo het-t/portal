@@ -8,33 +8,35 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 const getTasks = (req, res, next) => {
-    let logObj = {
-        "activityId": 20,
-        "user": req.userId,
-        "referenceTable": "tasks",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "tasksList"
-    }
-    makeDbReq(`tasks_get_tasks(?, ?)`, [req.query.from, req.query.recordsPerPage])
+    
+    makeDbReq(`tasks_get(?, ?, ?)`, [
+        req.userId,
+        req.query.from, 
+        req.query.recordsPerPage
+    ])
     .then((tasks) => {
-        logObj.detail = 'success'
-        logObj.resData = tasks
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(() => {
+        const resKey = "tasksList"
+        const resData = tasks
+
         if (typeof req?.logs == "object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            20,     //activityId
+            19,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default getTasks

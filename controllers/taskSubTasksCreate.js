@@ -24,15 +24,15 @@ const createSubTasks = (req, res, next) => {
         if (subTasks?.length == 0) next()
         else {
 
-            let logObj = {
-                "activityId": 18,
-                "user": req.userId,
-                "referenceTable": "sub_tasks_master",
-                "referenceTablePkId": null,
-                "detail": "",
-                "resData": [],
-                "resKey": "subTasksCreated"
-            }
+            // let logObj = {
+            //     "activityId": 18,
+            //     "user": req.userId,
+            //     "referenceTable": "sub_tasks_master",
+            //     "referenceTablePkId": null,
+            //     "detail": "",
+            //     "resData": [],
+            //     "resKey": "subTasksCreated"
+            // }
 
 
             for(let st in subTasks) {
@@ -48,7 +48,7 @@ const createSubTasks = (req, res, next) => {
             subTasks = JSON.stringify(subTasks)
 
 
-            makeDbReq(`sub_tasks_create_sub_task(?, ?, ?, ?, ?)`, [
+            makeDbReq(`sub_tasks_create(?, ?, ?, ?, ?)`, [
                 req.userId, 
                 taskMasterId ? taskMasterId : null, 
                 taskId,        
@@ -56,23 +56,27 @@ const createSubTasks = (req, res, next) => {
                 subTasks,
             ])
             .then((results) => {
-                logObj.referenceTablePkId = results[0]?.subTaskId
-                logObj.detail = 'success'
-                logObj.resData.push(results[0]?.subTaskId)
-            })
-            .then(() => {
+                const resKey = "subTasksCreated"
+                const resData = results[0]?.subTaskId
+                // logObj.resData.push(results[0]?.subTaskId)
+
                 if (typeof req?.logs == "object") {
-                    req.logs.push(logObj)
+                    req.logs.push({resKey, resData})
                 }
                 else {
-                    req.logs = [logObj]
+                    req.logs = [{resKey, resData}]
                 }
-                next()
             })
-            .catch((err) => {
-                logObj.detail = [err]
-                logObj.resData = 'fail'
-                next()
+            .catch(err => {
+                res.send(500)
+                makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+                    req.userId,
+                    18,     //activityId
+                    20,     //tableid
+                    null,   //tablePkId
+                    [err]     //details
+                ])
+                .catch((err) => console.log(err))
             })
         }
     // }

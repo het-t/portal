@@ -8,33 +8,46 @@ import makeDbReq from '../db/index.js'
  */
 
 const getAllUsers = (req, res, next) => {
-    let logObj = {
-        "activityId": 11,
-        "user": req.userId,
-        "referenceTable": "users",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "usersList"    
-    }
-    makeDbReq(`users_get_all_users(?, ?)`, [req.query.from, req.query.recordsPerPage])
+    // let logObj = {
+    //     "activityId": 11,
+    //     "user": req.userId,
+    //     "referenceTable": "users",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "usersList"    
+    // }
+    makeDbReq(`users_get(?, ?, ?)`, [
+        req.userId,
+        req.query.from, 
+        req.query.recordsPerPage
+    ])
     .then((users) => {
-        logObj.detail = 'success'
-        logObj.resData = users
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = 'failed in fetching users details'
-    })
-    .finally(()=>{
+        const resKey = 'usersList'
+        const resData = users
+
         if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
     })
+    .catch((err) => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            6,     //activityId
+            15,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    })
+    // .finally(()=>{
+
+    // })
 } 
 
 export default getAllUsers

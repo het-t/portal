@@ -9,7 +9,7 @@ import makeDbReq from '../db/index.js'
 
 const editUser = (req, res, next) => {
     const {
-        userId,
+        userIdToEdit,
         firstName,
         lastName,
         gender,
@@ -18,18 +18,19 @@ const editUser = (req, res, next) => {
         role
     } = req.body.params
 
-    let logObj = {
-        "activityId": 6,
-        "user": req.userId,
-        "referenceTable": "users",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "userEdited"
-    }
+    // let logObj = {
+    //     "activityId": 6,
+    //     "user": req.userId,
+    //     "referenceTable": "users",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "userEdited"
+    // }
 
-    makeDbReq(`users_edit_user(?, ?, ?, ?, ?, ?, ?)`, [
-        userId,
+    makeDbReq(`users_edit(?, ?, ?, ?, ?, ?, ?, ?)`, [
+        req.userId,
+        userIdToEdit,
         firstName,
         lastName,
         gender,
@@ -37,24 +38,32 @@ const editUser = (req, res, next) => {
         email,
         role
     ])
-    .then((results) => {
-        logObj.referenceTablePkId = userId
-        logObj.detail = 'success'
-        logObj.resData = 'success'
+    .then(() => {
+        next()
+        // logObj.referenceTablePkId = userId
+        // logObj.detail = 'success'
+        // logObj.resData = 'success'
     })
     .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = err
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            6,     //activityId
+            15,     //tableid
+            userIdToEdit,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
-    .finally(()=>{
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
-        }
-        else {
-            req.logs = [logObj]
-        }
-        next()
-    })
+    // .finally(()=>{
+    //     if (typeof req?.logs == "Object") {
+    //         req.logs.push(logObj)
+    //     }
+    //     else {
+    //         req.logs = [logObj]
+    //     }
+    //     next()
+    // })
 }
 
 export default editUser

@@ -9,15 +9,15 @@ import makeDbReq from "../db/index.js"
 
 const editTask = (req, res, next) => {
 
-    let logObj = {
-        "activityId": 30,
-        "user": req.userId,
-        "referenceTable": "tasks",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "taskEdited",
-    }
+    // let logObj = {
+    //     "activityId": 30,
+    //     "user": req.userId,
+    //     "referenceTable": "tasks",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "taskEdited",
+    // }
     let {
         taskId, 
         taskMasterId,
@@ -34,7 +34,8 @@ const editTask = (req, res, next) => {
         taskMasterId = reqTaskMasterId
     }
 
-    makeDbReq(`tasks_edit_task(?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_edit(?, ?, ?, ?, ?, ?, ?, ?)`, [
+        req.userId,
         taskId, 
         taskMasterId,
         title, 
@@ -44,23 +45,25 @@ const editTask = (req, res, next) => {
         coordinatorId, 
     ])
     .then(() => {
-        logObj.referenceTablePkId = taskId
-        logObj.detail = 'success'
-    })
-    .then(()=>{
-        if (typeof req?.logs == "object") {
-            req.logs.push(logObj)
-        }
-        else {
-            req.logs = [logObj]
-        }
+        // if (typeof req?.logs == "object") {
+        //     req.logs.push(logObj)
+        // }
+        // else {
+        //     req.logs = [logObj]
+        // }
         next()
     })
-    .catch((err) => {
-        logObj.detail = [err]
-        console.log(err)
-        res.end()
-    })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            30,     //activityId
+            19,     //tableid
+            taskId,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default editTask

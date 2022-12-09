@@ -8,34 +8,44 @@ import makeDbReq from '../db/index.js'
  */
 
 const getClients = (req, res, next) => {
-    let logObj = {
-        "activityId": 16,
-        "user": req.userId,
-        "referenceTable": "clients_master",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "clientsList"
-    }
+    // let logObj = {
+    //     "activityId": 16,
+    //     "user": req.userId,
+    //     "referenceTable": "clients_master",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": ""
+    // }
 
-    makeDbReq(`clients_master_get_clients(?, ?)`, [req.query.from, req.query.recordsPerPage])
+    makeDbReq(`clients_master_get(?, ?, ?)`, [
+        req.userId,
+        req.query.from, 
+        req.query.recordsPerPage
+    ])
     .then((results) => {
-        logObj.detail = "success"
-        logObj.resData = results
-    })
-    .catch((err) => {
-        logObj.detail = [`Error ${err}`]
-        logObj.resData = 'failed'
-    })
-    .finally(()=>{
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+        const resKey = 'clientsList'
+        const resData = results
+
+        if (typeof req?.logs == "object") {
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            16,     //activityId
+            3,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default getClients

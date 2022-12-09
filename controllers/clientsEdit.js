@@ -22,17 +22,18 @@ const editClient = (req, res, next) => {
         conPhone
     } = req.query
 
-    let logObj = {
-        "activityId": 14,
-        "user": req.userId,
-        "referenceTable": "clients_master",
-        "referenceTablePkId": null,
-        "resData": "",
-        "resKey": "clientEdited"
-    }
+    // let logObj = {
+    //     "activityId": 14,
+    //     "user": req.userId,
+    //     "referenceTable": "clients_master",
+    //     "referenceTablePkId": null,
+    //     "resData": "",
+    //     "resKey": "clientEdited"
+    // }
     makeDbReq(
-        `clients_master_edit_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+        `clients_master_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
         [
+            req.userId,
             clientId,
             clientName, 
             cin,
@@ -47,22 +48,25 @@ const editClient = (req, res, next) => {
         ]
     )
     .then(() => {
-        logObj.detail = 'success'
-        logObj.resData = 'success'
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = 'fail'
-    })
-    .then(() => {
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
-        }
-        else {
-            req.logs = [logObj]
-        }
+        // if (typeof req?.logs == "object") {
+        //     req.logs.push(logObj)
+        // }
+        // else {
+        //     req.logs = [logObj]
+        // }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            14,     //activityId
+            3,     //tableid
+            clientId,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default editClient

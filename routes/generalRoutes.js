@@ -5,12 +5,12 @@ import logout from '../controllers/logout.js'
 import auth from '../controllers/auth.js'
 import userRights from '../controllers/userRightsList.js'
 
-import addLog from '../controllers/logs.js'
+import sendResponse from '../controllers/sendResponse.js'
 
 const router = express.Router()
 
-router.post('/login', login, addLog)
-router.get('/rights', auth, userRights, addLog)
+router.post('/login', login, sendResponse)
+router.get('/rights', auth, userRights, sendResponse)
 router.post('/logout', logout)
 router.post('/auth', login)
 

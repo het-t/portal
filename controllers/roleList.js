@@ -9,33 +9,43 @@ import makeDbReq from '../db/index.js'
 
 const getRoles = (req, res, next) => {
 
-    let logObj = {
-        "activityId": 10,
-        "user": req.userId,
-        "referenceTable": "roles",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "rolesList",
-    }
-    makeDbReq(`roles_get_roles(?, ?)`, [req.query.from, req.query.recordsPerPage])
+    // let logObj = {
+    //     "activityId": 10,
+    //     "user": req.userId,
+    //     "referenceTable": "roles",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "rolesList",
+    // }
+    makeDbReq(`roles_get(?, ?, ?)`, [
+        req.userId,
+        req.query.from, 
+        req.query.recordsPerPage
+    ])
     .then((roles) => {
-        logObj.detail = 'success'
-        logObj.resData = roles
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = err
-    })
-    .finally(()=>{
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+        const resKey = 'rolesList'
+        const resData = roles
+
+        if (typeof req?.logs == "object") {
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            10,     //activityId
+            8,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default getRoles

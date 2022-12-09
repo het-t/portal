@@ -30,43 +30,40 @@ const createTaskMaster = (req, res, next) => {
 
     else {
 
-        let logObj = {
-            "activityId": 33,
-            "user": req.userId,
-            "referenceTable": "tasks_master",
-            "referenceTablePkId": null,
-            "detail": "",
-            "resData": {},
-            "resKey": "taskCreated"
-        }
+        // let logObj = {
+        //     "activityId": 33,
+        //     "user": req.userId,
+        //     "referenceTable": "tasks_master",
+        //     "referenceTablePkId": null,
+        //     "detail": "",
+        //     "resData": {},
+        //     "resKey": 
+        // }
 
-        makeDbReq(`tasks_master_create(?, ?, ?)`, [
+        makeDbReq(`tasks_master_create(?, ?, ?, ?)`, [
+            req.userId,
             title, 
             description, 
             cost ? cost : null
         ])
         .then((results) => {
-            logObj.referenceTablePkId = results[0]?.taskMasterId
-            logObj.detail = 'success'
-
             req.resData = logObj.resData = {
                 taskMasterId: results[0].taskMasterId 
             }
-        })
-        .then(()=>{
-            if (typeof req?.logs == "object") {
-                req.logs.push(logObj)
-            }
-            else {
-                req.logs = [logObj]
-            }
+
             req.skipSubTasksCreate = false
             next() 
         })
-        .catch((err) => {
-            logObj.detail = [err]
-            logObj.resData = 'fail'
-            res.end()
+        .catch(err => {
+            res.send(500)
+            makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+                req.userId,
+                33,     //activityId
+                12,     //tableid
+                req.resData,   //tablePkId
+                [err]     //details
+            ])
+            .catch((err) => console.log(err))
         })
     }
     

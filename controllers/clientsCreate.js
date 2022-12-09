@@ -21,17 +21,10 @@ const createClient = (req, res, next) => {
         conPhone
     } = req.query
 
-    let logObj = {
-        "activityId": 13,
-        "user": req.userId,
-        "referenceTable": "clients_master",
-        "referenceTablePkId": null,
-        "resData": "",
-        "resKey": "clientCreated"
-    }
     makeDbReq(
-        `clients_master_create_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+        `clients_master_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
         [
+            req.userId,
             clientName, 
             cin,
             clientTypeId, 
@@ -44,22 +37,28 @@ const createClient = (req, res, next) => {
             conPhone
         ]
     )
-    .then(() => {
-        logObj.detail = 'success'
-        logObj.resData = 'success'
-    })
-    .catch((err) => {
-        logObj.detail = [err]
-        logObj.resData = 'fail'
-    })
-    .then(() => {
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+    .then((results) => {
+        const resKey = 'clientCreated'
+        const resData = results[0].clientId
+
+        if (typeof req?.logs == "object") {
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
+    })
+    .catch((err) => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            13,     //activityId
+            3,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
     })
 }
 

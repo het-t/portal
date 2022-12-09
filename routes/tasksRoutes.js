@@ -4,7 +4,8 @@ import createTask from '../controllers/taskCreate.js'
 import createSubTasks from '../controllers/taskSubTasksCreate.js'
 
 import auth from '../controllers/auth.js'
-import addLog from '../controllers/logs.js'
+import sendResponse from '../controllers/sendResponse.js'
+
 import getSubTasks from '../controllers/subTasksList.js'
 import getTasks from '../controllers/tasksList.js'
 import getTaskData from '../controllers/tasksData.js'
@@ -20,15 +21,15 @@ import createTaskMaster from '../controllers/tasksMasterCreate.js'
 
 const router = express.Router()
 
-router.get('/', auth, getTasks, addLog)
-router.get('/get-task-data', auth, getTaskData, getTaskLogs, addLog)
-router.get('/create-task', auth, createTaskMaster, createTask, createSubTasks, addLog)
-router.get('/get-sub-tasks', auth, getSubTasks, addLog)
-router.get('/get-tasks-master', auth, getTasksMaster, addLog)
-router.get('/get-sub-tasks-master', auth, getSubTasksMaster, addLog)
-router.get('/count', auth, tasksCount, addLog)
-router.get('/edit-task', auth, createTaskMaster, editTask, editSubTasks, addLog)
-router.get('/edit-task-master', auth, editTaskMaster, addLog)
-router.post('/delete-task', auth, deleteTask, addLog)
+router.get('/', auth, getTasks, sendResponse)
+router.get('/get-task-data', auth, getTaskData, getTaskLogs, sendResponse)
+router.get('/create-task', auth, createTaskMaster, createTask, createSubTasks, sendResponse)
+router.get('/get-sub-tasks', auth, getSubTasks, sendResponse)
+router.get('/get-tasks-master', auth, getTasksMaster, sendResponse)
+router.get('/get-sub-tasks-master', auth, getSubTasksMaster, sendResponse)
+router.get('/count', auth, tasksCount, sendResponse)
+router.get('/edit-task', auth, createTaskMaster, editTask, editSubTasks, sendResponse)
+router.get('/edit-task-master', auth, editTaskMaster, sendResponse)
+router.post('/delete-task', auth, deleteTask, sendResponse)
 
 export default router

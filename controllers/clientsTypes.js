@@ -8,33 +8,39 @@ import makeDbReq from "../db/index.js"
  */
 
 const clientTypes = (req, res, next) => {
-    let logObj = {
-        "activityId": 15,
-        "user": req.userId,
-        "referenceTable": "clients_type_master",
-        "referenceTablePkId": null,
-        "detail": "",
-        "resData": {},
-        "resKey": "clientsMasterTypes"
-    }
-    makeDbReq(`clients_type_master_get_types`, [])
+    // let logObj = {
+    //     "activityId": 15,
+    //     "user": req.userId,
+    //     "referenceTable": "clients_type_master",
+    //     "referenceTablePkId": null,
+    //     "detail": "",
+    //     "resData": {},
+    //     "resKey": "clientsMasterTypes"
+    // }
+    makeDbReq(`clients_type_master_get(?)`, [req.userId])
     .then((types) => {
-        logObj.detail = 'success'
-        logObj.resData = types
-    })
-    .catch((err) => {
-        logObj.detail = [`Error ${err}`]
-        logObj.resData = err
-    })
-    .finally(()=>{
-        if (typeof req?.logs == "Object") {
-            req.logs.push(logObj)
+        const resKey = 'clientsMasterTypes'
+        const resData = types
+
+        if (typeof req?.logs == "object") {
+            req.logs.push({resKey, resData})
         }
         else {
-            req.logs = [logObj]
+            req.logs = [{resKey, resData}]
         }
         next()
     })
+    .catch(err => {
+        res.send(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            15,     //activityId
+            3,     //tableid
+            null,   //tablePkId
+            [err]     //details
+        ])
+        .catch((err) => console.log(err))
+    }) 
 }
 
 export default clientTypes
