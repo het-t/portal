@@ -8,10 +8,20 @@ import makeDbReq from '../db/index.js'
  */
 
 const getClients = (req, res, next) => {
-    makeDbReq(`clients_master_get(?, ?, ?)`, [
+
+    const {
+        from,
+        recordsPerPage,
+        sortBy,
+        sortOrder
+    } = req.query
+
+    makeDbReq(`clients_master_get(?, ?, ?, ?, ?)`, [
         req.userId,
-        req.query.from, 
-        req.query.recordsPerPage
+        from, 
+        recordsPerPage,
+        sortBy,
+        sortOrder
     ])
     .then((results) => {
         const resKey = 'clientsList'

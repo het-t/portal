@@ -8,11 +8,22 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 const getTasks = (req, res, next) => {
+
+    const {
+        from,
+        recordsPerPage,
+        sortBy,
+        sortOrder
+    } = req.query
+
+    console.log("sorting", sortOrder)
     
-    makeDbReq(`tasks_get(?, ?, ?)`, [
+    makeDbReq(`tasks_get(?, ?, ?, ?, ?)`, [
         req.userId,
-        req.query.from, 
-        req.query.recordsPerPage
+        from, 
+        recordsPerPage,
+        sortBy,
+        sortOrder
     ])
     .then((tasks) => {
         const resKey = "tasksList"
