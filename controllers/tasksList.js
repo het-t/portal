@@ -13,17 +13,25 @@ const getTasks = (req, res, next) => {
         from,
         recordsPerPage,
         sortBy,
-        sortOrder
+        sortOrder,
+        filters
     } = req.query
 
-    console.log("sorting", sortOrder)
+    for(let i in filters) {
+        if (filters[i] == '') {
+            filters[i] = null
+        }
+    }
+
+    console.log(filters)
     
-    makeDbReq(`tasks_get(?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
         from, 
         recordsPerPage,
         sortBy,
-        sortOrder
+        sortOrder,
+        filters
     ])
     .then((tasks) => {
         const resKey = "tasksList"

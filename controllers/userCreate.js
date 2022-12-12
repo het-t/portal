@@ -12,7 +12,7 @@ const createUser = (req, res, next) => {
     const {firstName, lastName, gender, bithdate, email, role, password} = req.body.params
 
     bcrypt.hash(password, 3)
-    .then((passwordHash) => {
+    .then((passwordHash) => 
         makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?)`, [
             req.userId,
             firstName, 
@@ -23,8 +23,10 @@ const createUser = (req, res, next) => {
             role, 
             passwordHash
         ])
-    })
+    )
     .then((results) => {
+        console.log(results)
+
         const resKey = "userCreated"
         const resData = results[0].createdUserId
 
@@ -37,6 +39,7 @@ const createUser = (req, res, next) => {
         next()
     })
     .catch(err => {
+        console.log(err)
         res.send(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,

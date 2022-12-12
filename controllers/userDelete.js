@@ -10,7 +10,7 @@ import makeDbReq from '../db/index.js'
 const deleteUser = (req, res, next) => {
     const userIdToDel = req.body.params.userId
     
-    makeDbReq(`users_delete(?)`, [
+    makeDbReq(`users_delete(?, ?)`, [
         req.userId,
         userIdToDel
     ])

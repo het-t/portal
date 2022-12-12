@@ -8,11 +8,25 @@ import makeDbReq from '../db/index.js'
  */
 
 const getAllUsers = (req, res, next) => {
+    const {
+        from,
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters
+    } = req.query
 
-    makeDbReq(`users_get(?, ?, ?)`, [
+    for (let i in filters) {
+        if (filters[i] == '') filters[i] = null
+    }
+    
+    makeDbReq(`users_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
-        req.query.from, 
-        req.query.recordsPerPage
+        from, 
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters
     ])
     .then((users) => {
         const resKey = 'usersList'

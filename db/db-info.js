@@ -2,6 +2,6 @@ const dbInfo = {
     "host": "localhost",
     "user": "root",
     "password": "het161967",
-    "database": "portal"
+    "database": "portal",
 }
 export default dbInfo

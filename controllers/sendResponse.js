@@ -6,20 +6,24 @@
 const sendResponse = (req, res) => {
     let resDataObj = {}
 
-    for (let logObj of req.logs) {
-        let {resData, resKey} = logObj
+    const length = req.logs?.length
 
-        Object.defineProperty(resDataObj, resKey, {
-            value: resData,
-            enumerable: true,
-            configurable: true,
-            writable: true,
-        })
+    if (length == 0 || length == undefined) res.end()
+    else {
+        for (let logObj of req?.logs) {
+            let {resData, resKey} = logObj
 
+            Object.defineProperty(resDataObj, resKey, {
+                value: resData,
+                enumerable: true,
+                configurable: true,
+                writable: true,
+            })
+
+        }
+
+        res.send(resDataObj)
     }
-
-    res.send(resDataObj)
-
 } 
 
 export default sendResponse

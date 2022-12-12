@@ -13,15 +13,22 @@ const getClients = (req, res, next) => {
         from,
         recordsPerPage,
         sortBy,
-        sortOrder
+        sortOrder,
+        filters
     } = req.query
 
-    makeDbReq(`clients_master_get(?, ?, ?, ?, ?)`, [
+    for (let i in filters) {
+        if (filters[i] == '') {
+            filters[i] = null
+        }
+    }
+    makeDbReq(`clients_master_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
         from, 
         recordsPerPage,
         sortBy,
-        sortOrder
+        sortOrder,
+        filters
     ])
     .then((results) => {
         const resKey = 'clientsList'

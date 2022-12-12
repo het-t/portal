@@ -36,7 +36,6 @@ const createSubTasks = (req, res, next) => {
 
             subTasks = JSON.stringify(subTasks)
 
-
             makeDbReq(`sub_tasks_create(?, ?, ?, ?, ?)`, [
                 req.userId, 
                 taskMasterId ? taskMasterId : null, 
@@ -54,6 +53,7 @@ const createSubTasks = (req, res, next) => {
                 else {
                     req.logs = [{resKey, resData}]
                 }
+                next()
             })
             .catch(err => {
                 res.send(500)

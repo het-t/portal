@@ -9,10 +9,32 @@ import makeDbReq from '../db/index.js'
 
 const getRoles = (req, res, next) => {
 
-    makeDbReq(`roles_get(?, ?, ?)`, [
+    const {
+        from,
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters             //0-name, 1-rights
+    } = req.query
+
+    console.log(filters)
+    for(let value in filters) {
+        console.log(value, filters[value])
+        if (filters[value] == undefined || filters[value] == '') {
+            filters[value] = null
+        }
+        console.log(value, filters[value])
+    }
+
+    console.log(filters)
+
+    makeDbReq(`roles_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
-        req.query.from, 
-        req.query.recordsPerPage
+        from, 
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters
     ])
     .then((roles) => {
         const resKey = 'rolesList'

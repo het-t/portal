@@ -36,10 +36,10 @@ const createTask = (req, res, next) => {
     ])
     .then((results) => { 
         const resKey = "taskCreated"
-        const resData = results[0].taskId
+        const resData = results[0].createdTaskId
 
         req.resData = {
-            taskId: resData.taskId,
+            taskId: resData,
             taskMasterId 
         }
 
