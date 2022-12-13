@@ -9,10 +9,25 @@ import makeDbReq from "../db/index.js"
 
 const usersActivities = (req, res, next) => {
 
-    makeDbReq(`user_activities(?, ?, ?)`,[
+    const {
+        from,
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters
+    } = req.query
+
+    for (let i in filters) {
+        if (filters[i] == '') filters[i] = null
+    }
+
+    makeDbReq(`user_activities(?, ?, ?, ?, ?, ?)`,[
         req.userId,
-        req.query.from, 
-        req.query.recordsPerPage
+        from, 
+        recordsPerPage,
+        sortBy,
+        sortOrder,
+        filters
     ])
     .then((activities) => {
         const resKey = 'activityList'
