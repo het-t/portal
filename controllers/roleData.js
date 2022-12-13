@@ -10,7 +10,7 @@ const getRoleData = (req, res, next) => {
 
     makeDbReq(`roles_role_data(?, ?)`, [
         req.userId,
-        req.query.editRoleId
+        req.query.roleId
     ])
     .then((roleData) => {
         const resKey = 'roleData'
