@@ -22,8 +22,6 @@ const getTasks = (req, res, next) => {
             filters[i] = null
         }
     }
-
-    console.log(filters)
     
     makeDbReq(`tasks_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
