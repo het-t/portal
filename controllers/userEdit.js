@@ -9,7 +9,7 @@ import makeDbReq from '../db/index.js'
 
 const editUser = (req, res, next) => {
     const {
-        userIdToEdit,
+        userId,
         firstName,
         lastName,
         gender,
@@ -20,7 +20,7 @@ const editUser = (req, res, next) => {
 
     makeDbReq(`users_edit(?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
-        userIdToEdit,
+        userId,
         firstName,
         lastName,
         gender,

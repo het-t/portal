@@ -25,7 +25,6 @@ const createUser = (req, res, next) => {
         ])
     )
     .then((results) => {
-        console.log(results)
 
         const resKey = "userCreated"
         const resData = results[0].createdUserId
