@@ -37,7 +37,7 @@ const createTaskMaster = (req, res, next) => {
             cost ? cost : null
         ])
         .then((results) => {
-            req.resData = logObj.resData = {
+            req.resData = {
                 taskMasterId: results[0].taskMasterId 
             }
 

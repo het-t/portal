@@ -17,6 +17,7 @@ const editTask = (req, res, next) => {
         cost, 
         coordinatorId, 
         clientId, 
+        removedSubTasks
     } = req.query
 
     const reqTaskMasterId = req?.resData?.taskMasterId
@@ -25,7 +26,7 @@ const editTask = (req, res, next) => {
         taskMasterId = reqTaskMasterId
     }
 
-    makeDbReq(`tasks_edit(?, ?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_edit(?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
         taskId, 
         taskMasterId,
@@ -34,6 +35,7 @@ const editTask = (req, res, next) => {
         cost, 
         clientId, 
         coordinatorId, 
+        removedSubTasks
     ])
     .then(() => {
         next()
