@@ -20,7 +20,6 @@ const editSubTasks = (req, res, next) => {
         next()
     }
     else {
-
         subTasks = JSON.parse(subTasks)
         for(let st in subTasks) {
             let stObj = subTasks[st]
