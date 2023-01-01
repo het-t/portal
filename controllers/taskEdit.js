@@ -17,7 +17,7 @@ const editTask = (req, res, next) => {
         cost, 
         coordinatorId, 
         clientId, 
-        removedSubTasks
+        removedSubTasks,
     } = req.query
 
     const reqTaskMasterId = req?.resData?.taskMasterId
