@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 node_modules
+=======
+/node_modules
+>>>>>>> review_2
 dist
