@@ -16,7 +16,6 @@ const getRoles = (req, res, next) => {
         sortOrder,
         filters             //0-name, 1-rights
     } = req.query
-
     console.log(filters)
     for(let value in filters) {
         console.log(value, filters[value])

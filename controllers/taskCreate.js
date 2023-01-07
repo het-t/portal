@@ -14,13 +14,12 @@ const createTask = (req, res, next) => {
         title, 
         description,
         cost, 
-        saved,
         coordinatorId, 
         clientId
     } = req.query
 
     const reqTaskMasterId = req?.resData?.taskMasterId
-
+    
     if (reqTaskMasterId != undefined && reqTaskMasterId != null) {
         taskMasterId = reqTaskMasterId
     } 

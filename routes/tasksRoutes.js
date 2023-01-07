@@ -29,9 +29,9 @@ router.get('/get-sub-tasks', auth, getSubTasks, sendResponse)
 router.get('/get-tasks-master', auth, getTasksMaster, sendResponse)
 router.get('/get-sub-tasks-master', auth, getSubTasksMaster, sendResponse)
 router.get('/count', auth, tasksCount, sendResponse)
+router.post('/delete-task', auth, deleteTask, sendResponse)
 router.get('/edit-task', auth, createTaskMaster, editTask, editSubTasks, sendResponse)
 router.get('/edit-task-master', auth, editTaskMaster, sendResponse)
-router.post('/delete-task', auth, deleteTask, sendResponse)
 router.post('/change-status', auth, changeStatusTask, sendResponse)
 
 export default router

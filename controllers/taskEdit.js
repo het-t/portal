@@ -29,12 +29,12 @@ const editTask = (req, res, next) => {
     makeDbReq(`tasks_edit(?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
         taskId, 
-        taskMasterId,
+        taskMasterId ? taskMasterId : null,
         title, 
         description,
-        cost, 
-        clientId, 
-        coordinatorId, 
+        cost ? cost : null, 
+        clientId ? clientId : null, 
+        coordinatorId ? coordinatorId : null, 
         removedSubTasks
     ])
     .then(() => {
