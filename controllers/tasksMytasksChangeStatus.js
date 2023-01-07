@@ -10,17 +10,38 @@ const myTasksChangeStatus = (req, res, next) => {
     let {
         taskId,
         subTaskId,
-        statusId
+        statusId,
+        cost,
+        costSaved
     } = req.query
     
+    if (costSaved == 1 && cost == undefined) cost = null
     taskId = parseInt(taskId, 10)
     subTaskId = parseInt(subTaskId, 10)
+
+    if (costSaved == 0) {
+        makeDbReq(`sub_tasks_set_cost(?, ?, ?)`, [
+            req.userId,
+            subTaskId,
+            cost
+        ])
+        .catch((err) => {
+            makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+                req.userId,
+                41,     //activityId
+                20,     //tableid
+                subTaskId,   //tablePkId
+                [err]     //details
+            ])
+            .catch((err) => console.log(err))
+        })
+    }
 
     makeDbReq(`sub_tasks_change_status(?, ?, ?, ?)`, [
         req.userId,
         taskId,
         subTaskId,
-        statusId
+        statusId,
     ])
     .then(() => next())
     .catch(err => {
