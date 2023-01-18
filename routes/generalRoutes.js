@@ -9,6 +9,10 @@ import sendResponse from '../controllers/sendResponse.js'
 
 const router = express.Router()
 
+router.get('/', auth, (req, res) => {
+    res.send('1')
+})
+
 router.post('/login', login, sendResponse)
 router.get('/rights', auth, userRights, sendResponse)
 router.post('/logout', logout)

@@ -4,11 +4,16 @@ import makeDbReq from '../db/index.js'
 
 const login = (req, res, next) => {
 
-    const {password, email} = req.body
+    const {password, email, remember} = req.body
 
     var resKey = 'login'
     var resData = ''
     var userId = null
+
+    let expiresIn = ''
+    if (remember) expiresIn = '30d'
+    else expiresIn = '1d'
+
     //find users     
     //get hash from database
     makeDbReq(
@@ -38,7 +43,7 @@ const login = (req, res, next) => {
         }
     })
     .then(() =>{
-        jwt.sign({userId}, 'secert', (err, token) => {
+        jwt.sign({userId}, 'secert', {expiresIn}, (err, token) => {
             if (err) {
                 throw err
             }
