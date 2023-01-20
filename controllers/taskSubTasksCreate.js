@@ -21,7 +21,19 @@ const createSubTasks = (req, res, next) => {
             taskMasterId
         } = req.resData
 
-        if (subTasks?.length == 0) next()
+        if (subTasks?.length == 0) {
+            makeDbReq(`sub_tasks_create(?, ?, ?, ?, ?)`, [
+                req.userId, 
+                taskMasterId ? taskMasterId : null, 
+                taskId,        
+                saved,
+                JSON.stringify([{
+                  'description': '_#_*&^'  
+                }]),
+            ])
+            .catch(err => console.log(err))
+            .finally(() => next())
+        }
         else {
 
             for(let st in subTasks) {
