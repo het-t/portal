@@ -2,11 +2,18 @@ import makeDbReq from "../db/index.js"
 
 export default function workDiaryTasks(req, res) {
     const {
-        userId
+        userId,
+        fromDate,
+        toDate
     } = req.query
 
-    makeDbReq(`tasks_users_tasks(?)`, [
-        userId
+    console.log("fromDate raw", fromDate)
+    console.log("fromDate formatted", new Date(fromDate).toLocaleString().slice(0, 19).replace('T', ' '))
+
+    makeDbReq(`tasks_users_tasks(?, ?, ?)`, [
+        userId,
+        fromDate ? fromDate : null,
+        toDate ? toDate : null
     ])
     .then((tasks) => res.send(tasks))
     .catch((err) => {

@@ -12,7 +12,7 @@ const login = (req, res, next) => {
 
     let expiresIn = ''
     if (remember) expiresIn = '30d'
-    else expiresIn = '1d'
+    else expiresIn = '4h'
 
     //find users     
     //get hash from database
@@ -64,6 +64,7 @@ const login = (req, res, next) => {
     })
     .catch(err => {
         res.send(500)
+        console.log(err)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             null,
             1,                  //activityId

@@ -3,12 +3,16 @@ import makeDbReq from "../db/index.js"
 export default function workDiarySubTasks(req, res) {
     const {
         userId,
-        taskId
+        taskId,
+        fromDate,
+        toDate
     } = req.query
 
-    makeDbReq(`sub_tasks_users_sub_tasks(?, ?)`, [
+    makeDbReq(`sub_tasks_users_sub_tasks(?, ?, ?, ?)`, [
         userId,
-        taskId
+        taskId,
+        fromDate ? fromDate : null,
+        toDate ? toDate : null
     ])
     .then((subTasks) => res.send(subTasks))
     .catch((err) => {

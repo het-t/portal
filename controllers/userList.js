@@ -32,7 +32,7 @@ const getAllUsers = (req, res, next) => {
         const resKey = 'usersList'
         const resData = users
 
-        if (typeof req?.logs == "Object") {
+        if (typeof req?.logs == "object") {
             req.logs.push({resKey, resData})
         }
         else {

@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken'
 const auth = (req, res, next) => {
     jwt.verify(req.signedCookies._token, 'secert', (err, decoded) => {
         if (err) {
-            res.send("invalid login attempt")
+            res.sendStatus(403)
         } else {
             req.userId = decoded.userId
             next()
