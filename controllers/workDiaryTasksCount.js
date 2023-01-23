@@ -1,10 +1,7 @@
-import makeDbReq from "../db/index.js"
+import makeDbReq from "../db/index.js";
 
-export default function workDiaryTasks(req, res, next) {
-    let {
-        filters
-    } = req.query
-    
+const workDiaryTasksCount = (req, res, next) => {
+    let {filters} = req.query
 
     let generalFilters = filters.slice(3, 9).map((el) => {
         if (el == '') return null
@@ -16,16 +13,16 @@ export default function workDiaryTasks(req, res, next) {
         return el
     })
 
-    makeDbReq(`tasks_users_tasks(?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_work_diary_tasks_count(?, ?, ?, ?, ?)`, [
         req.userId,
         filters[0],
         filters[1],
-        filters[2], 
+        filters[2],
         generalFilters
     ])
-    .then((tasks) => {
-        const resKey = 'workDiaryList'
-        const resData = tasks
+    .then((results) => {
+        const resKey = "count"
+        const resData = results[0].count 
 
         if (typeof req?.logs == "object") {
             req.logs.push({resKey, resData})
@@ -35,16 +32,17 @@ export default function workDiaryTasks(req, res, next) {
         }
         next()
     })
-    .catch((err) => {
-        console.log(err)
+    .catch(err => {
         res.send(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
-            42,     //activityId
-            21,     //tableid
+            23,     //activityId
+            19,     //tableid
             null,   //tablePkId
             [err]     //details
         ])
         .catch((err) => console.log(err))
-    })
+    }) 
 }
+
+export default workDiaryTasksCount

@@ -18,6 +18,6 @@ app.use('/activity', activityRoutes)
 app.use('/clients', clientRoutes)
 app.use('/tasks', tasksRoutes)
 app.use('/myTasks', myTasksRoutes)
-app.use('/work-diary', workDiaryRoutes)
+app.use('/workDiary', workDiaryRoutes)
 
 export default app;

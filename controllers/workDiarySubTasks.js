@@ -8,7 +8,8 @@ export default function workDiarySubTasks(req, res) {
         toDate
     } = req.query
 
-    makeDbReq(`sub_tasks_users_sub_tasks(?, ?, ?, ?)`, [
+    makeDbReq(`sub_tasks_users_sub_tasks(?, ?, ?, ?, ?)`, [
+        req.userId,
         userId,
         taskId,
         fromDate ? fromDate : null,
@@ -16,6 +17,7 @@ export default function workDiarySubTasks(req, res) {
     ])
     .then((subTasks) => res.send(subTasks))
     .catch((err) => {
+        console.log(err)
         res.send(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,

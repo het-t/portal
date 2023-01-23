@@ -13,7 +13,7 @@ const usersCount = (req, res, next) => {
         const resKey = "count"
         const resData = results[0].count 
 
-        if (typeof req?.logs == "Object") {
+        if (typeof req?.logs == "object") {
             req.logs.push({resKey, resData})
         }
         else {
