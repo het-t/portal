@@ -7,6 +7,9 @@ export default function organizationsCreate(req, res) {
         req.userId,
         name
     ])
+    .then(() => {
+        res.sendStatus(200)
+    })
     .catch((err) => {
         console.log(err)
         res.sendStatus(500)
