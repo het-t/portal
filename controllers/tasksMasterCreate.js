@@ -30,8 +30,9 @@ const createTaskMaster = (req, res, next) => {
 
     else {
 
-        makeDbReq(`tasks_master_create(?, ?, ?, ?)`, [
+        makeDbReq(`tasks_master_create(?, ?, ?, ?, ?)`, [
             req.userId,
+            req.orgId,
             title, 
             description, 
             cost ? cost : null
@@ -45,7 +46,7 @@ const createTaskMaster = (req, res, next) => {
             next() 
         })
         .catch(err => {
-            res.send(500)
+            res.sendStatus(500)
             makeDbReq('logs_add(?, ?, ?, ?, ?)', [
                 req.userId,
                 33,     //activityId

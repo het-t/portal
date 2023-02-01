@@ -21,22 +21,20 @@ const createClient = (req, res, next) => {
         conPhone
     } = req.query
 
-    makeDbReq(
-        `clients_master_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
-        [
-            req.userId,
-            clientName, 
-            cin,
-            clientTypeId, 
-            firmName, 
-            firmAddress, 
-            caPan, 
-            caEmail, 
-            conName, 
-            conEmail, 
-            conPhone
-        ]
-    )
+    makeDbReq(`clients_master_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+        req.userId,
+        req.orgId,
+        clientName, 
+        cin,
+        clientTypeId, 
+        firmName, 
+        firmAddress, 
+        caPan, 
+        caEmail, 
+        conName, 
+        conEmail, 
+        conPhone
+    ])
     .then((results) => {
         const resKey = 'clientCreated'
         const resData = results[0].clientId
@@ -50,7 +48,7 @@ const createClient = (req, res, next) => {
         next()
     })
     .catch((err) => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             13,     //activityId

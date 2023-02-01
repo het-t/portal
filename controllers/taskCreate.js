@@ -24,8 +24,9 @@ const createTask = (req, res, next) => {
         taskMasterId = reqTaskMasterId
     } 
     
-    makeDbReq(`tasks_create(?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_create(?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId, 
+        req.orgId,
         taskMasterId ? taskMasterId : null, 
         title, 
         description, 
@@ -51,7 +52,7 @@ const createTask = (req, res, next) => {
         next() 
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             17,     //activityId

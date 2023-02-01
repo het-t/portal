@@ -2,41 +2,30 @@ import makeDbReq from '../db/index.js'
 import bcrypt from 'bcrypt'
 
 /**
- * create user
+ * create admin user
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
 
-const createUser = (req, res, next) => {
-    const { firstName, lastName, gender, bithdate, email, role, password} = req.body.params
+const createAdmin = (req, res) => {
+    const { firstName, lastName, gender, bithdate, email, password, orgId} = req.body.params
 
     bcrypt.hash(password, 3)
     .then((passwordHash) => 
-        makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+        makeDbReq(`organizations_users_admin_create(?, ?, ?, ?, ?, ?, ?, ?)`, [
             req.userId,
-            req.orgId,
+            orgId,
             firstName, 
             lastName, 
             gender, 
             bithdate, 
             email, 
-            role, 
             passwordHash
         ])
     )
-    .then((results) => {
-
-        const resKey = "userCreated"
-        const resData = results[0].createdUserId
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    .then(() => {
+        res.sendStatus(200)
     })
     .catch(err => {
         console.log(err)
@@ -52,4 +41,4 @@ const createUser = (req, res, next) => {
     })
 }
 
-export default createUser
+export default createAdmin

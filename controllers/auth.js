@@ -12,6 +12,7 @@ const auth = (req, res, next) => {
             res.sendStatus(403)
         } else {
             req.userId = decoded.userId
+            req.orgId = decoded?.orgId
             next()
         }
     })

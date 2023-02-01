@@ -9,8 +9,9 @@ import makeDbReq from '../db/index.js'
 
 const createRole = (req, res, next) => {
 
-    makeDbReq('roles_create(?, ?, ?)', [
-        res.userId,
+    makeDbReq('roles_create(?, ?, ?, ?)', [
+        req.userId,
+        req.orgId,
         req.query.roleName, 
         JSON.stringify(req.query.roleRights)
     ])
@@ -27,7 +28,7 @@ const createRole = (req, res, next) => {
         next()
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             3,     //activityId

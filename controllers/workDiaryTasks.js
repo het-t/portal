@@ -37,7 +37,7 @@ export default function workDiaryTasks(req, res, next) {
     })
     .catch((err) => {
         console.log(err)
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             42,     //activityId

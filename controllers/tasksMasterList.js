@@ -9,7 +9,10 @@ import makeDbReq from '../db/index.js'
  */
 const getTasksMaster = (req, res, next) => {
 
-    makeDbReq(`tasks_master_get(?)`, [req.userId])
+    makeDbReq(`tasks_master_get(?, ?)`, [
+        req.userId,
+        req.orgId
+    ])
     .then((tasks) => {
         const resKey = "tasksMasterList"
         const resData = tasks
@@ -23,7 +26,7 @@ const getTasksMaster = (req, res, next) => {
         next()
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             33,     //activityId

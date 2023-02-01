@@ -1,25 +1,22 @@
 import makeDbReq from '../db/index.js'
 
 /**
- * get total number of users
+ * get total number of admins
  * @param {*} req 
  * @param {*} res 
  */
 
-const usersCount = (req, res, next) => {
+const adminsCount = (req, res) => {
+    let {
+        orgId
+    } = req.query
 
-    makeDbReq(`users_count(?)`, [req.userId])
+    makeDbReq(`organizations_users_admins_count(?, ?)`, [
+        req.userId,
+        orgId
+    ])
     .then((results) => {
-        const resKey = "count"
-        const resData = results[0].count 
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+        res.send({'count': results[0].count})
     })
     .catch(err => {
         res.sendStatus(500)
@@ -34,4 +31,4 @@ const usersCount = (req, res, next) => {
     })
 }
 
-export default usersCount
+export default adminsCount

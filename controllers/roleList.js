@@ -16,19 +16,16 @@ const getRoles = (req, res, next) => {
         sortOrder,
         filters             //0-name, 1-rights
     } = req.query
-    console.log(filters)
+
     for(let value in filters) {
-        console.log(value, filters[value])
         if (filters[value] == undefined || filters[value] == '') {
             filters[value] = null
         }
-        console.log(value, filters[value])
     }
 
-    console.log(filters)
-
-    makeDbReq(`roles_get(?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`roles_get(?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
+        req.orgId,
         from, 
         recordsPerPage,
         sortBy,
@@ -48,7 +45,7 @@ const getRoles = (req, res, next) => {
         next()
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             10,     //activityId

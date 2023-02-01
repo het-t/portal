@@ -22,8 +22,9 @@ const getClients = (req, res, next) => {
             filters[i] = null
         }
     }
-    makeDbReq(`clients_master_get(?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`clients_master_get(?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
+        req.orgId,
         from, 
         recordsPerPage,
         sortBy,
@@ -43,7 +44,7 @@ const getClients = (req, res, next) => {
         next()
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             16,     //activityId

@@ -1,13 +1,13 @@
 import makeDbReq from '../db/index.js'
 
 /**
- * get all users
+ * get admins of given organization
  * @param {*} req 
  * @param {*} res 
  * @param {*} next 
  */
 
-const getAllUsers = (req, res, next) => {
+const getOrgainzationsAdmins = (req, res) => {
     const {
         from,
         recordsPerPage,
@@ -20,26 +20,16 @@ const getAllUsers = (req, res, next) => {
         if (filters[i] == '') filters[i] = null
     }
     
-    makeDbReq(`users_get(?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`organizations_users_admins_get(?, ?, ?, ?, ?, ?)`, [
         req.userId,
-        req.orgId,
         from, 
         recordsPerPage,
         sortBy,
         sortOrder,
         filters
     ])
-    .then((users) => {
-        const resKey = 'usersList'
-        const resData = users
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    .then((admins) => {
+        res.send({'orgs/adminsList': admins})
     })
     .catch((err) => {
         res.sendStatus(500)
@@ -54,4 +44,4 @@ const getAllUsers = (req, res, next) => {
     })
 } 
 
-export default getAllUsers
+export default getOrgainzationsAdmins

@@ -9,6 +9,7 @@ const login = (req, res, next) => {
     var resKey = 'login'
     var resData = ''
     var userId = null
+    var orgId = null
 
     let expiresIn = ''
     if (remember) expiresIn = '30d'
@@ -28,6 +29,7 @@ const login = (req, res, next) => {
         }
         else {
             userId = user[0].userId
+            orgId = user[0].orgId
             return user
         }
     })
@@ -43,7 +45,7 @@ const login = (req, res, next) => {
         }
     })
     .then(() =>{
-        jwt.sign({userId}, 'secert', {expiresIn}, (err, token) => {
+        jwt.sign({userId, orgId}, 'secert', {expiresIn}, (err, token) => {
             if (err) {
                 throw err
             }
@@ -63,7 +65,7 @@ const login = (req, res, next) => {
         })
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         console.log(err)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             null,

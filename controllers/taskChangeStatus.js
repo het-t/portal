@@ -13,7 +13,7 @@ const changeStatusTask = (req, res, next) => {
     ])
     .then(() => next())
     .catch((err) => {
-        res.sentStatus(403)
+        res.sentStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             40,     //activityId

@@ -8,6 +8,8 @@ import clientRoutes from './clientsRoutes.js'
 import tasksRoutes from './tasksRoutes.js'
 import myTasksRoutes from './myTasksRoutes.js'
 import workDiaryRoutes from './workDiaryRoutes.js'
+import settingsRoutes from './settingsRoutes.js'
+import organizationsRoutes from './organizationsRoutes.js'
 
 const app = express()
 
@@ -19,5 +21,7 @@ app.use('/clients', clientRoutes)
 app.use('/tasks', tasksRoutes)
 app.use('/myTasks', myTasksRoutes)
 app.use('/workDiary', workDiaryRoutes)
+app.use('/settings', settingsRoutes)
+app.use('/orgs', organizationsRoutes)
 
 export default app;

@@ -21,8 +21,9 @@ const usersActivities = (req, res, next) => {
         if (filters[i] == '') filters[i] = null
     }
 
-    makeDbReq(`user_activities(?, ?, ?, ?, ?, ?)`,[
+    makeDbReq(`user_activities(?, ?, ?, ?, ?, ?, ?)`,[
         req.userId,
+        req.orgId,
         from, 
         recordsPerPage,
         sortBy,
@@ -41,7 +42,7 @@ const usersActivities = (req, res, next) => {
         next()
     })
     .catch((err) => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             12,     //activityId

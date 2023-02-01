@@ -23,8 +23,9 @@ const getTasks = (req, res, next) => {
         }
     }
     
-    makeDbReq(`tasks_get(?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`tasks_get(?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
+        req.orgId,
         from, 
         recordsPerPage,
         sortBy,
@@ -44,7 +45,7 @@ const getTasks = (req, res, next) => {
         next()
     })
     .catch(err => {
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             20,     //activityId

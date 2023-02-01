@@ -18,7 +18,7 @@ export default function workDiarySubTasks(req, res) {
     .then((subTasks) => res.send(subTasks))
     .catch((err) => {
         console.log(err)
-        res.send(500)
+        res.sendStatus(500)
         makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
             42,     //activityId
