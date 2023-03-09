@@ -10,7 +10,7 @@ export default function getProfilePic(req, res) {
         userId
     ])
     .then((results) => {
-        if (results?.[0].length == 0) throw 'NO_PROFILE_PIC_FOUND' 
+        if (results?.length == 0) throw 'NO_PROFILE_PIC_FOUND' 
         const filePath = `./pics/users/${results[0].picPath}_${width}x${height}.txt`
         return fs.readFile(filePath)
     })
@@ -21,7 +21,16 @@ export default function getProfilePic(req, res) {
         })
     })
     .catch(err => {
-        console.log(err)
-        res.sendStatus(500)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            55,
+            27,
+            7,
+            err
+        ])
+        .catch(err => console.log(err))
+        
+        if (err == 'NO_PROFILE_PIC_FOUND') res.sendStatus(404)
+        else res.sendStatus(500)
     })
 }

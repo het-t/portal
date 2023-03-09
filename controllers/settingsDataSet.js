@@ -1,17 +1,23 @@
 import makeDbReq from "../db/index.js";
-import bcrypt from 'bcrypt'
 
 export default function settingsDataSet(req, res) {
 
-    console.log(req.body.params)
     makeDbReq(`users_settings_set(?, ?)`, [
         req.userId,
         JSON.stringify(req.body.params)
     ])
-    .then(result => {
-        res.send(result)
+    .then(() => {
+        res.sendStatus(200)
     })
     .catch(err => {
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            52,
+            27,
+            req.body.params.key,
+            err
+        ])
+        .catch(err => console.log(err))
         res.sendStatus(500)
     })
 }

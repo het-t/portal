@@ -25,16 +25,27 @@ export default function setProfilePic(req, res) {
         resizeImg(fileData, 50, 50, `${picPath}_50x50.${ext}`)
     ])
     .then(() => {
-        return makeDbReq(`users_settings_profile_pic_path_set(?, ?)`, [
+        return makeDbReq(`users_settings_set(?, ?)`, [
             req.userId,
-            fileName
+            JSON.stringify({
+                "key": 7,
+                "value": fileName
+            })
         ])
     })
     .then(() => {
         res.sendStatus(200)
     })
     .catch(err => {
-        console.log(err)
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+            req.userId,
+            52,
+            27,
+            7,
+            err 
+        ])
+        .catch(err => console.log(err))
+        
         res.sendStatus(500)
     })
     .finally(() => {
