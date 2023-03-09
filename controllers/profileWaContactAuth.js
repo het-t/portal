@@ -12,15 +12,16 @@ export default function sendWaAuthOtp(req, res) {
         wid,
         otp
     ])
-    .then(() => {
+    .then(() => res.sendStatus(200))
+    .catch((err) => {
         makeDbReq('logs_add(?, ?, ?, ?, ?', [
             req.userId,
             53,
             23,
             null,
-            err
+            [err]
         ])
         .catch(err => console.log(err))
-        res.sendStatus(200)
+        res.sendStatus(500)
     })
 }

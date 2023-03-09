@@ -20,7 +20,7 @@ export default function createWaNotification(req, res) {
             53,
             23,
             null,
-            err
+            [err]
         ])
         res.sendStatus(500)
     }) 

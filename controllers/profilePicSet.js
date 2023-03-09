@@ -42,7 +42,7 @@ export default function setProfilePic(req, res) {
             52,
             27,
             7,
-            err 
+            [err] 
         ])
         .catch(err => console.log(err))
         

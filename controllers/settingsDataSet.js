@@ -15,7 +15,7 @@ export default function settingsDataSet(req, res) {
             52,
             27,
             req.body.params.key,
-            err
+            [err]
         ])
         .catch(err => console.log(err))
         res.sendStatus(500)

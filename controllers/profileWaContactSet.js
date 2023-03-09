@@ -17,7 +17,7 @@ export default function waContactSet(req, res) {
             61,
             27,
             8,
-            err
+            [err]
         ])
         .catch((err) => console.log(err))
         res.sendStatus(500)

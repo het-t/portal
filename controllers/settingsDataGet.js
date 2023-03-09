@@ -1,9 +1,9 @@
 import makeDbReq from '../db/index.js'
 
 export default function settingsDataGet(req, res) {
-    makeDbReq(`users_settings_get(?, ?)`, [
+    makeDbReq(`settings_get(?, ?)`, [
         req.userId,
-        parseInt(req.query.authorType)
+        parseInt(req.query.pageId)
     ])
     .then(result => {
         res.send(result)
@@ -14,7 +14,7 @@ export default function settingsDataGet(req, res) {
             51,
             27,
             null,
-            err
+            [err]
         ])
         .catch(err => console.log(err))
         res.sendStatus(500)

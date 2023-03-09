@@ -9,7 +9,6 @@ import multer from 'multer'
 
 import path from 'path'
 import { fileURLToPath } from "url"
-import auth from '../controllers/auth.js'
 
 import waNotificationRoutes from './notificationsRoutes.js'
 //////////////////////////////////////////////////////////

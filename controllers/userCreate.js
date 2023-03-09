@@ -13,7 +13,7 @@ const createUser = (req, res, next) => {
 
     bcrypt.hash(password, 3)
     .then((passwordHash) => 
-        makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+        makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?, ?, @createdUserId)`, [
             req.userId,
             req.orgId,
             firstName, 
@@ -26,7 +26,6 @@ const createUser = (req, res, next) => {
         ])
     )
     .then((results) => {
-
         const resKey = "userCreated"
         const resData = results[0].createdUserId
 
