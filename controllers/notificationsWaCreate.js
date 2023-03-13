@@ -25,5 +25,3 @@ export default function createWaNotification(req, res) {
         res.sendStatus(500)
     }) 
 }
-
-// line 20-21 changes are pending in server

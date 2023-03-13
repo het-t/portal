@@ -1,8 +1,6 @@
 import makeDbReq from '../db/index.js'
 import * as fs from 'fs/promises'
 
-// changes pending in server added new param req.userId and made some other changes too
-
 export default function getProfilePic(req, res) {
     let {width, height, userId} = req.query
 
