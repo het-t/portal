@@ -16,8 +16,8 @@ export default function notificationsWaSend(client) {
             .then(() => {
                 makeDbReq('notifications_wa_mark_sent(?)', [ntf.id])
             })
-            .catch(err => {
-                console.log(err)
+            .catch((err) => {
+                makeDbReq('notifications_wa_mark_failed(?)', [ntf.id])
             })
         })
     })

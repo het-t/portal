@@ -1,6 +1,7 @@
 import makeDbReq from '../db/index.js'
 
 export default function settingsDataGet(req, res) {
+
     makeDbReq(`settings_get(?, ?)`, [
         req.userId,
         parseInt(req.query.pageId)

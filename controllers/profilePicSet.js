@@ -25,7 +25,7 @@ export default function setProfilePic(req, res) {
         resizeImg(fileData, 50, 50, `${picPath}_50x50.${ext}`)
     ])
     .then(() => {
-        return makeDbReq(`users_settings_set(?, ?)`, [
+        return makeDbReq(`settings_set(?, ?)`, [
             req.userId,
             JSON.stringify({
                 "key": 7,

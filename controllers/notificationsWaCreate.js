@@ -17,11 +17,13 @@ export default function createWaNotification(req, res) {
     .catch(err => {
         makeDbReq('logs_add(?, ?, ?, ?, ?', [
             req.userId,
-            53,
-            23,
+            57,
+            24,
             null,
             [err]
         ])
         res.sendStatus(500)
     }) 
 }
+
+// line 20-21 changes are pending in server

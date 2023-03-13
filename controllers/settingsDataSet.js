@@ -2,7 +2,7 @@ import makeDbReq from "../db/index.js";
 
 export default function settingsDataSet(req, res) {
 
-    makeDbReq(`users_settings_set(?, ?)`, [
+    makeDbReq(`settings_set(?, ?)`, [
         req.userId,
         JSON.stringify(req.body.params)
     ])

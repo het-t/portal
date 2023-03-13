@@ -1,12 +1,15 @@
 import makeDbReq from '../db/index.js'
 import * as fs from 'fs/promises'
 
+// changes pending in server added new param req.userId and made some other changes too
+
 export default function getProfilePic(req, res) {
     let {width, height, userId} = req.query
-    let dim = userId
+
     userId == -1 ? userId = req.userId : userId = userId
 
-    makeDbReq(`users_settings_profile_pic_get(?)`, [
+    makeDbReq(`users_settings_profile_pic_get(?, ?)`, [
+        req.userId,
         userId
     ])
     .then((results) => {
@@ -16,7 +19,7 @@ export default function getProfilePic(req, res) {
     })
     .then((data) => {
         res.send({
-            dim: `${dim}_${width}x${height}`,
+            dim: `${userId}_${width}x${height}`,
             data: `data:image/jpeg;base64,${data}`
         })
     })
