@@ -3,15 +3,21 @@ import makeDbReq from '../db/index.js'
 export default function createWaNotification(req, res) {
     const {
         content,
-        rule
+        userRule,
+        clientRule,
+        custom
     } = req.body.params
 
-    makeDbReq('notifications_wa_add(?, ?, ?)', [
+    console.log(custom)
+    makeDbReq('notifications_wa_add(?, ?, ?, ?, ?)', [
         req.userId,
-        JSON.stringify(rule),
+        userRule,
+        clientRule,
+        custom,
         content
     ])
-    .then(() => {
+    .then((results) => {
+        console.log(results)
         res.sendStatus(200)
     })
     .catch(err => {
