@@ -19,13 +19,22 @@ export default function notificationsWaSend(client) {
             .catch((err) => {
                 makeDbReq('notifications_wa_mark_failed(?)', [ntf.id])
                 makeDbReq('logs_add(?, ?, ?, ?, ?', [
-                    req.userId,
+                    1,
                     62,
                     24,
-                    null,
+                    ntf.id,
                     [err]
                 ])
             })
         })
+    })
+    .catch(err => {
+        makeDbReq('logs_add(?, ?, ?, ?, ?)',[
+            1,
+            65,
+            24,
+            null,
+            [err]
+        ])
     })
 }
