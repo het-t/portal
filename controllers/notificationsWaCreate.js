@@ -16,18 +16,18 @@ export default function createWaNotification(req, res) {
         custom,
         content
     ])
-    .then((results) => {
-        console.log(results)
+    .then(() => {
         res.sendStatus(200)
     })
-    .catch(err => {
-        makeDbReq('logs_add(?, ?, ?, ?, ?', [
+    .catch((err) => {
+        makeDbReq(`logs_add(?, ?, ?, ?, ?)`, [
             req.userId,
             57,
             24,
             null,
             [err]
         ])
+        .catch(err => console.log(err))
         res.sendStatus(500)
     }) 
 }
