@@ -8,7 +8,6 @@ export default function createWaNotification(req, res) {
         custom
     } = req.body.params
 
-    console.log(custom)
     makeDbReq('notifications_wa_add(?, ?, ?, ?, ?)', [
         req.userId,
         userRule,
