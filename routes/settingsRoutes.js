@@ -10,11 +10,11 @@ import multer from 'multer'
 import path from 'path'
 import { fileURLToPath } from "url"
 
-import waNotificationRoutes from './notificationsRoutes.js'
+import waNotificationRoutes from './waNotificationsRoutes.js'
 //////////////////////////////////////////////////////////
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const pathToStoreFiles = path.join(__dirname, '../pics/temp/')
+const pathToStoreFiles = path.join(__dirname, '../uploads/temp/')
 /////////////////////////////////////////////////////////
 
 const router = express.Router()
@@ -28,7 +28,6 @@ router.get('/profile-pic', auth, getProfilePic)
 const upload = multer({dest: pathToStoreFiles})
 router.post('/profile-pic', auth, upload.single('File'), setProfilePic)
 
-
-router.use('/notifications/wa/', waNotificationRoutes)
+router.use('/notifications/wa/', auth, waNotificationRoutes)
 
 export default router

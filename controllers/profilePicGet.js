@@ -12,7 +12,7 @@ export default function getProfilePic(req, res) {
     ])
     .then((results) => {
         if (results?.length == 0) throw 'NO_PROFILE_PIC_FOUND' 
-        const filePath = `./pics/users/${results[0].picPath}_${width}x${height}.txt`
+        const filePath = `./uploads/pics/users/${results[0].picPath}_${width}x${height}.txt`
         return fs.readFile(filePath)
     })
     .then((data) => {

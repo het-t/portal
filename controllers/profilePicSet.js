@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 
 export default function setProfilePic(req, res) {
     const fileName = `${req.userId}_${req.orgId}`
-    const tempPath = path.join(__dirname, '../pics/temp')
+    const tempPath = path.join(__dirname, '../uploads/temp')
 
     let fileData = fs.readFileSync(`${tempPath}/${req.file.filename}`)
 
@@ -19,7 +19,7 @@ export default function setProfilePic(req, res) {
 
     let ext = 'txt'
     
-    const picPath = path.join(__dirname, '../pics/users', fileName)
+    const picPath = path.join(__dirname, '../uploads/pics/users', fileName)
     Promise.all([
         resizeImg(fileData, 100, 100, `${picPath}_100x100.${ext}`),    
         resizeImg(fileData, 50, 50, `${picPath}_50x50.${ext}`)

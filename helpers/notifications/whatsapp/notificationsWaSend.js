@@ -6,19 +6,24 @@ export default function notificationsWaSend(client) {
     makeDbReq('notifications_wa_get()', [])
     .then((results) => {
         results.forEach(ntf => {
-            
             ntf.toContact = convertToWID(ntf.toContact)
 
-            client.sendMessage(
-                ntf.toContact,
-                ntf.content
-            )
+            client.isRegisteredUser(ntf.toContact)
             .then(() => {
+                setTimeout(() => {
+                    return client.sendMessage(
+                        ntf.toContact,
+                        ntf.content
+                    )
+                }, Math.random()*2*1000*10)
+            })
+            .then((p) => {
+                if (p === false) throw 'RECIEVER_NOT_REGISTRED'
                 makeDbReq('notifications_wa_mark_sent(?)', [ntf.id])
             })
             .catch((err) => {
                 makeDbReq('notifications_wa_mark_failed(?)', [ntf.id])
-                makeDbReq('logs_add(?, ?, ?, ?, ?', [
+                makeDbReq('logs_add(?, ?, ?, ?, ?)', [
                     1,
                     62,
                     24,
