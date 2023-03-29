@@ -44,7 +44,7 @@ export default function createWaNotification(req, res) {
         const workbook = xlsx.readFile(req.file.path)
         const sheet = workbook.Sheets[workbook.SheetNames[0]]
         const rows = JSON.stringify(xlsx.utils.sheet_to_json(sheet))
-        
+
         makeDbReq('notifications_wa_add_from_file(?, ?, ?, ?)', [
             req.userId,
             content,
@@ -57,7 +57,6 @@ export default function createWaNotification(req, res) {
             res.sendStatus(500)
         })
         .finally(() => {
-            console.log(req.file.path)
             fs.rm(req.file.path, (err) => {
                 if (err) console.log(err)
             })
