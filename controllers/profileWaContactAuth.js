@@ -7,16 +7,17 @@ export default function sendWaAuthOtp(req, res) {
 
     const wid = convertToWid(req.query.value)
 
-    makeDbReq('authentications_wid(?, ?, ?)', [
+    makeDbReq('authentications_wid(?, ?, ?, ?)', [
         req.userId,
+        req.orgId,
         wid,
         otp
     ])
     .then(() => res.sendStatus(200))
     .catch((err) => {
-        makeDbReq('logs_add(?, ?, ?, ?, ?', [
+        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
             req.userId,
-            53,
+            60,
             23,
             null,
             [err]

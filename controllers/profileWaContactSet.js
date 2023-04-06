@@ -2,8 +2,9 @@ import makeDbReq from "../db/index.js";
 
 export default function waContactSet(req, res) {
 
-    makeDbReq('users_settings_set_wid(?, ?)', [
+    makeDbReq('authentications_verify_otp(?, ?, ?)', [
         req.userId,
+        1,
         req.body.params.otp
     ])
     .then((results) => {

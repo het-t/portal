@@ -1,8 +1,7 @@
 import cron from 'node-cron'
 import notificationsWaSend from '../helpers/notifications/whatsapp/notificationsWaSend.js'
 
-let job = (client) => cron.schedule('*/1 * * * *', () => {
-    notificationsWaSend(client)
-})
+let job = setInterval(notificationsWaSend, 1000*60*5)
+
 
 export default job

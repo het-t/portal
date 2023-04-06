@@ -1,45 +1,33 @@
-import makeDbReq from '../../../db/index.js'
-import convertToWID from './convertToWID.js'
+import makeDbReq from "../../../db/index.js";
+import convertToWid from './convertToWID.js'
+import {initClient} from './initClient.js'
 
-export default function notificationsWaSend(client) {
+export default function notificationWaSend() {
+console.log("job started")
+    makeDbReq('notifications_wa_get();', [])
+    .then(notifications => {
+        for(let ntfObject of notifications) {   
 
-    makeDbReq('notifications_wa_get()', [])
-    .then((results) => {
-        results.forEach(ntf => {
-            ntf.toContact = convertToWID(ntf.toContact)
+            let clientReadyPromise
 
-            client.isRegisteredUser(ntf.toContact)
-            .then(() => {
-                setTimeout(() => {
-                    return client.sendMessage(
-                        ntf.toContact,
-                        ntf.content
-                    )
-                }, Math.random()*2*1000*10)
+            clientReadyPromise = initClient(ntfObject.orgId)
+
+            clientReadyPromise
+            .then((client) => {
+                ntfObject.notifications.map((ntf) => {
+                    let contact = convertToWid(ntf.toContact)
+                    return client.sendMessage(contact, ntf.content)
+                    .then(() => {
+                        return makeDbReq(`notifications_wa_mark_sent(?)`, [ntf.id])
+                    })
+                    .catch(err => {
+                        return makeDbReq(`notifications_wa_mark_failed(?)`, [ntf.id])
+                    })
+                });
             })
-            .then((p) => {
-                if (p === false) throw 'RECIEVER_NOT_REGISTRED'
-                makeDbReq('notifications_wa_mark_sent(?)', [ntf.id])
+            .catch(err => {
+                console.log(err)
             })
-            .catch((err) => {
-                makeDbReq('notifications_wa_mark_failed(?)', [ntf.id])
-                makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-                    1,
-                    62,
-                    24,
-                    ntf.id,
-                    [err]
-                ])
-            })
-        })
-    })
-    .catch(err => {
-        makeDbReq('logs_add(?, ?, ?, ?, ?)',[
-            1,
-            65,
-            24,
-            null,
-            [err]
-        ])
+        }
     })
 }
