@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkportal"]=self["webpackChunkportal"]||[]).push([[646],{6646:function(e,r,t){t.r(r),t.d(r,{default:function(){return o}});var n=t(6252);function u(e,r,t,u,s,a){const i=(0,n.up)("router-view");return(0,n.wg)(),(0,n.iD)("div",null,[(0,n.Wm)(i)])}var s={name:"AdminPanelView",computed:{userType(){return this.$store.getters["getUserType"]}}},a=t(3744);const i=(0,a.Z)(s,[["render",u]]);var o=i}}]);
+//# sourceMappingURL=646.2113f43b.js.map

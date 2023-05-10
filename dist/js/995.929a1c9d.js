@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkportal"]=self["webpackChunkportal"]||[]).push([[995],{8227:function(t,e,r){r.r(e),r.d(e,{default:function(){return u}});var s=r(6252);const a={class:"ml24 mr24"};function n(t,e,r,n,l,i){const o=(0,s.up)("router-view");return(0,s.wg)(),(0,s.iD)("div",a,[(0,s.Wm)(o)])}var l={name:"RoleView",data(){return{allow:!1}},created(){Promise.all([this.$store.dispatch("rights/setAllRightsList")]).then((()=>{this.allow=!0}))}},i=r(3744);const o=(0,i.Z)(l,[["render",n]]);var u=o}}]);
+//# sourceMappingURL=995.929a1c9d.js.map
