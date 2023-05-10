@@ -23,6 +23,6 @@ app.use('/myTasks', myTasksRoutes)
 app.use('/workDiary', workDiaryRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/orgs', organizationsRoutes)
-app.get('/test', res.json("harleys in hawaii"))
+app.get('/test', (req, res) => res.json("harleys in hawaii"))
 
 export default app;
