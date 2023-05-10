@@ -8,14 +8,13 @@ console.log("job started")
     .then(notifications => {
         for(let ntfObject of notifications) {   
 
-            let clientReadyPromise
-
-            clientReadyPromise = initClient(ntfObject.orgId)
+            let clientReadyPromise = initClient(ntfObject.orgId)
 
             clientReadyPromise
             .then((client) => {
                 ntfObject.notifications.map((ntf) => {
                     let contact = convertToWid(ntf.toContact)
+    
                     return client.sendMessage(contact, ntf.content)
                     .then(() => {
                         return makeDbReq(`notifications_wa_mark_sent(?)`, [ntf.id])

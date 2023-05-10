@@ -14,7 +14,7 @@ const createTask = (req, res, next) => {
         title, 
         description,
         cost, 
-        coordinatorId, 
+        coordinatorIds, 
         clientId
     } = req.query
 
@@ -32,7 +32,7 @@ const createTask = (req, res, next) => {
         description, 
         cost ? cost : null,  
         clientId ? clientId : null, 
-        coordinatorId ? coordinatorId : null
+        coordinatorIds ? JSON.stringify(JSON.parse(coordinatorIds)) : null
     ])
     .then((results) => { 
         const resKey = "taskCreated"

@@ -2,10 +2,9 @@ import makeDbReq from '../db/index.js'
 import xlsx from 'xlsx'
 import fs from 'fs'
 
-
 export default function createWaNotification(req, res) {
 
-    const {
+    let {
         content,
         userRule,
         clientRule,
@@ -13,6 +12,11 @@ export default function createWaNotification(req, res) {
         consent
     } = req.body
 
+    let msg = new String()
+    msg = req.body.content
+
+    msg.replaceAll('/', '///')
+    
     if (req.files.length === 0) {
         makeDbReq('notifications_wa_add(?, ?, ?, ?, ?, ?, ?)', [
             req.userId,
@@ -20,7 +24,7 @@ export default function createWaNotification(req, res) {
             userRule,
             clientRule,
             custom === 'false' ? 0 : 1,
-            content,
+            msg,
             consent === 'false' ? 0 : 1
         ])
         .then(() => {

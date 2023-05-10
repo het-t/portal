@@ -18,22 +18,24 @@ const createClient = (req, res, next) => {
         caPan, 
         conName,
         conEmail, 
-        conPhone
+        conPhone,
+        status
     } = req.query
 
-    makeDbReq(`clients_master_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
+    makeDbReq(`clients_master_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, [
         req.userId,
         req.orgId,
         clientName, 
         cin,
-        clientTypeId, 
+        clientTypeId ? clientTypeId : 1, 
         firmName, 
         firmAddress, 
         caPan, 
         caEmail, 
         conName, 
         conEmail, 
-        conPhone
+        conPhone,
+        status
     ])
     .then((results) => {
         const resKey = 'clientCreated'
