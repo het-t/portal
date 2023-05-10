@@ -3,4 +3,5 @@ dist
 /index.js
 db/db-info.js
 pics
-/.wwebjs_auth
+auth-for-use
+auth-for-qr
