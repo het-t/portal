@@ -27,7 +27,7 @@ const createClient = (req, res, next) => {
         req.orgId,
         clientName, 
         cin,
-        clientTypeId ? clientTypeId : 1, 
+        clientTypeId, 
         firmName, 
         firmAddress, 
         caPan, 

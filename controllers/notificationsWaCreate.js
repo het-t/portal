@@ -4,18 +4,13 @@ import fs from 'fs'
 
 export default function createWaNotification(req, res) {
 
-    let {
+    const {
         content,
         userRule,
         clientRule,
         custom,
         consent
     } = req.body
-
-    let msg = new String()
-    msg = req.body.content
-
-    msg.replaceAll('/', '///')
     
     if (req.files.length === 0) {
         makeDbReq('notifications_wa_add(?, ?, ?, ?, ?, ?, ?)', [
@@ -24,7 +19,7 @@ export default function createWaNotification(req, res) {
             userRule,
             clientRule,
             custom === 'false' ? 0 : 1,
-            msg,
+            content,
             consent === 'false' ? 0 : 1
         ])
         .then(() => {
