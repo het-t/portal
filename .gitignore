@@ -1,6 +1,4 @@
 node_modules
-/index.js
-db/db-info.js
-pics
+pics/users
 auth-for-use
 auth-for-qr
