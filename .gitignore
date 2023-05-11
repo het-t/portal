@@ -1,5 +1,4 @@
 node_modules
-/index.js
 db/db-info.js
 pics
 auth-for-use
