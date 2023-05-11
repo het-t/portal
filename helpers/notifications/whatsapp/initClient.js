@@ -53,7 +53,6 @@ export function initClient(orgId) {
 }
 
 function destroyClient() {
-    console.log(this)
     if (flagToDestroyClient === true) {
         this.destroy()
     }
