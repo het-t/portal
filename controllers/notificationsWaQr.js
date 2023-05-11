@@ -39,9 +39,7 @@ export default function (req, res) {
         })
     })
 
-    client.initialize()
-        .catch(err => {
+    client.initialize().catch(err => {
         console.log(err)
-        res.sendStatus(500)
     })
 }
