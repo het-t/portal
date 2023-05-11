@@ -16,6 +16,9 @@ export default function createClient (orgId, usecase) {
         }),
         puppeteer: { 
             handleSIGINT: false,
+            args: [
+                '--no-sandbox'
+            ]
         },
         takeoverOnConflict: true
     })
