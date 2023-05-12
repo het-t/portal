@@ -30,9 +30,10 @@ app.listen(process.env.PORT, () => {
 process.on('SIGINT', () => {
     let clients = getClients()
 
-    Object.values(clients).forEach((client) => {
-        return client.destroy()
-    })
+    console.log(clients)
+    for (let i = 0; i !== clients.length; i++) {
+        clients[i].destroy()
+    }
 
     process.exit(0)
 })
