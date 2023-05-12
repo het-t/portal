@@ -18,30 +18,29 @@ export function initClient(orgId) {
         if (clientId) {
             client.on('qr', () => {
                 // destroyClient.call(client)
-                     
+                console.log(`=> ${clientId} QR`)
                 reject(`${orgId} NOT_AUTHORISED`)
             })
         
-            client.on('authenticated', () => console.log('client authenticated'))
+            client.on('authenticated', () => console.log(`=> ${clientId} authenticated`))
         
             client.on('auth_failure', () => {
                 
                 // destroyClient.call(client)
-                    
-                              
+                console.log(`=> ${clientId} auth_failure`)
                 reject(`${orgId} AUTH_FAILURE`)
             })
         
             client.on('ready', () => {
                 clients[orgId] = client
-                console.log(`${orgId} READY`)
+                console.log(`=> ${clientId} READY`)
                 resolve(client)
             })
         
             client.initialize()
             .catch(err => {
                 // destroyClient.call(client)
-                console.error(err)
+                console.error(`${clientId} ${err}`)
             })
         }
         else {

@@ -31,8 +31,8 @@ process.on('SIGINT', () => {
     let clients = getClients()
 
     console.log(clients)
-    for (let i = 0; i !== clients.length; i++) {
-        clients[i].destroy()
+    for (let client in clients) {
+        client.destroy()
     }
 
     process.exit(0)
