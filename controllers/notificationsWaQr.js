@@ -25,15 +25,15 @@ export default function (req, res) {
         })
     })
 
-    client.on('authenticated', () => {
+    client.once('authenticated', () => {
         console.log(`client for ${clientId} authenticated`)
     })
 
-    client.on('auth_failure', (error) => {
+    client.once('auth_failure', (error) => {
         console.log(`${clientId} Authentication failure: ${error}`);
     });
     
-    client.on('ready', () => {
+    client.once('ready', () => {
         console.log(`client for ${clientId} ready`)
 
         // return fs.rename(

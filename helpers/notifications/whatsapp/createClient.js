@@ -17,7 +17,9 @@ export default function createClient (orgId, usecase) {
         puppeteer: { 
             handleSIGINT: false,
             args: [
-                '--no-sandbox'
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-gpu'
             ]
         },
         takeoverOnConflict: true
