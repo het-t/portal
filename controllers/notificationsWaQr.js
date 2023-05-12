@@ -11,7 +11,7 @@ export default function (req, res) {
 
     console.log(`${clientId} auth kickstart in notificationsWaQr`)
 
-    client.once('qr', (qr) => {
+    client.on('qr', (qr) => {
         console.log(`${clientId} qr sent`)
 
         qrcode.toDataURL(qr, (err, url) => {
@@ -25,16 +25,17 @@ export default function (req, res) {
         })
     })
 
-    client.once('authenticated', () => {
+    client.on('authenticated', () => {
         console.log(`client for ${clientId} authenticated`)
     })
 
-    client.once('auth_failure', (error) => {
+    client.on('auth_failure', (error) => {
         console.log(`${clientId} Authentication failure: ${error}`);
     });
     
-    client.once('ready', () => {
+    client.on('ready', () => {
         console.log(`client for ${clientId} ready`)
+    client.sendMessage('8849210989@c.use', "working ");
 
         // return fs.rename(
         //     `./auth-for-qr/session-${clientId}`, 
