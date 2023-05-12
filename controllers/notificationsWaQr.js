@@ -29,9 +29,13 @@ export default function (req, res) {
         console.log(`client for ${clientId} authenticated`)
     })
 
+    client.on('auth_failure', (error) => {
+        console.log(`${clientId} Authentication failure: ${error}`);
+    });
+    
     client.on('ready', () => {
         console.log(`client for ${clientId} ready`)
-        
+
         return fs.rename(
             `./auth-for-qr/session-${clientId}`, 
             `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
