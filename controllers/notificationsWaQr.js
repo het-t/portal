@@ -60,9 +60,7 @@ export default function (req, res) {
         // })
     })
 
-    client.on('change_state', (state) => {
-        console.log(`${clientId} changed state ${state}`)
-    })
+    
     client.initialize()
     //     .catch(err => {
     //     console.log(err)
