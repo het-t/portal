@@ -31,16 +31,16 @@ export default function (req, res) {
 
     client.once('ready', () => {
         console.log(`client for ${clientId} ready`)
-        client.destroy()
-        .catch(err => {
-            console.log(err)
-        })
-        .finally(() => {
-            return fs.rename(
-                `./auth-for-qr/session-${clientId}`, 
-                `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
-            )
-        })
+        // client.destroy()
+        // .catch(err => {
+        //     console.log(err)
+        // })
+        // .finally(() => {
+        //     return fs.rename(
+        //         `./auth-for-qr/session-${clientId}`, 
+        //         `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
+        //     )
+        // })
     })
 
     client.initialize().catch(err => {
