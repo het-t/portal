@@ -17,9 +17,8 @@ export function initClient(orgId) {
     
         if (clientId) {
             client.on('qr', () => {
-                destroyClient.call(client)
-                    
-                
+                // destroyClient.call(client)
+                     
                 reject(`${orgId} NOT_AUTHORISED`)
             })
         
@@ -27,7 +26,7 @@ export function initClient(orgId) {
         
             client.on('auth_failure', () => {
                 
-                destroyClient.call(client)
+                // destroyClient.call(client)
                     
                               
                 reject(`${orgId} AUTH_FAILURE`)
@@ -41,7 +40,7 @@ export function initClient(orgId) {
         
             client.initialize()
             .catch(err => {
-                destroyClient.call(client)
+                // destroyClient.call(client)
                 console.error(err)
             })
         }
