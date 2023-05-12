@@ -9,7 +9,11 @@ export default function (req, res) {
 
     let {client, clientId} = clientObj
 
+    console.log(`${clientId} auth kickstart in notificationsWaQr`)
+
     client.once('qr', (qr) => {
+        console.log(`${clientId} qr sent`)
+
         qrcode.toDataURL(qr, (err, url) => {
             if (err) {
                 console.log(err)
@@ -22,11 +26,11 @@ export default function (req, res) {
     })
 
     client.once('authenticated', () => {
-        console.log(`client for ${req.orgId} authenticated`)
+        console.log(`client for ${clientId} authenticated`)
     })
 
     client.once('ready', () => {
-        console.log(`client for ${req.orgId} ready`)
+        console.log(`client for ${clientId} ready`)
         client.destroy()
         .catch(err => {
             console.log(err)
