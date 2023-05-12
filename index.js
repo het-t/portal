@@ -1,3 +1,5 @@
+import https from 'https'
+import fs from 'fs'
 import * as dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser'
@@ -23,7 +25,13 @@ app.use('/api', router)
 
 app.use('/.well-known/pki-validation', express.static('.well-known/pki-validation'));
 
-app.listen(process.env.PORT, () => {
+let options = {
+    key: fs.readFileSync('/ssl/Certificate CRT/corporatetasks.com_privatekey.key'),
+    cert: fs.readFileSync('/ssl/Certificate CRT/corporatetasks_com.crt'),
+    ca: fs.readFileSync('/ssl/Certificate CRT/CerteraDVSSLCA.crt')
+}
+
+https.createServer(options, app).listen(process.env.PORT, () => {
     // notificationWaSend()
     // setInterval(notificationWaSend, 1000*60)
     console.log(`PORT ${process.env.PORT}`)
