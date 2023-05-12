@@ -23,7 +23,7 @@ app.use('/api', router)
 
 app.listen(process.env.PORT, () => {
     // notificationWaSend()
-    setInterval(notificationWaSend, 1000*60)
+    // setInterval(notificationWaSend, 1000*60)
     console.log(`PORT ${process.env.PORT}`)
 })
 
