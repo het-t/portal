@@ -27,8 +27,12 @@ app.use('/api', router)
 
 let options = {
     key: fs.readFileSync('./ssl/corporatetasks.com_privatekey.key'),
-    cert: fs.readFileSync('./ssl/Certificate CRT/corporatetasks_com.crt'),
-    ca: fs.readFileSync('./ssl/Certificate CRT/CerteraDVSSLCA.crt')
+    cert: fs.readFileSync('./ssl/combined.crt'),
+    ca: [
+        fs.readFileSync('./ssl/CerteraDVSSLCA.crt'),
+        fs.readFileSync('./ssl/USERTrustRSAAAACA.crt'),
+        fs.readFileSync('./ssl/AAACertificateServices.crt')
+    ]
 }
 
 https.createServer(options, app).listen(process.env.PORT, () => {
