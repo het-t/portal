@@ -23,7 +23,7 @@ app.use(express.static(join(__dirname, './dist')))
 app.use('/u/api', router)
 app.use('/api', router)
 
-app.use('/.well-known/pki-validation', express.static('.well-known/pki-validation'));
+// app.use('/.well-known/pki-validation', express.static('.well-known/pki-validation'));
 
 let options = {
     key: fs.readFileSync('./ssl/corporatetasks.com_privatekey.key'),
