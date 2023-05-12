@@ -25,12 +25,25 @@ export default function (req, res) {
         })
     })
 
-    client.once('authenticated', () => {
+    client.on('authenticated', () => {
         console.log(`client for ${clientId} authenticated`)
     })
 
-    client.once('ready', () => {
+    client.on('ready', () => {
         console.log(`client for ${clientId} ready`)
+        
+        return fs.rename(
+            `./auth-for-qr/session-${clientId}`, 
+            `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
+        ).then(() => {
+            console.log('File renamed successfully');
+            client.destroy()
+                .catch(err => {
+                    console.log(err)
+                });
+        }).catch(err => {
+            console.log(err);
+        });
         // client.destroy()
         // .catch(err => {
         //     console.log(err)
@@ -43,7 +56,8 @@ export default function (req, res) {
         // })
     })
 
-    client.initialize().catch(err => {
-        console.log(err)
-    })
+    client.initialize()
+    //     .catch(err => {
+    //     console.log(err)
+    // })
 }
