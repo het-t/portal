@@ -21,6 +21,8 @@ app.use(express.static(join(__dirname, './dist')))
 app.use('/u/api', router)
 app.use('/api', router)
 
+app.use('/.well-known/pki-validation', express.static('.well-known/pki-validation'));
+
 app.listen(process.env.PORT, () => {
     // notificationWaSend()
     // setInterval(notificationWaSend, 1000*60)
