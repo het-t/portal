@@ -36,18 +36,18 @@ export default function (req, res) {
     client.on('ready', () => {
         console.log(`client for ${clientId} ready`)
 
-        return fs.rename(
-            `./auth-for-qr/session-${clientId}`, 
-            `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
-        ).then(() => {
-            console.log('File renamed successfully');
-            client.destroy()
-                .catch(err => {
-                    console.log(err)
-                });
-        }).catch(err => {
-            console.log(err);
-        });
+        // return fs.rename(
+        //     `./auth-for-qr/session-${clientId}`, 
+        //     `./auth-for-use/session-admin-${req.orgId}-${Date.now()}`
+        // ).then(() => {
+        //     console.log('File renamed successfully');
+        //     client.destroy()
+        //         .catch(err => {
+        //             console.log(err)
+        //         });
+        // }).catch(err => {
+        //     console.log(err);
+        // });
         // client.destroy()
         // .catch(err => {
         //     console.log(err)
@@ -60,6 +60,9 @@ export default function (req, res) {
         // })
     })
 
+    client.on('change_state', (state) => {
+        console.log(`${clientId} changed state ${state}`)
+    })
     client.initialize()
     //     .catch(err => {
     //     console.log(err)
