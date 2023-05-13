@@ -3,6 +3,6 @@ auth-for-qr
 uploads
 auth-for-use
 ssl
-.env
+/.env
 index.js
 db/db-info.js

@@ -42,12 +42,12 @@ https.createServer(options, app).listen(process.env.PORT, () => {
 })
 
 process.on('SIGINT', () => {
-    let clients = getClients()
+    // let clients = getClients()
 
-    console.log(clients)
-    for (let client in clients) {
-        client.destroy()
-    }
+    // console.log(clients)
+    // for (let client in clients) {
+    //     client.destroy()
+    // }
 
     process.exit(0)
 })
