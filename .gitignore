@@ -3,3 +3,5 @@ auth-for-qr
 uploads
 auth-for-use
 ssl
+.env
+index.js
