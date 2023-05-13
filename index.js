@@ -23,7 +23,13 @@ app.use(express.static(join(__dirname, './dist')))
 app.use('/u/api', router)
 app.use('/api', router)
 
-// app.use('/.well-known/pki-validation', express.static('.well-known/pki-validation'));
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+});
 
 let options = {
     key: fs.readFileSync('./ssl/corporatetasks.com_privatekey.key'),
