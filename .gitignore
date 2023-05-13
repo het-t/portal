@@ -1,6 +1,4 @@
 node_modules
 auth-for-qr
-uploads
 auth-for-use
-ssl
 /.env
