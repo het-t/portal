@@ -3,7 +3,7 @@ const dbInfo = {
     "user": "root",
     "password": "het161967",
     "database": "portal",
-    "multipleStatesment": true
+    "multipleStatements": true
 }
 
-export default dbInfo
+export default dbInfo;
