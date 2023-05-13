@@ -4,5 +4,3 @@ uploads
 auth-for-use
 ssl
 /.env
-index.js
-db/db-info.js
