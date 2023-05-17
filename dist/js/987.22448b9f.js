@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkportal"]=self["webpackChunkportal"]||[]).push([[987],{987:function(e,r,t){t.r(r),t.d(r,{default:function(){return c}});var a=t(6252);const l={class:"ml24 mr24"};function n(e,r,t,n,s,o){const u=(0,a.up)("router-view");return(0,a.wg)(),(0,a.iD)("div",l,[s.allow?((0,a.wg)(),(0,a.j4)(u,{key:0})):(0,a.kq)("",!0)])}var s={name:"UserView",data(){return{allow:!1}},created(){this.$store.dispatch("roles/rolesAll").then((()=>{this.allow=!0}))}},o=t(3744);const u=(0,o.Z)(s,[["render",n]]);var c=u}}]);
-//# sourceMappingURL=987.22448b9f.js.map
