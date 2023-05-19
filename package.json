@@ -1,19 +1,20 @@
 {
-  "homepage": "http://13.50.110.158:8181/",
   "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "host": "pm2 start index.js"
+    "host": "pm2 start index.js",
+    "build": "babel src -d dist_backend",
+    "test": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.1",
@@ -26,5 +27,10 @@
     "qrcode-terminal": "^0.12.0",
     "sharp": "^0.31.3",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5"
   }
 }
