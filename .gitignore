@@ -2,3 +2,5 @@ node_modules
 auth-for-qr
 auth-for-use
 /.env
+ssl
+uploads/pics/users/*.txt
