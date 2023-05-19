@@ -7,14 +7,17 @@ import cookieParser from 'cookie-parser'
 import router from './routes/index.js'
 // import {getClients} from './helpers/notifications/whatsapp/initClient.js'
 // import notificationWaSend from './helpers/notifications/whatsapp/notificationsWaSend.js'
-import {join} from 'path'
-import * as url from 'url';
-// const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+
+//remove below part before creating build
+dotenv.config()
+//remove above part before creating build
 
 const app = express()
 
-// dotenv.config()
-app.use(cors({origin: "https://corporatetasks.com/"}))
+let runningAsProduction = process.env.NODE_MODE === "production"
+const origin = runningAsProduction ? process.env.DEV_ORIGIN : process.env.PRO_ORIGIN;
+
+app.use(cors({origin}))
 
 app.use(cookieParser('secret'))
 app.use(express.urlencoded({extended: true}))
@@ -22,18 +25,12 @@ app.use(express.json({limit:'10mb'}))
 
 app.use('/api', router)
 
-
-
-let options = {
-    key: fs.readFileSync('./ssl/corporatetasks.com_privatekey.key'),
-    cert: fs.readFileSync('./ssl/combined.crt'),
-    ca: [
-        fs.readFileSync('./ssl/CerteraDVSSLCA.crt'),
-        fs.readFileSync('./ssl/USERTrustRSAAAACA.crt'),
-        fs.readFileSync('./ssl/AAACertificateServices.crt')
-    ]
-}
-
 let server = http.createServer(app)
 
-server.listen()
+if (runningAsProduction) {
+    server.listen()
+}
+else {
+    server.listen(process.env.DEV_PORT)
+    console.log(`PORT ${process.env.DEV_PORT}`)
+}

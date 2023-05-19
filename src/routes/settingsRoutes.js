@@ -11,11 +11,14 @@ import path from 'path'
 import { fileURLToPath } from "url"
 
 // import waNotificationRoutes from './waNotificationsRoutes.js'
-//////////////////////////////////////////////////////////
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+
+var __dirname = __dirname;
+if (process.env.NODE_MODE !== 'production') {
+    const __filename = fileURLToPath(import.meta.url);
+    __dirname = path.dirname(__filename);
+}
+
 const pathToStoreFiles = path.join(__dirname, '../uploads/temp/')
-/////////////////////////////////////////////////////////
 
 const router = express.Router()
 

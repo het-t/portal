@@ -7,7 +7,7 @@
   "scripts": {
     "host": "pm2 start index.js",
     "build": "babel src -d dist_backend",
-    "test": "node index.js"
+    "test": "node src/index.js"
   },
   "author": "",
   "license": "ISC",
