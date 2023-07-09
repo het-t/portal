@@ -3,62 +3,55 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = createTask;
 var _index = _interopRequireDefault(require("../db/index.js"));
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /**
  * create task
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-var createTask = function createTask(req, res, next) {
+function createTask(req, res) {
   var _req$resData;
-  var _req$query = req.query,
-    taskMasterId = _req$query.taskMasterId,
-    title = _req$query.title,
-    description = _req$query.description,
-    cost = _req$query.cost,
-    coordinatorIds = _req$query.coordinatorIds,
-    clientId = _req$query.clientId;
+  var _req$body$params = req.body.params,
+    taskMasterId = _req$body$params.taskMasterId,
+    title = _req$body$params.title,
+    description = _req$body$params.description,
+    cost = _req$body$params.cost,
+    coordinatorIds = _req$body$params.coordinatorIds,
+    clientId = _req$body$params.clientId,
+    subTasks = _req$body$params.subTasks,
+    saved = _req$body$params.saved;
   var reqTaskMasterId = req === null || req === void 0 ? void 0 : (_req$resData = req.resData) === null || _req$resData === void 0 ? void 0 : _req$resData.taskMasterId;
   if (reqTaskMasterId != undefined && reqTaskMasterId != null) {
     taskMasterId = reqTaskMasterId;
   }
-  (0, _index["default"])("tasks_create(?, ?, ?, ?, ?, ?, ?, ?)", [req.userId, req.orgId, taskMasterId ? taskMasterId : null, title, description, cost ? cost : null, clientId ? clientId : null, coordinatorIds ? JSON.stringify(JSON.parse(coordinatorIds)) : null]).then(function (results) {
-    var resKey = "taskCreated";
-    var resData = results[0].createdTaskId;
-    req.resData = {
-      taskId: resData,
-      taskMasterId: taskMasterId
-    };
-    if (_typeof(req === null || req === void 0 ? void 0 : req.logs) == "object") {
-      req.logs.push({
-        resKey: resKey,
-        resData: resData
-      });
-    } else {
-      req.logs = [{
-        resKey: resKey,
-        resData: resData
-      }];
+  subTasks = JSON.parse(subTasks);
+  for (var st in subTasks) {
+    var stObj = subTasks[st];
+    for (var key in stObj) {
+      if (stObj[key] == null || stObj[key] == 'null' || stObj[key] == '') {
+        delete subTasks[st][key];
+      } else continue;
     }
-    next();
+  }
+  subTasks = JSON.stringify(subTasks);
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "tasks_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [req.userId, req.orgId, taskMasterId ? taskMasterId : null, title, description, cost ? cost : null, clientId ? clientId : null, coordinatorIds ? JSON.stringify(JSON.parse(coordinatorIds)) : null, saved, subTasks]).then(function () {
+    res.sendStatus(200);
   })["catch"](function (err) {
     res.sendStatus(500);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 17,
+    (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 17,
     //activityId
     19,
     //tableid
     null,
     //tablePkId
     [err] //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
-};
-var _default = createTask;
-exports["default"] = _default;
+}

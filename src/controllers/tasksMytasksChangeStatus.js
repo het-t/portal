@@ -1,4 +1,5 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * change status of sub task of task assigened to user
@@ -6,55 +7,86 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const myTasksChangeStatus = (req, res, next) => {
+export default function myTasksChangeStatus(req, res) {
+    const taskId = req.params.taskId
+
     let {
-        taskId,
         subTaskId,
         statusId,
         cost,
         costSaved
-    } = req.query
+    } = req.body
     
     if (costSaved == 1 && cost == undefined) cost = null
-    taskId = parseInt(taskId, 10)
     subTaskId = parseInt(subTaskId, 10)
 
+    const connection = con()
     if (costSaved == 0) {
-        makeDbReq(`sub_tasks_set_cost(?, ?, ?)`, [
-            req.userId,
-            subTaskId,
-            cost
-        ])
-        .catch((err) => {
-            makeDbReq('logs_add(?, ?, ?, ?, ?)', [
+        makeDbReq(
+            connection,
+            `sub_tasks_set_cost(?, ?, ?)`,
+            [
                 req.userId,
-                41,     //activityId
-                20,     //tableid
-                subTaskId,   //tablePkId
-                [err]     //details
-            ])
-            .catch((err) => console.log(err))
+                subTaskId,
+                cost
+            ]
+        )
+        .catch((err) => {
+            makeDbReq(
+                connection,
+                'logs_add(?, ?, ?, ?, ?)',
+                [
+                    req.userId,
+                    41,     //activityId
+                    20,     //tableid
+                    subTaskId,   //tablePkId
+                    [err]     //details
+                ]
+            )
         })
     }
 
-    makeDbReq(`sub_tasks_change_status(?, ?, ?, ?)`, [
-        req.userId,
-        taskId,
-        subTaskId,
-        statusId,
-    ])
-    .then(() => next())
+    makeDbReq(
+        connection,
+        `sub_tasks_change_status(?, ?, ?, ?, ?)`,
+        [
+            req.userId,
+            req.orgId,
+            taskId,
+            subTaskId,
+            statusId,
+        ]
+    )
+    .then(() => {
+        return makeDbReq(
+            connection,
+            `tasks_auto_assign_status(?, ?, ?)`,
+            [
+                req.userId,
+                req.orgId,
+                taskId
+            ]
+        )
+    })
+    
+    .then(() => {
+        res.sendStatus(200)
+    })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            34,     //activityId
-            19,     //tableid
-            subTaskId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                34,     //activityId
+                19,     //tableid
+                subTaskId,   //tablePkId
+                [err]     //details
+            ]
+        )   
     })
+    .finally(() => {
+        connection.end()
+    }) 
 }
-
-export default myTasksChangeStatus

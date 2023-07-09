@@ -1,3 +1,4 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
 
 
@@ -5,37 +6,38 @@ import makeDbReq from '../db/index.js'
  * get list of tasks for `tasks` screen
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
-const getSubTasksMaster = (req, res, next) => {
+export default function getSubTasksMaster (req, res) {
 
-    makeDbReq(`sub_tasks_master_get(?, ?)`, [
-        req.userId,
-        req.query.taskMasterId
-    ])
-    .then((tasks) => {
-        const resKey = "subTasksMasterList"
-        const resData = tasks
+    const taskMasterId = req.params.id
 
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    const connection = con()
+    makeDbReq(
+        connection,
+        `sub_tasks_master_get(?, ?)`, 
+        [
+            req.userId,
+            taskMasterId
+        ]
+    )
+    .then((results) => {
+        res.send(results)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            27,     //activityId
-            20,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                27,     //activityId
+                20,     //tableid
+                taskMasterId,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default getSubTasksMaster

@@ -3,7 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = createSubTasks;
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 var _index = _interopRequireDefault(require("../db/index.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -14,28 +15,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
  * @param {*} next 
  */
 
-var createSubTasks = function createSubTasks(req, res, next) {
-  var _subTasks;
-  var _req$query = req.query,
-    subTasks = _req$query.subTasks,
-    saved = _req$query.saved;
-  subTasks = JSON.parse(subTasks);
+function createSubTasks(req, res, next) {
+  var _req$body$params = req.body.params,
+    subTasks = _req$body$params.subTasks,
+    saved = _req$body$params.saved;
   var _req$resData = req.resData,
     taskId = _req$resData.taskId,
     taskMasterId = _req$resData.taskMasterId;
-  if (((_subTasks = subTasks) === null || _subTasks === void 0 ? void 0 : _subTasks.length) == 0) {
+  if ((subTasks === null || subTasks === void 0 ? void 0 : subTasks.length) == 0) {
     next();
   } else {
-    for (var st in subTasks) {
-      var stObj = subTasks[st];
-      for (var key in stObj) {
-        if (stObj[key] == null || stObj[key] == 'null' || stObj[key] == '') {
-          delete subTasks[st][key];
-        } else continue;
-      }
-    }
-    subTasks = JSON.stringify(subTasks);
-    (0, _index["default"])("sub_tasks_create(?, ?, ?, ?, ?)", [req.userId, taskMasterId ? taskMasterId : null, taskId, saved, subTasks]).then(function (results) {
+    var connection = (0, _conDb["default"])();
+    (0, _index["default"])(connection, "sub_tasks_create(?, ?, ?, ?, ?)", [req.userId, taskMasterId ? taskMasterId : null, taskId, saved, subTasks]).then(function (results) {
       var _results$;
       var resKey = "subTasksCreated";
       var resData = (_results$ = results[0]) === null || _results$ === void 0 ? void 0 : _results$.subTaskId;
@@ -53,19 +44,16 @@ var createSubTasks = function createSubTasks(req, res, next) {
       next();
     })["catch"](function (err) {
       res.sendStatus(500);
-      (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 18,
+      return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 18,
       //activityId
       20,
       //tableid
       null,
       //tablePkId
       [err] //details
-      ])["catch"](function (err) {
-        return console.log(err);
-      });
+      ]);
+    })["finally"](function () {
+      connection.end();
     });
   }
-  // }
-};
-var _default = createSubTasks;
-exports["default"] = _default;
+}

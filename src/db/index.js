@@ -1,8 +1,6 @@
-import con from './conDb.js'
-
-const makeDbReq = (sp, args) => {
+const makeDbReq = (connection, sp, args) => {
     return new Promise((resolve, reject) => {
-        con.query(
+        connection.query(
             `CALL ${sp}`,
             [...args],
             (err, results) => {

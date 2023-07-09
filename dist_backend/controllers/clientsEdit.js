@@ -3,44 +3,43 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = editClient;
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 var _index = _interopRequireDefault(require("../db/index.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 /**
  * edit client
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-var editClient = function editClient(req, res, next) {
-  var _req$query = req.query,
-    clientId = _req$query.clientId,
-    clientName = _req$query.clientName,
-    clientTypeId = _req$query.clientTypeId,
-    cin = _req$query.cin,
-    firmName = _req$query.firmName,
-    firmAddress = _req$query.firmAddress,
-    caEmail = _req$query.caEmail,
-    caPan = _req$query.caPan,
-    conName = _req$query.conName,
-    conEmail = _req$query.conEmail,
-    conPhone = _req$query.conPhone;
-  (0, _index["default"])("clients_master_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [req.userId, clientId, clientName, cin, clientTypeId, firmName, firmAddress, caPan, caEmail, conName, conEmail, conPhone]).then(function () {
-    next();
+function editClient(req, res) {
+  var _req$body$params = req.body.params,
+    clientId = _req$body$params.clientId,
+    clientName = _req$body$params.clientName,
+    clientTypeId = _req$body$params.clientTypeId,
+    cin = _req$body$params.cin,
+    firmName = _req$body$params.firmName,
+    firmAddress = _req$body$params.firmAddress,
+    caEmail = _req$body$params.caEmail,
+    caPan = _req$body$params.caPan,
+    conName = _req$body$params.conName,
+    conEmail = _req$body$params.conEmail,
+    conPhone = _req$body$params.conPhone;
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "clients_master_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [req.userId, clientId, clientName, cin, clientTypeId, firmName, firmAddress, caPan, caEmail, conName, conEmail, conPhone]).then(function () {
+    res.sendStatus(200);
   })["catch"](function (err) {
     res.sendStatus(500);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 14,
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 14,
     //activityId
     3,
     //tableid
     clientId,
     //tablePkId
     [err] //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
-};
-var _default = editClient;
-exports["default"] = _default;
+}

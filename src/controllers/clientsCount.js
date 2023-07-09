@@ -1,4 +1,6 @@
 import makeDbReq from '../db/index.js'
+import formatFilters from '../helpers/formatFilters.js'
+import con from '../db/conDb.js'
 
 /**
  * get number of clients
@@ -6,32 +8,42 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const clientsCount = (req, res, next) => {
+export default function clientsCount(req, res) {
 
-    makeDbReq(`clients_count(?)`, [req.userId])
+    const filters = formatFilters(req.query.filters)
+
+    const connection = con()
+    makeDbReq(
+        connection,
+        `clients_count(?, ?, ?, ?, ?, ?, ?)`,
+        [
+            req.userId,
+            req.orgId,
+            filters.name,
+            filters.type,
+            filters.ca,
+            filters.contact,
+            filters.tag
+        ]
+    )
     .then((results) => {
-        const resKey = 'count'
-        const resData = results[0].count
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resData, resKey})
-        }
-        else {
-            req.logs = [{resData, resKey}]
-        }
-        next()
+        res.send({count: results[0].count})
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            23,     //activityId
-            3,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                23,     //activityId
+                3,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default clientsCount

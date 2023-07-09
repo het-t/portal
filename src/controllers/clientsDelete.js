@@ -1,33 +1,42 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
 
 /**
  * delete role
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const deleteClient = (req, res, next) => {
-    const clientId = req.body.params.clientId
+export default function deleteClient(req, res) {
+    const clientId = req.params.id
 
-    makeDbReq(`clients_master_delete(?, ?)`, [
-        req.userId,
-        clientId
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        `clients_master_delete(?, ?)`, 
+        [
+            req.userId,
+            clientId
+        ]
+    )
     .then(() => {
-        next()
+        res.sendStatus(200)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            29,     //activityId
-            3,     //tableid
-            clientId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                29,     //activityId
+                3,     //tableid
+                clientId,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default deleteClient

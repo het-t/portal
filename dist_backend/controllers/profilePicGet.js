@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports["default"] = getProfilePic;
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 var _index = _interopRequireDefault(require("../db/index.js"));
 var fs = _interopRequireWildcard(require("fs/promises"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -16,7 +17,8 @@ function getProfilePic(req, res) {
     height = _req$query.height,
     userId = _req$query.userId;
   userId == -1 ? userId = req.userId : userId = userId;
-  (0, _index["default"])("users_settings_profile_pic_get(?, ?)", [req.userId, userId]).then(function (results) {
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "users_settings_profile_pic_get(?, ?)", [req.userId, userId]).then(function (results) {
     if ((results === null || results === void 0 ? void 0 : results.length) == 0) throw 'NO_PROFILE_PIC_FOUND';
     var filePath = "./uploads/pics/users/".concat(results[0].picPath, "_").concat(width, "x").concat(height, ".txt");
     return fs.readFile(filePath);
@@ -26,9 +28,9 @@ function getProfilePic(req, res) {
       data: "data:image/jpeg;base64,".concat(data)
     });
   })["catch"](function (err) {
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 55, 27, 7, [err]])["catch"](function (err) {
-      return console.log(err);
-    });
     if (err == 'NO_PROFILE_PIC_FOUND') res.sendStatus(404);else res.sendStatus(500);
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 55, 27, 7, [err]]);
+  })["finally"](function () {
+    connection.end();
   });
 }

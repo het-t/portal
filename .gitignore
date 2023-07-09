@@ -4,3 +4,4 @@ auth-for-use
 /.env
 ssl
 uploads/pics/users/*.txt
+dist_backend

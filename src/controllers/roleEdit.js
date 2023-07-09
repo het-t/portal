@@ -1,34 +1,43 @@
 import makeDbReq from "../db/index.js"
+import con from '../db/conDb.js'
 
 /**
  * edit role
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const editRole = (req, res, next) => {
+export default function editRole (req, res) {
 
-    makeDbReq(`roles_edit(?, ?, ?, ?)`, [
-        req.userId,
-        req.body.params.roleId, 
-        req.body.params.roleName, 
-        JSON.stringify(req.body.params.roleRights)
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        `roles_edit(?, ?, ?, ?)`, 
+        [
+            req.userId,
+            req.params.id, 
+            req.body.params.roleName, 
+            JSON.stringify(req.body.params.roleRights)
+        ]
+    )
     .then(() => {
-        next()
+        res.sendStatus(200)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            5,     //activityId
-            8,     //tableid
-            req.query.editRoleId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                5,     //activityId
+                8,     //tableid
+                req.query.editRoleId,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default editRole

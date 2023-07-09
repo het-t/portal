@@ -1,38 +1,40 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * get list of rights
  * from rights_master
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const getRights = (req, res, next) => {
-    makeDbReq(`rights_master_get_all(?)`, [req.userId])
-    .then((rights) => {
-        const resData = rights
-        const resKey = 'rightsMasterList'
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+export default function getRights(req, res) {
+    const connection = con()
+    makeDbReq(
+        connection,
+        `rights_master_get_all(?)`, 
+        [
+            req.userId
+        ]
+    )
+    .then((results) => {
+        res.send(results)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            9,     //activityId
-            6,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                9,     //activityId
+                6,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default getRights

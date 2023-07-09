@@ -1,60 +1,58 @@
 import makeDbReq from '../db/index.js'
-
-
+import formatFilters from '../helpers/formatFilters.js'
+import con from '../db/conDb.js'
 /**
  * get list of tasks for `tasks` screen
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
-const getTasks = (req, res, next) => {
+export default function getTasks (req, res) {
 
     const {
         from,
         recordsPerPage,
         sortBy,
-        sortOrder,
-        filters
+        sortOrder
     } = req.query
 
-    for(let i in filters) {
-        if (filters[i] == '') {
-            filters[i] = null
-        }
-    }
+    const filters = formatFilters(req.query.filters)
     
-    makeDbReq(`tasks_get(?, ?, ?, ?, ?, ?, ?)`, [
-        req.userId,
-        req.orgId,
-        from, 
-        recordsPerPage,
-        sortBy,
-        sortOrder,
-        filters
-    ])
-    .then((tasks) => {
-        const resKey = "tasksList"
-        const resData = tasks
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    const connection = con()
+    makeDbReq(
+        connection,
+        `tasks_get(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [
+            req.userId,
+            req.orgId,
+            from, 
+            recordsPerPage,
+            sortBy,
+            sortOrder,
+            filters.name,
+            filters.description,
+            filters.client,
+            filters.status,
+            filters.progress
+        ]
+    )
+    .then((results) => {
+        res.send(results)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            20,     //activityId
-            19,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                20,     //activityId
+                19,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default getTasks

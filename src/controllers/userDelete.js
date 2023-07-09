@@ -1,33 +1,43 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
+
 
 /**
  * delete user
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const deleteUser = (req, res, next) => {
-    const userIdToDel = req.body.params.userId
+export default function deleteUser (req, res) {
+    const userIdToDel = req.params.id
     
-    makeDbReq(`users_delete(?, ?)`, [
-        req.userId,
-        userIdToDel
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        `users_delete(?, ?)`, 
+        [
+            req.userId,
+            userIdToDel
+        ]
+    )
     .then(() => {
-        next()
+        res.sendStatus(200)
     })
     .catch((err) => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            8,     //activityId
-            15,     //tableid
-            userIdToDel,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                8,     //activityId
+                15,     //tableid
+                userIdToDel,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default deleteUser

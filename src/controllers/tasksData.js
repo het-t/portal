@@ -1,20 +1,24 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * get data of task for edit task screen
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const getTaskData = (req, res, next) => {
+export default function getTaskData (req, res, next) {
 
-    const taskId = req.query.taskId
-
-    makeDbReq(`tasks_get_task_data(?, ?)`, [
-        req.userId,
-        taskId
-    ])
+    const taskId = req.params.id
+    const connection = con()
+    makeDbReq(
+        connection,
+        `tasks_get_task_data(?, ?)`, 
+        [
+            req.userId,
+            taskId
+        ]
+    )
     .then((taskData) => {
         const resKey = "taskData"
         const resData = taskData
@@ -30,15 +34,19 @@ const getTaskData = (req, res, next) => {
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            23,     //activityId
-            19,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                23,     //activityId
+                19,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default getTaskData

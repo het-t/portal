@@ -3,33 +3,32 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = deleteClient;
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 var _index = _interopRequireDefault(require("../db/index.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 /**
  * delete role
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-var deleteClient = function deleteClient(req, res, next) {
-  var clientId = req.body.params.clientId;
-  (0, _index["default"])("clients_master_delete(?, ?)", [req.userId, clientId]).then(function () {
-    next();
+function deleteClient(req, res) {
+  var clientId = req.params.id;
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "clients_master_delete(?, ?)", [req.userId, clientId]).then(function () {
+    res.sendStatus(200);
   })["catch"](function (err) {
     res.sendStatus(500);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 29,
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 29,
     //activityId
     3,
     //tableid
     clientId,
     //tablePkId
     [err] //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
-};
-var _default = deleteClient;
-exports["default"] = _default;
+}

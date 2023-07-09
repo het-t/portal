@@ -3,55 +3,38 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = getList;
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 var _index = _interopRequireDefault(require("../db/index.js"));
+var _formatFilters = _interopRequireDefault(require("../helpers/formatFilters.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 /**
  * get all users
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-var getAllUsers = function getAllUsers(req, res, next) {
+function getList(req, res) {
   var _req$query = req.query,
     from = _req$query.from,
     recordsPerPage = _req$query.recordsPerPage,
     sortBy = _req$query.sortBy,
-    sortOrder = _req$query.sortOrder,
-    filters = _req$query.filters;
-  for (var i in filters) {
-    if (filters[i] == '') filters[i] = null;
-  }
-  (0, _index["default"])("users_get(?, ?, ?, ?, ?, ?, ?)", [req.userId, req.orgId, from, recordsPerPage, sortBy, sortOrder, filters]).then(function (users) {
-    var resKey = 'usersList';
-    var resData = users;
-    if (_typeof(req === null || req === void 0 ? void 0 : req.logs) == "object") {
-      req.logs.push({
-        resKey: resKey,
-        resData: resData
-      });
-    } else {
-      req.logs = [{
-        resKey: resKey,
-        resData: resData
-      }];
-    }
-    next();
+    sortOrder = _req$query.sortOrder;
+  var filters = (0, _formatFilters["default"])(req.query.filters);
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "users_get(?, ?, ?, ?, ?, ?, ?, ?, ?)", [req.userId, req.orgId, from, recordsPerPage, sortBy, sortOrder, filters.name, filters.email, filters.rights]).then(function (results) {
+    res.send(results);
   })["catch"](function (err) {
     res.sendStatus(500);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 6,
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 6,
     //activityId
     15,
     //tableid
     null,
     //tablePkId
     [err] //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
-};
-var _default = getAllUsers;
-exports["default"] = _default;
+}

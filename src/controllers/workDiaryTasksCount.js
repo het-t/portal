@@ -1,48 +1,44 @@
 import makeDbReq from "../db/index.js";
+import formatFilters from "../helpers/formatFilters.js"
+import con from '../db/conDb.js'
 
-const workDiaryTasksCount = (req, res, next) => {
-    let {filters} = req.query
+export default function workDiaryTasksCount (req, res) {
+    const filters = formatFilters(req.query.filters)
 
-    let generalFilters = filters.slice(3, 9).map((el) => {
-        if (el == '') return null
-        return el
-    })
-
-    filters = filters.slice(0, 3).map((el) => {
-        if (el == '' || el == null || el == 'null') return null
-        return el
-    })
-
-    makeDbReq(`tasks_work_diary_tasks_count(?, ?, ?, ?, ?)`, [
-        req.userId,
-        filters[0],
-        filters[1],
-        filters[2],
-        generalFilters
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        `tasks_work_diary_tasks_count(?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+        [
+            req.userId,
+            filters.userId,
+            filters.datefrom,
+            filters.dateto,
+            filters.title,
+            filters.client,
+            filters.description,
+            filters.coordinator,
+            filters.status
+        ]
+    )
     .then((results) => {
-        const resKey = "count"
-        const resData = results[0].count 
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+        res.send({count: results[0].count}) 
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            23,     //activityId
-            19,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                23,     //activityId
+                19,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default workDiaryTasksCount

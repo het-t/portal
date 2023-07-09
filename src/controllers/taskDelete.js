@@ -1,33 +1,41 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * delete task
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const deleteTask = (req, res, next) => {
-    const taskId = req.body.params.taskId
-
-    makeDbReq(`tasks_delete(?, ?)`, [
-        req.userId,
-        taskId
-    ])
+export default function deleteTask (req, res, next) {
+    const taskId = req.params.id
+    const connection = con()
+    makeDbReq(
+        connection,
+        `tasks_delete(?, ?)`,
+        [
+            req.userId,
+            taskId
+        ]
+    )
     .then(() => {
-        next()
+        res.sendStatus(200)
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            32,     //activityId
-            19,     //tableid
-            taskId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                32,     //activityId
+                19,     //tableid
+                taskId,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default deleteTask

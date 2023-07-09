@@ -1,28 +1,38 @@
 import makeDbReq from "../db/index.js";
+import con from '../db/conDb.js'
 
-const changeStatusTask = (req, res, next) => {
-    let {
-        taskId,
-        statusId
-    } = req.body.params
+export default function changeStatusTask(req, res) {
+    const taskId = req.params.id
+    const statusId = req.body.statusId
+    const connection = con()
 
-    makeDbReq(`tasks_change_status(?, ?, ?)`, [
-        req.userId,
-        taskId,
-        statusId
-    ])
-    .then(() => next())
+    makeDbReq(
+        connection,
+        `tasks_change_status(?, ?, ?)`,
+        [
+            req.userId,
+            taskId,
+            statusId
+        ]
+    )
+    .then(() => {
+        res.sendStatus(200)
+    })
     .catch((err) => {
         res.sentStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            40,     //activityId
-            19,     //tableid
-            taskId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                40,     //activityId
+                19,     //tableid
+                taskId,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default changeStatusTask

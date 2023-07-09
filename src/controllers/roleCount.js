@@ -1,4 +1,6 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
+import formatFilters from '../helpers/formatFilters.js'
 
 /**
  * get number of roles
@@ -6,31 +8,39 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const rolesCount = (req, res, next) => {
-
-    makeDbReq(`roles_count(?)`, [req.userId])
+export default function rolesCount (req, res) {
+    const connection = con()
+    const filters = formatFilters(req.query.filters)
+    makeDbReq(
+        connection,
+        `roles_count(?, ?, ?, ?)`, 
+        [
+            req.userId, 
+            req.orgId,
+            filters.name,
+            filters.rights
+        ]
+    )
     .then((results) => {
-        const resKey = 'count'
-        const resData = results[0].count
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+        res.send({
+            count: results[0].count
+        })
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            23,     //activityId
-            8,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                23,     //activityId
+                8,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default rolesCount

@@ -1,3 +1,4 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
 import bcrypt from 'bcrypt'
 
@@ -5,50 +6,48 @@ import bcrypt from 'bcrypt'
  * create user
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-const createUser = (req, res, next) => {
+export default function createUser(req, res) {
     const { firstName, lastName, gender, bithdate, email, role, password} = req.body.params
 
+    const connection = con()
     bcrypt.hash(password, 3)
     .then((passwordHash) => 
-        makeDbReq(`users_create(?, ?, ?, ?, ?, ?, ?, ?, ?, @createdUserId)`, [
-            req.userId,
-            req.orgId,
-            firstName, 
-            lastName, 
-            gender, 
-            bithdate, 
-            email, 
-            role, 
-            passwordHash
-        ])
+        makeDbReq(
+            connection,
+            `users_create(?, ?, ?, ?, ?, ?, ?, ?, ?, @createdUserId)`, 
+            [
+                req.userId,
+                req.orgId,
+                firstName, 
+                lastName, 
+                gender, 
+                bithdate, 
+                email, 
+                role, 
+                passwordHash
+            ]
+        )
     )
-    .then((results) => {
-        const resKey = "userCreated"
-        const resData = results[0].createdUserId
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    .then(() => {
+        res.sendStatus(200)
     })
     .catch(err => {
-        console.log(err)
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            4,     //activityId
-            15,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                4,     //activityId
+                15,     //tableid
+                null,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default createUser

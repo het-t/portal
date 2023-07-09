@@ -15,12 +15,13 @@ var _path = _interopRequireDefault(require("path"));
 var _url = require("url");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 // import waNotificationRoutes from './waNotificationsRoutes.js'
-//////////////////////////////////////////////////////////
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-var pathToStoreFiles = _path["default"].join(__dirname, '../uploads/temp/');
-/////////////////////////////////////////////////////////
 
+var _dirname = _dirname;
+if (process.env.NODE_MODE !== 'production') {
+  var _filename = (0, _url.fileURLToPath)(import.meta.url);
+  _dirname = _path["default"].dirname(_filename);
+}
+var pathToStoreFiles = _path["default"].join(_dirname, '../uploads/temp/');
 var router = _express["default"].Router();
 router.get('/', _auth["default"], _settingsDataGet["default"]);
 router.post('/', _auth["default"], _settingsDataSet["default"]);

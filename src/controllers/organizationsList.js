@@ -1,17 +1,24 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
 
 export default function organizationsList(req, res) {
-
-    makeDbReq('organizations_list(?)', [
-        req.userId
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        'organizations_list(?)', 
+            [
+            req.userId
+        ]
+    )
     .then((results) => {
         res.send({
             'orgsList': results
         })
     })
     .catch((err) => {
-        console.log(err)
         res.sendStatus(500)
+    })
+    .finally(() => {
+        connection.end()
     })
 }

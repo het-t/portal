@@ -3,33 +3,32 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports["default"] = deleteRole;
 var _index = _interopRequireDefault(require("../db/index.js"));
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 /**
  * delete role
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
 
-var deleteRole = function deleteRole(req, res, next) {
-  var roleId = req.body.params.roleId;
-  (0, _index["default"])("roles_delete(?, ?)", [req.userId, roleId]).then(function () {
-    next();
+function deleteRole(req, res) {
+  var roleId = req.params.id;
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "roles_delete(?, ?)", [req.userId, roleId]).then(function () {
+    res.sendStatus(200);
   })["catch"](function (err) {
     res.sendStatus(500);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [req.userId, 3,
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [req.userId, 3,
     //activityId
     8,
     //tableid
     roleId,
     //tablePkId
     [err] //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
-};
-var _default = deleteRole;
-exports["default"] = _default;
+}

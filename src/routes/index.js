@@ -10,19 +10,30 @@ import myTasksRoutes from './myTasksRoutes.js'
 import workDiaryRoutes from './workDiaryRoutes.js'
 import settingsRoutes from './settingsRoutes.js'
 import organizationsRoutes from './organizationsRoutes.js'
+import chatInternalRoutes from './chatInternalRoutes.js'
+import tasksMasterRoutes from './tasksMasterRoutes.js'
+import rightsList from '../controllers/rightsList.js'
+import tags from './tags.js'
+
+import auth from '../controllers/auth.js'
 
 const app = express()
 
 app.use('/', generalRoutes)
-app.use('/users', usersRoutes)
-app.use('/roles', rolesRoutes)
-app.use('/activity', activityRoutes)
-app.use('/clients', clientRoutes)
-app.use('/tasks', tasksRoutes)
-app.use('/myTasks', myTasksRoutes)
-app.use('/workDiary', workDiaryRoutes)
+app.use('/tags', auth, tags)
+app.use('/users', auth, usersRoutes)
+app.use('/roles', auth, rolesRoutes)
+app.use('/activities', auth, activityRoutes)
+app.use('/clients', auth, clientRoutes)
+app.use('/tasks', auth, tasksRoutes)
+app.use('/tasksMaster', auth, tasksMasterRoutes)
+app.use('/myTasks', auth, myTasksRoutes)
+app.use('/workDiary', auth, workDiaryRoutes)
 app.use('/settings', settingsRoutes)
 app.use('/orgs', organizationsRoutes)
-app.get('/test', (req, res) => res.json("harleys in hawaii"))
+app.use('/chat', auth, chatInternalRoutes)
+app.get('/rights/', auth, rightsList)
+
+app.get('/test', (req, res) => res.send("harleys in hawaii"))
 
 export default app;

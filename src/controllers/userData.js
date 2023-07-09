@@ -1,40 +1,41 @@
 import makeDbReq from '../db/index.js'
-
+import con from '../db/conDb.js'
 /**
  * get user data to show in edit user screen
  * @param {*} req 
  * @param {*} res 
  */
 
-const getEditUser = (req, res, next) => {
+export default function getData (req, res) {
+    const userId = req.params.id
 
-    makeDbReq(`users_user_data(?, ?)`, [
-        req.userId,
-        req.query.editUserId
-    ])
-    .then((userData) => {
-        const resKey = "userData"
-        const resData = userData[0]
-
-        if (typeof req?.logs == "Object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()
+    const connection = con()
+    makeDbReq(
+        connection,
+        `users_user_data(?, ?)`, 
+        [
+            req.userId,
+            userId
+        ]
+    )
+    .then((results) => {
+        res.send(results[0])
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            25,     //activityId
-            15,     //tableid
-            null,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                req.userId,
+                25,     //activityId
+                15,     //tableid
+                userId,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default getEditUser

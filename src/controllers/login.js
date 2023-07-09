@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 const login = (req, res, next) => {
 
@@ -17,7 +18,9 @@ const login = (req, res, next) => {
 
     //find users     
     //get hash from database
+    const connection = con()
     makeDbReq(
+        connection,
         `users_login(?)`,
         [email]
     )
@@ -66,16 +69,21 @@ const login = (req, res, next) => {
     })
     .catch(err => {
         res.sendStatus(500)
-        console.log(err)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            null,
-            1,                  //activityId
-            15,                 //tableid
-            null,                  //tablePkId
-            email + ' ' + err     //details
-        ])
-        .catch((err) => console.log(err))
-    }) 
+        return makeDbReq(
+            connection, 
+            'logs_add(?, ?, ?, ?, ?)', 
+            [
+                null,
+                1,                  //activityId
+                15,                 //tableid
+                null,                  //tablePkId
+                email + ' ' + err     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
+    })
 }
 
 export default login

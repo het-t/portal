@@ -1,5 +1,5 @@
 import makeDbReq from '../db/index.js'
-
+import con from '../db/conDb.js'
 
 /**
  * edit sub tasks of given task
@@ -7,12 +7,12 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  * @param {*} next 
  */
-const editSubTasks = (req, res, next) => {
+export default function editSubTasks(req, res, next) {
     let {
         taskId,
         subTasks,
         saved
-    } = req.query
+    } = req.body.params
 
     let taskMasterId = req?.resData?.taskMasterId
 
@@ -20,42 +20,37 @@ const editSubTasks = (req, res, next) => {
         next()
     }
     else {
-        subTasks = JSON.parse(subTasks)
-        for(let st in subTasks) {
-            let stObj = subTasks[st]
-            for(let key in stObj) {
-                if ((stObj[key] == null || stObj[key] == 'null' || stObj[key] == '') && key != 'id') {
-                    delete subTasks[st][key]
-                }  
-                else continue
-            }
-        }
-
-        subTasks = JSON.stringify(subTasks)
-
-
-        makeDbReq(`sub_tasks_edit(?, ?, ?, ?, ?)`, [
-            req.userId,
-            taskId, 
-            taskMasterId,
-            subTasks,
-            saved
-        ])
+        const connection = con()
+        makeDbReq(
+            connection,
+            `sub_tasks_edit(?, ?, ?, ?, ?)`, 
+            [
+                req.userId,
+                taskId, 
+                taskMasterId,
+                subTasks,
+                saved
+            ]
+        )
         .then(() => {
             next()
         })
         .catch(err => {
             res.sendStatus(500)
-            makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-                req.userId,
-                31,     //activityId
-                20,     //tableid
-                null,   //tablePkId
-                [err]     //details
-            ])
-            .catch((err) => console.log(err))
+            return makeDbReq(
+                connection,
+                'logs_add(?, ?, ?, ?, ?)',
+                [
+                    req.userId,
+                    31,     //activityId
+                    20,     //tableid
+                    null,   //tablePkId
+                    [err]     //details
+                ]
+            )
+            .then(() => {
+                connection.end()
+            })
         })
     }
 }
-
-export default editSubTasks

@@ -1,3 +1,4 @@
+import con from '../db/conDb.js'
 import makeDbReq from '../db/index.js'
 
 /**
@@ -7,14 +8,13 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 
-const createSubTasks = (req, res, next) => {
+export default function createSubTasks (req, res, next) {
         
         let {
             subTasks,
             saved
-        } = req.query
+        } = req.body.params
 
-        subTasks = JSON.parse(subTasks)
 
         const {
             taskId,
@@ -25,26 +25,18 @@ const createSubTasks = (req, res, next) => {
             next()
         }
         else {
-
-            for(let st in subTasks) {
-                let stObj = subTasks[st]
-                for(let key in stObj) {
-                    if (stObj[key] == null || stObj[key] == 'null' || stObj[key] == '') {
-                        delete subTasks[st][key]
-                    }  
-                    else continue
-                }
-            }
-
-            subTasks = JSON.stringify(subTasks)
-
-            makeDbReq(`sub_tasks_create(?, ?, ?, ?, ?)`, [
-                req.userId, 
-                taskMasterId ? taskMasterId : null, 
-                taskId,        
-                saved,
-                subTasks,
-            ])
+            const connection = con()
+            makeDbReq(
+                connection,
+                `sub_tasks_create(?, ?, ?, ?, ?)`, 
+                [
+                    req.userId, 
+                    taskMasterId ? taskMasterId : null, 
+                    taskId,        
+                    saved,
+                    subTasks,
+                ]
+            )
             .then((results) => {
                 const resKey = "subTasksCreated"
                 const resData = results[0]?.subTaskId
@@ -59,16 +51,20 @@ const createSubTasks = (req, res, next) => {
             })
             .catch(err => {
                 res.sendStatus(500)
-                makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-                    req.userId,
-                    18,     //activityId
-                    20,     //tableid
-                    null,   //tablePkId
-                    [err]     //details
-                ])
-                .catch((err) => console.log(err))
+                return makeDbReq(
+                    connection,
+                    'logs_add(?, ?, ?, ?, ?)', 
+                    [
+                        req.userId,
+                        18,     //activityId
+                        20,     //tableid
+                        null,   //tablePkId
+                        [err]     //details
+                    ]
+                )
+            })
+            .finally(() => {
+                connection.end()
             })
         }
-    // }
 }
-export default createSubTasks

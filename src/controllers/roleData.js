@@ -1,4 +1,5 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * get role data
@@ -6,35 +7,35 @@ import makeDbReq from '../db/index.js'
  * @param {*} res 
  */
 
-const getRoleData = (req, res, next) => {
+export default function getRoleData (req, res) {
 
-    makeDbReq(`roles_role_data(?, ?)`, [
-        req.userId,
-        req.query.roleId
-    ])
-    .then((roleData) => {
-        const resKey = 'roleData'
-        const resData = roleData
-
-        if (typeof req?.logs == "object") {
-            req.logs.push({resKey, resData})
-        }
-        else {
-            req.logs = [{resKey, resData}]
-        }
-        next()    
+    const connection = con()
+    makeDbReq(
+        connection,
+        `roles_role_data(?, ?)`,
+        [
+            req.userId,
+            req.params.id
+        ]
+    )
+    .then((results) => {
+        res.send(results) 
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            22,     //activityId
-            8,     //tableid
-            req.query.editRoleId,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        return makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                22,     //activityId
+                8,     //tableid
+                req.params.id,   //tablePkId
+                [err]     //details
+            ]
+        )
     }) 
+    .finally(() => {
+        connection.end()
+    })
 }
-
-export default getRoleData

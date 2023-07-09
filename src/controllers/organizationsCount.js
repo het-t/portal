@@ -1,14 +1,22 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 export default function organizationsCount(req, res) {
-    makeDbReq('organizations_count(?)', [
-        req.userId,
-    ])
+    const connection = con()
+    makeDbReq(
+        connection,
+        'organizations_count(?)', 
+        [
+            req.userId,
+        ]
+    )
     .then((results) => res.send({
-        'count': results[0].count
+        count: results[0].count
     }))
     .catch((err) => {
-        console.log(err)
         res.sendStatus(500)
+    })
+    .finally(() => {
+        connection.end()
     })
 }

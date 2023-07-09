@@ -1,4 +1,5 @@
 import makeDbReq from '../db/index.js'
+import con from '../db/conDb.js'
 
 /**
  * get logs of task for edit task screen
@@ -7,14 +8,18 @@ import makeDbReq from '../db/index.js'
  * @param {*} next 
  */
 
-const getTaskLogs = (req, res, next) => {
-    
-    makeDbReq(`tasks_get_logs(?, ?)`, [
-        req.userId,
-        req.resData
-    ])
+export default function getTaskLogs(req, res, next) {
+    const connection = con()
+    makeDbReq(
+        connection,
+        `tasks_get_logs(?, ?)`, 
+        [
+            req.userId,
+            req.resData
+        ]
+    )
     .then((taskLogs) => {
-        const resKey = "tasksLogs"
+        const resKey = "taskLogs"
         const resData = taskLogs
 
         if (typeof req?.logs == "object") {
@@ -27,15 +32,19 @@ const getTaskLogs = (req, res, next) => {
     })
     .catch(err => {
         res.sendStatus(500)
-        makeDbReq('logs_add(?, ?, ?, ?, ?)', [
-            req.userId,
-            37,     //activityId
-            21,     //tableid
-            req.resData,   //tablePkId
-            [err]     //details
-        ])
-        .catch((err) => console.log(err))
+        makeDbReq(
+            connection,
+            'logs_add(?, ?, ?, ?, ?)',
+            [
+                req.userId,
+                37,     //activityId
+                21,     //tableid
+                req.resData,   //tablePkId
+                [err]     //details
+            ]
+        )
+    })
+    .finally(() => {
+        connection.end()
     })
 }
-
-export default getTaskLogs

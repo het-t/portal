@@ -7,6 +7,7 @@ exports["default"] = void 0;
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
 var _index = _interopRequireDefault(require("../db/index.js"));
+var _conDb = _interopRequireDefault(require("../db/conDb.js"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 var login = function login(req, res, next) {
@@ -23,7 +24,8 @@ var login = function login(req, res, next) {
 
   //find users     
   //get hash from database
-  (0, _index["default"])("users_login(?)", [email])
+  var connection = (0, _conDb["default"])();
+  (0, _index["default"])(connection, "users_login(?)", [email])
   //if no user exist throw err
   .then(function (user) {
     if (user.length == 0) {
@@ -75,17 +77,16 @@ var login = function login(req, res, next) {
     });
   })["catch"](function (err) {
     res.sendStatus(500);
-    console.log(err);
-    (0, _index["default"])('logs_add(?, ?, ?, ?, ?)', [null, 1,
+    return (0, _index["default"])(connection, 'logs_add(?, ?, ?, ?, ?)', [null, 1,
     //activityId
     15,
     //tableid
     null,
     //tablePkId
     email + ' ' + err //details
-    ])["catch"](function (err) {
-      return console.log(err);
-    });
+    ]);
+  })["finally"](function () {
+    connection.end();
   });
 };
 var _default = login;
