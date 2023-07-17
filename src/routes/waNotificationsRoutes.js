@@ -12,8 +12,8 @@ import getWaQr from '../controllers/notificationsWaQr.js'
 const router = express.Router()
 
 ////////////////////////////////////////////////////
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const pathToStoreFiles = path.join(__dirname, '../uploads/temp/')
 /////////////////////////////////////////////////////////////
 
