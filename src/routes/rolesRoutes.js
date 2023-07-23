@@ -1,19 +1,19 @@
 import express from 'express'
 
-import createRole from '../controllers/roleCreate.js'
-import editRole from '../controllers/roleEdit.js'
-import deleteRole from '../controllers/roleDelete.js'
-import getRoleData from '../controllers/roleData.js'
-import getRolesCount from '../controllers/roleCount.js'
-import getRoles from '../controllers/roleList.js'
+import getCount from '../controllers/roles/getCount.js'
+import getData from '../controllers/roles/getData.js'
+import getList from '../controllers/roles/getList.js'
+import create from '../controllers/roles/create.js'
+import edit from '../controllers/roles/edit.js'
+import del from '../controllers/roles/delete.js'
 
 const router = express.Router()
 
-router.get('/count', getRolesCount)
-router.get('/:id', getRoleData)
-router.get('/', getRoles)
-router.post('/', createRole)
-router.put('/:id', editRole)
-router.delete('/:id', deleteRole)
+router.get('/count', getCount)
+router.get('/:id', getData)
+router.get('/', getList)
+router.post('/', create)
+router.put('/:id', edit)
+router.delete('/:id', del)
 
 export default router

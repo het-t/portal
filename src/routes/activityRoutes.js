@@ -1,11 +1,11 @@
 import express from 'express'
 
-import usersActivities from '../controllers/activityData.js'
-import usersActivitiesCount from '../controllers/activityCount.js'
+import getList from '../controllers/activities/getList.js'
+import getCount from '../controllers/activities/getCount.js'
 
 const router = express.Router()
 
-router.get('/', usersActivities)
-router.get('/count', usersActivitiesCount)
+router.get('/count', getCount)
+router.get('/', getList)
 
 export default router

@@ -1,8 +1,11 @@
 import express from "express";
-import getProfilePic from "../controllers/profilePicGet.js";
-import setProfilePic from "../controllers/profilePicSet.js";
-import settingsDataGet from "../controllers/settingsDataGet.js";
-import settingsDataSet from '../controllers/settingsDataSet.js'
+
+import getPic from "../controllers/settings/profile/getPic.js";
+import setPic from "../controllers/settings/profile/setPic.js";
+
+import getData from "../controllers/settings/getData.js";
+import setData from '../controllers/settings/setData.js';
+
 import settingsDataGetOrganizations from "../controllers/settingsDataGetOrganizations.js";
 
 import multer from 'multer'
@@ -22,15 +25,15 @@ const pathToStoreFiles = path.join(__dirname, '../uploads/temp/')
 
 const router = express.Router()
 
-router.get('/users', settingsDataGet)
+router.get('/users', getData)
 router.get('/organizations', settingsDataGetOrganizations)
 
-router.post('/', settingsDataSet)
+router.post('/', setData)
 
-router.get('/profile-pic', getProfilePic)
+router.get('/profile-pic', getPic)
 
 const upload = multer({dest: pathToStoreFiles})
-router.post('/profile-pic', upload.single('File'), setProfilePic)
+router.post('/profile-pic', upload.single('File'), setPic)
 
 router.use('/notifications/wa/', waNotificationRoutes)
 

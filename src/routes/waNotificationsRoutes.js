@@ -5,8 +5,8 @@ import createWaNotification from "../controllers/notificationsWaCreate.js";
 import notificaitonsWaGetHistory from '../controllers/notificationsWaGetHistory.js';
 import setNotificationConsent from '../controllers/notificationsConsent.js'
 import multer from 'multer'
-import sendWaAuthOtp from "../controllers/profileWaContactAuth.js";
-import waContactSet from "../controllers/profileWaContactSet.js";
+import sendWaAuthOtp from "../controllers/settings/profileWaContactAuth.js";
+import waContactSet from "../controllers/settings/profileWaContactSet.js";
 import getWaQr from '../controllers/notificationsWaQr.js'
 
 const router = express.Router()

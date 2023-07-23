@@ -1,15 +1,15 @@
 import express from 'express'
 
-import tasksGetMyTasks from '../controllers/tasksGetMyTasks.js'
-import myTasksChangeStatus from '../controllers/tasksMytasksChangeStatus.js'
-import tasksMyTasksCount from '../controllers/tasksMyTasksCount.js'
-import myTasksChangeTags from '../controllers/myTasksChangeTags.js'
+import getcount from '../controllers/my-tasks/getCount.js'
+import getList from '../controllers/my-tasks/getList.js'
+import changeStatus from '../controllers/my-tasks/changeStatus.js'
+import changeTags from '../controllers/my-tasks/changeTag.js'
 
 const router = express.Router()
 
-router.get('/count', tasksMyTasksCount)
-router.get('/', tasksGetMyTasks)
-router.patch('/:taskId/status', myTasksChangeStatus)
-router.patch('/:taskId/tags', myTasksChangeTags)
+router.get('/count', getcount)
+router.get('/', getList)
+router.patch('/:taskId/status', changeStatus)
+router.patch('/:taskId/tags', changeTags)
 
 export default router

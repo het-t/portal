@@ -1,13 +1,13 @@
 import express from 'express'
 
-import workDiaryTasks from '../controllers/workDiaryTasks.js'
-import workDiarySubTasks from '../controllers/workDiarySubTasks.js'
-import workDiaryTasksCount from '../controllers/workDiaryTasksCount.js'
+import getCount from '../controllers/work-diary/getCount.js'
+import getSubTasks from '../controllers/work-diary/getSubTasks.js'
+import getTasks from '../controllers/work-diary/getTasks.js'
 
 const router = express.Router()
 
-router.get('/count', workDiaryTasksCount)
-router.get('/:userId/:taskId', workDiarySubTasks)
-router.get('/:userId', workDiaryTasks)
+router.get('/count', getCount)
+router.get('/:userId/:taskId', getSubTasks)
+router.get('/:userId', getTasks)
 
 export default router

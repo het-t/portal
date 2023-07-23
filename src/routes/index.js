@@ -15,7 +15,7 @@ import tasksMasterRoutes from './tasksMasterRoutes.js'
 import rightsList from '../controllers/rightsList.js'
 import tags from './tags.js'
 
-import auth from '../controllers/auth.js'
+import auth from '../controllers/general/auth.js'
 
 const app = express()
 

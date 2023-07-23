@@ -1,27 +1,24 @@
 import express from 'express'
 
-import usersCount from '../controllers/userCount.js'
-import createUser from '../controllers/userCreate.js'
-import editUser from '../controllers/userEdit.js'
-import getAllUsers from '../controllers/userList.js'
-import getEditUser from '../controllers/userData.js'
-import deleteUser from '../controllers/userDelete.js'
-import userRightsList from '../controllers/userRightsList.js'
-
-import getRoles from '../controllers/roleList.js'
+import getCount from '../controllers/users/getCount.js'
+import getUsersRights from '../controllers/users/getUsersRights.js'
+import getData from '../controllers/users/getData.js'
+import getList from '../controllers/users/getList.js'
+import create from '../controllers/users/create.js'
+import edit from '../controllers/users/edit.js'
+import del from '../controllers/users/delete.js'
 
 const router = express.Router()
 
-router.get('/count', usersCount)
-router.get('/rights', userRightsList)
-router.get('/:id', getEditUser)
-router.get('/', getAllUsers)
+router.get('/count', getCount)
+router.get('/rights', getUsersRights)
+router.get('/:id', getData)
+router.get('/', getList)
 
-router.post('/', createUser)
-router.put('/:id', editUser)
+router.post('/', create)
 
-router.delete('/:id', deleteUser)
-//
-router.get('/get-roles', getRoles)
+router.put('/:id', edit)
+
+router.delete('/:id', del)
 
 export default router

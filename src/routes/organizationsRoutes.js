@@ -1,6 +1,6 @@
 import express from 'express'
 
-import auth from '../controllers/auth.js'
+import auth from '../controllers/general/auth.js'
 
 import organizationsList from '../controllers/organizationsList.js'
 import organizationsCreateAdmin from '../controllers/organizationsAdminCreate.js'

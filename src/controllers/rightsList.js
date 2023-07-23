@@ -2,8 +2,7 @@ import makeDbReq from '../db/index.js'
 import con from '../db/conDb.js'
 
 /**
- * get list of rights
- * from rights_master
+ * get list of rights from rights_master
  * @param {*} req 
  * @param {*} res 
  */
