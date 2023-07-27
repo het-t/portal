@@ -9,7 +9,7 @@ import formatFilters from '../../helpers/formatFilters.js'
 */
 
 export default function getTaskPayments(req, res) {
-    const taskId = req.params.id
+    const taskId = req.params.taskId
     let {
         filters,
         sortBy,

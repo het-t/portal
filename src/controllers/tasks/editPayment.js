@@ -2,20 +2,22 @@ import con from '../../db/conDb.js'
 import makeDbReq from '../../db/index.js'
 
 export default function editPayment (req, res) {
-    const taskId = req.params.taskId
-    const paymentId = req.params.paymentId
+    const {
+        taskId,
+        paymentId
+    } = req.params
 
     const {
         details,
         amount,
         receivedAt,
-        tags
     } = req.body.params
     
     const connection = con()
+    
     makeDbReq(
         connection,
-        `tasks_payments_edit(?, ?, ?, ?, ?, ?, ?, ?)`,
+        `tasks_payment_edit(?, ?, ?, ?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
@@ -23,8 +25,7 @@ export default function editPayment (req, res) {
             paymentId,
             details ? details : '',
             amount ? amount : 0,
-            receivedAt ? receivedAt : null,
-            tags ? tags : null
+            receivedAt ? receivedAt : null
         ]
     )
     .then((results) => {
@@ -38,8 +39,8 @@ export default function editPayment (req, res) {
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                31,
                 74,
+                31,
                 taskId,
                 [err]
             ]

@@ -4,10 +4,8 @@ import makeDbReq from '../../db/index.js'
 export default function createPayment(req, res) {
     const taskId = req.params.taskId
 
-    const {
-        payments
-    } = req.body.params
-    
+    const payments = JSON.stringify(req.body.params.payments)
+
     const connection = con()
     
     makeDbReq(
@@ -20,7 +18,7 @@ export default function createPayment(req, res) {
             payments
         ]
     )
-    .then(() => {
+    .then((results) => {
         res.sendStatus(200)
     }) 
     .catch(err => {
@@ -31,8 +29,8 @@ export default function createPayment(req, res) {
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                31,
                 73,
+                31,
                 null,
                 [err]
             ]

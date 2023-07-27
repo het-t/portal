@@ -3,7 +3,8 @@ const dbInfo = {
     "user": "root",
     "password": "het161967",
     "database": "portal",
-    "multipleStatements": true
+    "multipleStatements": true,
+    "timezone": '+00:00'
 }
 
 export default dbInfo;

@@ -2,13 +2,15 @@ import con from '../../db/conDb.js'
 import makeDbReq from '../../db/index.js'
 
 export default function deletePayment(req, res) {
-    const taskId = req.params.taskId
-    const paymentId = req.params.paymentId
+    const {
+        taskId,
+        paymentId
+    } = req.params
 
     const connection = con()
     makeDbReq(
         connection,
-        `tasks_payments_delete(?, ?, ?, ?)`,
+        `tasks_payment_remove(?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
@@ -27,8 +29,8 @@ export default function deletePayment(req, res) {
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                31,
                 75,
+                31,
                 paymentId,
                 [err]
             ]
