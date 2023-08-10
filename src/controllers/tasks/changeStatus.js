@@ -1,7 +1,7 @@
 import makeDbReq from "../../db/index.js";
 import con from '../../db/conDb.js'
 
-export default function changeStatusTask(req, res) {
+export default function (req, res) {
     const taskId = req.params.id
     const statusId = req.body.statusId
     const connection = con()

@@ -5,48 +5,43 @@ import con from '../../db/conDb.js'
  * delete given sub tasks
  * @param {*} req 
  * @param {*} res 
- * @param {*} next 
  */
-export default function editSubTasks(req, res, next) {
+export default function(req, res) {
     let {
         taskId,
-        removedSubTasks,
-    } = req.body.params
+        subTaskId,
+    } = req.params
 
-    if (removedSubTasks.length === 0) {
-        next()
-    }
-    else {
-        const connection = con()
-        makeDbReq(
+    const connection = con()
+
+    makeDbReq(
+        connection,
+        `sub_task_delete(?, ?, ?, ?)`, 
+        [
+            req.userId,
+            req.orgId,
+            taskId,
+            subTaskId
+        ]
+    )
+    .then(() => {
+        res.sendStatus(200)
+    })
+    .catch(err => {
+        res.sendStatus(500)
+        return makeDbReq(
             connection,
-            `sub_tasks_delete(?, ?, ?, ?, ?, ?)`, 
+            'logs_add(?, ?, ?, ?, ?)',
             [
                 req.userId,
-                req.orgId,
-                taskId,
-                removedSubTasks
+                39,     //activityId
+                20,     //tableid
+                subTaskId,   //tablePkId
+                [err]     //details
             ]
         )
-        .then(() => {
-            next()
-        })
-        .catch(err => {
-            res.sendStatus(500)
-            return makeDbReq(
-                connection,
-                'logs_add(?, ?, ?, ?, ?)',
-                [
-                    req.userId,
-                    39,     //activityId
-                    20,     //tableid
-                    null,   //tablePkId
-                    [err]     //details
-                ]
-            )
-        })
-        .finally(() => {
-            connection.end()
-        })
-    }
+    })
+    .finally(() => {
+        connection.end()
+    })
 }

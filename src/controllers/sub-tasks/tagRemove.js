@@ -1,37 +1,39 @@
-import con from '../../db/conDb.js'
-import makeDbReq from '../../db/index.js'
+import makeDbReq from "../../db/index.js";
+import con from "../../db/conDb.js";
 
-export default function deletePayment(req, res) {
+export default function (req, res) {
     const {
         taskId,
-        paymentId
+        subTaskId,
+        tagId
     } = req.params
 
     const connection = con()
+
     makeDbReq(
         connection,
-        `task_payment_remove(?, ?, ?, ?)`,
+        `sub_task_remove_tag(?, ?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
             taskId,
-            paymentId
-        ]
+            subTaskId,
+            tagId
+        ]    
     )
-    .then((results) => {
+    .then(() => {
         res.sendStatus(200)
-    }) 
+    })
     .catch(err => {
-        console.log(err)
         res.sendStatus(500)
         makeDbReq(
             connection,
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                75,
-                31,
-                paymentId,
+                71,
+                20,
+                subTaskId,
                 [err]
             ]
         )

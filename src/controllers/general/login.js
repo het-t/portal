@@ -10,6 +10,7 @@ export default function login (req, res) {
     var resData = ''
     var userId = null
     var orgId = null
+    var metaData = null
 
     let expiresIn = ''
     if (remember) expiresIn = '30d'
@@ -32,6 +33,8 @@ export default function login (req, res) {
         else {
             userId = user[0].userId
             orgId = user[0].orgId
+            metaData = user[0].metaData
+
             return user
         }
     })
@@ -56,7 +59,21 @@ export default function login (req, res) {
                     signed: true
                 })
 
-                res.send({'login': 1})
+                if (metaData !== null) {
+                    jwt.sign({metaData}, 'secert', {expiresIn}, (err, metaDataToken) => {
+                        if (err) throw err
+                        else {
+                            res.cookie('_wa_service_key', metaDataToken, {
+                                signed: true
+                            })
+                            res.send({'login': 1})
+                        }
+                    })
+                }
+                else {
+                    res.send({'login': 1})
+                }
+
             }
         })
     })

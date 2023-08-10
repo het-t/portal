@@ -11,7 +11,7 @@ import workDiaryRoutes from './workDiaryRoutes.js'
 import settingsRoutes from './settingsRoutes.js'
 import organizationsRoutes from './organizationsRoutes.js'
 import chatInternalRoutes from './chatInternalRoutes.js'
-import tasksMasterRoutes from './tasksMasterRoutes.js'
+import tasksTemplateRoutes from './tasksTemplateRoutes.js'
 import rightsList from '../controllers/rightsList.js'
 import tags from './tags.js'
 
@@ -26,7 +26,7 @@ app.use('/roles', auth, rolesRoutes)
 app.use('/activities', auth, activityRoutes)
 app.use('/clients', auth, clientRoutes)
 app.use('/tasks', auth, tasksRoutes)
-app.use('/tasksMaster', auth, tasksMasterRoutes)
+app.use('/tasksMaster', auth, tasksTemplateRoutes)
 app.use('/myTasks', auth, myTasksRoutes)
 app.use('/workDiary', auth, workDiaryRoutes)
 app.use('/settings', auth, settingsRoutes)

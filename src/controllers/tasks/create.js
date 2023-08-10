@@ -10,57 +10,29 @@ import con from '../../db/conDb.js'
 export default function createTask (req, res) {
 
     let {
-        taskTemplateId, 
+        templateId, 
         title, 
         description,
-        cost, 
-        coordinatorsIds, 
+        fees, 
         clientId,
-        subTasks,
-        saved,
-        payments
     } = req.body.params
-
-    const reqTaskMasterId = req?.resData?.taskMasterId
-    
-    if (reqTaskMasterId !== undefined && reqTaskMasterId !== null) {
-        taskTemplateId = reqTaskMasterId
-    } 
-
-    subTasks = JSON.parse(subTasks)
-
-    for(let st in subTasks) {
-        let stObj = subTasks[st]
-        for(let key in stObj) {
-            if (stObj[key] === null || stObj[key] === 'null' || stObj[key] === '') {
-                delete subTasks[st][key]
-            }  
-            else continue
-        }
-    }
-
-    subTasks = JSON.stringify(subTasks)
 
     const connection = con()
     makeDbReq(
         connection,
-        `tasks_create(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        `task_create(?, ?, ?, ?, ?, ?, ?)`,
         [
             req.userId, 
             req.orgId,
-            taskTemplateId ? taskTemplateId : null, 
+            templateId ? templateId : null, 
             title, 
             description, 
-            cost ? cost : null,  
-            clientId ? clientId : null, 
-            coordinatorsIds ? JSON.stringify(JSON.parse(coordinatorsIds)) : null,
-            saved,
-            subTasks,
-            payments ? JSON.stringify(JSON.parse(payments)) : null
+            fees ? fees : null,
+            clientId
         ]
     )
-    .then(() => { 
-        res.sendStatus(200)
+    .then((results) => { 
+        res.send({createdTaskId: results[0].createdTaskId})
     })
     .catch(err => {
         res.sendStatus(500)

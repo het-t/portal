@@ -1,25 +1,37 @@
 import con from '../../db/conDb.js'
 import makeDbReq from '../../db/index.js'
 
-export default function createPayment(req, res) {
+export default function (req, res) {
     const taskId = req.params.taskId
 
-    const payments = JSON.stringify(req.body.params.payments)
+    const {
+        amount,
+        subTaskId,
+        title,
+        comments,
+        type,
+        receivedAt
+    } = req.body.params
 
     const connection = con()
     
     makeDbReq(
         connection,
-        `tasks_payments_add(?, ?, ?, ?)`,
+        `task_payment_add(?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
             taskId,
-            payments
+            subTaskId ? subTaskId : null,
+            amount,
+            title,
+            comments,
+            type,
+            receivedAt
         ]
     )
     .then((results) => {
-        res.sendStatus(200)
+        res.send({createdPaymentId: results[0].createdPaymentId})
     }) 
     .catch(err => {
         console.log(err)

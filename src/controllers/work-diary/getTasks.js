@@ -8,7 +8,7 @@ export default function workDiaryTasks(req, res) {
     const connection = con()
     makeDbReq(
         connection,
-        `tasks_users_tasks(?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+        `tasks_users_tasks(?, ?, ?, ?, ?, ?, ?, ?)`, 
         [
             req.userId,
             filters.userId,
@@ -17,7 +17,6 @@ export default function workDiaryTasks(req, res) {
             filters.title,
             filters.client,
             filters.description,
-            filters.coordinator,
             filters.status
         ]
     )

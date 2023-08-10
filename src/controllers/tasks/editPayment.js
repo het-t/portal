@@ -8,23 +8,29 @@ export default function editPayment (req, res) {
     } = req.params
 
     const {
-        details,
+        subTaskId,
+        title,
+        comments,
         amount,
         receivedAt,
+        type
     } = req.body.params
     
     const connection = con()
-    
+
     makeDbReq(
         connection,
-        `tasks_payment_edit(?, ?, ?, ?, ?, ?, ?)`,
+        `task_payment_edit(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
             taskId,
+            subTaskId ? subTaskId : null,
             paymentId,
-            details ? details : '',
+            type,
+            title,
             amount ? amount : 0,
+            comments,
             receivedAt ? receivedAt : null
         ]
     )

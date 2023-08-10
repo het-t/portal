@@ -1,26 +1,30 @@
-import con from '../../db/conDb.js'
-import makeDbReq from '../../db/index.js'
+import makeDbReq from "../db/index.js";
+import con from "../db/conDb.js";
 
-export default function deletePayment(req, res) {
+export default function (req, res) {
+
     const {
-        taskId,
-        paymentId
-    } = req.params
+        tableId,
+        tagName
+    } = req.body.params
 
     const connection = con()
+
     makeDbReq(
         connection,
-        `task_payment_remove(?, ?, ?, ?)`,
+        `tags_master_create(?, ?, ?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
-            taskId,
-            paymentId
+            tableId,
+            tagName,
+            null,
+            null
         ]
     )
     .then((results) => {
-        res.sendStatus(200)
-    }) 
+        res.send({createdTagId: results[0].createdTagId})
+    })
     .catch(err => {
         console.log(err)
         res.sendStatus(500)
@@ -29,9 +33,9 @@ export default function deletePayment(req, res) {
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                75,
-                31,
-                paymentId,
+                70,
+                28,
+                null,
                 [err]
             ]
         )
