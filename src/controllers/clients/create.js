@@ -7,7 +7,7 @@ import con from '../../db/conDb.js'
  * @param {*} res 
  */
 
-export default function createClient(req, res) {
+export default function (req, res) {
     const {
         clientName, 
         clientTypeId, 

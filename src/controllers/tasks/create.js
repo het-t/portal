@@ -28,7 +28,7 @@ export default function createTask (req, res) {
             title, 
             description, 
             fees ? fees : null,
-            clientId
+            clientId ? clientId : null
         ]
     )
     .then((results) => { 
