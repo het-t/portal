@@ -21,6 +21,7 @@ import getList from '../controllers/sub-tasks/getList.js'
 import deleteSubTask from '../controllers/sub-tasks/detete.js'
 import addSubTask from '../controllers/sub-tasks/create.js'
 import editSubTask from '../controllers/sub-tasks/edit.js'
+import pinStatusUpdate from '../controllers/sub-tasks/pinStatusUpdate.js'
 
 import createTaskTemplate from '../controllers/task-templates/create.js'
 
@@ -68,6 +69,7 @@ router.put('/:id', createTaskTemplate, editTask)
 router.patch('/:id', changeTaskStatus)
 router.patch('/:taskId/sub-tasks/:subTaskId/status', changeStatus)
 router.patch('/:taskId/sub-tasks/:subTaskId/description', editSubTask)
+router.patch('/:taskId/sub-tasks/:subTaskId/pin', pinStatusUpdate)
 
 router.delete('/:taskId/sub-tasks/:subTaskId/delegation/', delegationRemove)
 router.delete('/:taskId/sub-tasks/:subTaskId/tags/:tagId', tagRemove)

@@ -1,41 +1,34 @@
 import makeDbReq from '../../db/index.js'
 import connection from '../../db/conDb.js'
 
-export default function (req, res) {
-    const {
-        taskId,
-        subTaskId,
-        tagId
-    } = req.params
-
+export default function(req, res) {
     const con = connection()
+
+    const subTaskId = req.params.subTaskId
 
     makeDbReq(
         con,
-        `sub_task_add_tag(?, ?, ?, ?, ?)`,
+        `sub_task_delegation_pin_handle(?, ?, ?, ?)`,
         [
             req.userId,
             req.orgId,
-            taskId,
             subTaskId,
-            tagId
+            req.body.isPinned,
         ]
     )
-    .then((results) => {
-        if (results?.[0]?.createdTagId) {
-            res.send({createdTagId: results[0].createdTagId})
-        }
-        else res.sendStatus(200)
+    .then(() => {
+        res.sendStatus(200)
     })
     .catch(err => {
+        console.log(err)
         res.sendStatus(500)
-        makeDbReq(
+        return makeDbReq(
             con,
             `logs_add(?, ?, ?, ?, ?)`,
             [
                 req.userId,
-                71,
-                30,
+                79,
+                33,
                 subTaskId,
                 [err]
             ]

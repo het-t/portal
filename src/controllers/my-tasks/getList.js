@@ -1,35 +1,21 @@
 import makeDbReq from "../../db/index.js";
-import fromatFilters from '../../helpers/formatFilters.js'
 import con from '../../db/conDb.js'
+
 /**
  * get tasks assigend to particular user
  * for my tasks screen
  * @param {*} req 
  * @param {*} res 
  */
-export default function tasksGetMyTasks (req, res) {
+export default function (req, res) {
 
-    const {
-        from,
-        recordsPerPage,
-        sortBy,
-        sortOrder
-    } = req.query
-
-    const filters = fromatFilters(req.query.filters)
     const connection = con()
     makeDbReq(
         connection,
-        `tasks_get_my_tasks(?, ?, ?, ?, ?, ?, ?, ?)`,
+        `my_sub_tasks_get(?, ?)`,
         [
             req.userId, 
-            from, 
-            recordsPerPage,
-            sortBy,
-            sortOrder,
-            filters.name,
-            filters.description,
-            filters.client
+            req.orgId
         ]
     )
     .then((results) => {
